@@ -1,9 +1,9 @@
 import { useRef } from 'react'
-import { ArrowRight, Check, ChevronDown } from 'lucide-react'
+import { ArrowRight, Check, ChevronDown, Phone } from 'lucide-react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { HighlightHeadline } from '@/components/site/HighlightHeadline'
 import { MagneticButton } from '@/components/site/MagneticButton'
-import { hero } from '@/content/site'
+import { hero, contact } from '@/content/site'
 
 export function Hero() {
   const reduce = useReducedMotion()
@@ -17,8 +17,8 @@ export function Hero() {
         <motion.div className="absolute inset-x-0 top-[-12%] h-[124%]" style={reduce ? undefined : { y }}>
           <img src={hero.image} alt={hero.imageAlt} decoding="async" className="h-full w-full object-cover" />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--navy))]/96 via-[hsl(var(--navy))]/82 to-[hsl(var(--navy))]/45" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))]/85 via-transparent to-[hsl(var(--navy))]/45" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--navy))]/97 via-[hsl(var(--navy))]/84 to-[hsl(var(--navy))]/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))]/95 via-[hsl(var(--navy))]/35 to-[hsl(var(--navy))]/55" />
       </div>
 
       <div className="container-tight py-16 text-white sm:py-28">
@@ -36,12 +36,16 @@ export function Hero() {
           <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-white/80 sm:text-xl">{hero.sub}</p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
-              {hero.cta} <ArrowRight />
-            </MagneticButton>
-            <MagneticButton href="#why" variant="outline" className="w-full justify-center border-white/30 text-white hover:border-white/50 hover:bg-white/10 sm:w-auto">
-              {hero.ctaSecondary} <ArrowRight />
-            </MagneticButton>
+            <span data-track="hero_apply" className="w-full sm:w-auto">
+              <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
+                {hero.cta} <ArrowRight />
+              </MagneticButton>
+            </span>
+            <span data-track="hero_call" className="w-full sm:w-auto">
+              <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="w-full justify-center border-white/30 text-white hover:border-white/50 hover:bg-white/10 sm:w-auto">
+                <Phone /> {hero.ctaSecondary}
+              </MagneticButton>
+            </span>
           </div>
 
           <p className="mt-5 text-sm text-white/65">{hero.payLine}</p>

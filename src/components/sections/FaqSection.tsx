@@ -9,6 +9,7 @@ import {
 import { Section, SectionHeading } from '@/components/site/kit'
 import { Reveal } from '@/components/Reveal'
 import { MagneticButton } from '@/components/site/MagneticButton'
+import { track } from '@/lib/track'
 
 export function FaqSection() {
   return (
@@ -22,7 +23,15 @@ export function FaqSection() {
           />
 
           <Reveal className="mt-10">
-            <Accordion type="single" collapsible className="space-y-3">
+            <Accordion
+              type="single"
+              collapsible
+              className="space-y-3"
+              onValueChange={(value) => {
+                // fires only when an item opens (empty string = the open one closed)
+                if (value) track('faq_expand', { faq_item_id: value })
+              }}
+            >
               {faq.map((f, i) => (
                 <AccordionItem
                   key={i}

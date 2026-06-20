@@ -1,46 +1,38 @@
 import { useSEO } from '@/hooks/useSEO'
 import { meta } from '@/content/site'
 import { Hero } from '@/components/sections/Hero'
+import { TrustStrip } from '@/components/sections/TrustStrip'
 import { PaySection } from '@/components/sections/PaySection'
+import { WhyStay } from '@/components/sections/WhyStay'
 import { HomeTime } from '@/components/sections/HomeTime'
 import { TruckExplorer } from '@/components/sections/TruckExplorer'
 import { FleetGallery } from '@/components/sections/FleetGallery'
-import { VideoSection } from '@/components/sections/VideoSection'
 import { NetworkSection } from '@/components/sections/NetworkSection'
-import { SafetyBar } from '@/components/sections/SafetyBar'
-import { Benefits } from '@/components/sections/Benefits'
-import { WhyStay } from '@/components/sections/WhyStay'
-import { Testimonials } from '@/components/sections/Testimonials'
-import { DayInLife } from '@/components/sections/DayInLife'
+import { VideoSection } from '@/components/sections/VideoSection'
 import { ProofSection } from '@/components/sections/ProofSection'
 import { Process } from '@/components/sections/Process'
 import { ApplySection } from '@/components/sections/ApplySection'
 import { FaqSection } from '@/components/sections/FaqSection'
-import { Resources } from '@/components/sections/Resources'
 import { FinalCta } from '@/components/sections/FinalCta'
 
 export function Home() {
   useSEO({ title: meta.title, description: meta.description })
   return (
     <>
-      {/* Hook → what's in it for me → what I'd run → the equipment → proof → why us → how to start → apply */}
+      {/* Hook → stats → pay → why stay → home time → the truck → fleet → network → real footage → proof+safety → how it works → apply → faq → final */}
       <Hero />
+      <TrustStrip />
       <PaySection />
+      <WhyStay />
       <HomeTime />
       <TruckExplorer />
       <FleetGallery />
-      <VideoSection />
       <NetworkSection />
-      <SafetyBar />
-      <Benefits />
-      <WhyStay />
-      <Testimonials />
-      <DayInLife />
+      <VideoSection />
       <ProofSection />
       <Process />
       <ApplySection />
       <FaqSection />
-      <Resources />
       <FinalCta />
     </>
   )

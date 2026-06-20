@@ -53,12 +53,16 @@ export function PaySection() {
 
         <Reveal className="mt-8">
           <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
-            <MagneticButton href="#apply" variant="accent" className="justify-center">
-              See your number — 60-second quiz <ArrowRight />
-            </MagneticButton>
-            <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="justify-center">
-              <Phone /> {contact.phone}
-            </MagneticButton>
+            <span data-track="pay_quiz" className="w-full sm:w-auto">
+              <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
+                See if you qualify <ArrowRight />
+              </MagneticButton>
+            </span>
+            <span data-track="pay_phone" className="w-full sm:w-auto">
+              <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="w-full justify-center sm:w-auto">
+                <Phone /> {contact.phone}
+              </MagneticButton>
+            </span>
           </div>
         </Reveal>
       </div>

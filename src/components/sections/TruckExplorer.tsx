@@ -3,29 +3,38 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Section, SectionHeading } from '@/components/site/kit'
 import { SmartImage } from '@/components/site/SmartImage'
 import { truckExplorer } from '@/content/site'
+import { track } from '@/lib/track'
 import { cn } from '@/lib/utils'
+
+type Hotspot = (typeof truckExplorer.hotspots)[number]
+
+/** Animated spec callout — hoisted to module scope (re-mounts on `active` change to re-animate). */
+function Callout({ active, hs, reduce, className }: { active: number; hs: Hotspot[]; reduce: boolean | null; className?: string }) {
+  return (
+    <motion.div
+      key={active}
+      initial={reduce ? false : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+        {`0${active + 1}`.slice(-2)} · {hs.length} features
+      </p>
+      <h3 className="mt-1 text-lg font-bold">{hs[active].title}</h3>
+      <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">{hs[active].body}</p>
+    </motion.div>
+  )
+}
 
 export function TruckExplorer() {
   const reduce = useReducedMotion()
   const [active, setActive] = useState(0)
   const hs = truckExplorer.hotspots
 
-  function Callout({ className }: { className?: string }) {
-    return (
-      <motion.div
-        key={active}
-        initial={reduce ? false : { opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className={className}
-      >
-        <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-          {`0${active + 1}`.slice(-2)} · {hs.length} features
-        </p>
-        <h3 className="mt-1 text-lg font-bold">{hs[active].title}</h3>
-        <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">{hs[active].body}</p>
-      </motion.div>
-    )
+  function select(i: number) {
+    setActive(i)
+    track('hotspot_click', { hotspot_name: hs[i].id })
   }
 
   return (
@@ -46,7 +55,7 @@ export function TruckExplorer() {
               <button
                 key={i}
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => select(i)}
                 aria-label={h.title}
                 aria-pressed={active === i}
                 className="absolute grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/30"
@@ -68,13 +77,13 @@ export function TruckExplorer() {
 
             {/* overlay callout — tablet/desktop only */}
             <div className="absolute bottom-5 left-5 hidden max-w-sm sm:block">
-              <Callout className="rounded-2xl border border-border bg-white/95 p-5 shadow-pop backdrop-blur" />
+              <Callout active={active} hs={hs} reduce={reduce} className="rounded-2xl border border-border bg-white/95 p-5 shadow-pop backdrop-blur" />
             </div>
           </div>
 
           {/* mobile callout — static, below the image so no hotspot is hidden */}
           <div className="border-t border-border p-5 sm:hidden">
-            <Callout />
+            <Callout active={active} hs={hs} reduce={reduce} />
           </div>
 
           <div className="flex flex-wrap gap-2 border-t border-border p-4">
@@ -82,10 +91,10 @@ export function TruckExplorer() {
               <button
                 key={i}
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => select(i)}
                 aria-pressed={active === i}
                 className={cn(
-                  'min-h-[40px] rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
+                  'min-h-[44px] rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
                   active === i ? 'border-accent bg-accent/10 text-accent' : 'border-border text-muted-foreground hover:text-foreground',
                 )}
               >

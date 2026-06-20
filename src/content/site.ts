@@ -1,27 +1,25 @@
 /* ============================================================================
    WEST WIND LOGISTICS — single source of truth for all site copy & data.
    Apple/Tesla/GP-Transco-grade, light theme. Fact-checked vs FMCSA + the vault.
-   [P] in a string = PLACEHOLDER pending Peter's real, provable figure (FTC).
-   Keep config.DRAFT = true until pay/home-time/benefits are confirmed AND lead
-   delivery is live. Real photos only for people — no AI faces.
+   Copy is dead-simple, trucker-to-trucker, honest. Pay is REAL: $0.70/mi + extra
+   stops, 1099, paid per round trip (~$3,500 IL->CA->IL), cash advance up to
+   $300/wk, NO sign-on bonus (on purpose). [P] is allowed ONLY on truck
+   model-year / spec lines confirmed at orientation — never on pay/hero/lead copy.
    ============================================================================ */
 
-import logo from '@/assets/photos/logo.png'
-import truckHero from '@/assets/photos/truck-hero.webp'
-import truckOtr from '@/assets/photos/truck-otr.webp'
-import truckYellow from '@/assets/photos/truck-yellow.webp'
-import truckSlide from '@/assets/photos/truck-slide.webp'
-import shop from '@/assets/photos/shop.webp'
-import warehouse from '@/assets/photos/warehouse.webp'
-import intermodal from '@/assets/photos/intermodal.webp'
-import hq from '@/assets/photos/hq.webp'
-import building from '@/assets/photos/building.webp'
-
-export const assets = { logo, truckHero, truckOtr, truckYellow, truckSlide, shop, warehouse, intermodal, hq, building }
+/* Real, West Wind-branded photography shot at the Bedford Park yard & HQ.
+   These replace the earlier generic/AI stand-ins — every truck, trailer and
+   building below carries the actual West Wind logo, DOT 1302563 and signage. */
+import windHero from '@/assets/photos/wind-hero.webp'
+import windTruckReefers from '@/assets/photos/wind-truck-reefers.webp'
+import windFleetLineup from '@/assets/photos/wind-fleet-lineup.webp'
+import windTrailerLogo from '@/assets/photos/wind-trailer-logo.webp'
+import windHq from '@/assets/photos/wind-hq.webp'
+import windYard from '@/assets/photos/wind-yard.webp'
 
 export const config = {
-  /** true = show the "DRAFT — placeholder pay" ribbon. Flip false to launch. */
-  DRAFT: true,
+  /** Pay is real now — no DRAFT ribbon. */
+  DRAFT: false,
   lead: {
     mode: 'demo' as 'demo' | 'web3forms' | 'webhook',
     web3formsKey: '',
@@ -58,17 +56,26 @@ export const contact = {
   saferUrl: 'https://safer.fmcsa.dot.gov/CompanySnapshot.aspx',
 }
 
-export const payRange = { low: 1800, high: 2200, signOn: 2500, note: 'to start, paid weekly', seatsOpen: 45 }
-export const payDisplay = `$${payRange.low.toLocaleString()}–$${payRange.high.toLocaleString()}`
+/* ---- Real pay model: $0.70/mi + extra-stop ladder, 1099, paid per round trip ---- */
+export const payRange = {
+  perMile: 0.70,
+  extraStops: { first: 75, second: 100, thirdPlus: 120 },
+  cashAdvance: 300,
+  tripExample: 3500,
+  tripLane: 'IL → CA → IL',
+  tripDays: '8–9',
+  signOn: 0,
+  seatsOpen: 45,
+}
 
 export const meta = {
-  title: 'CDL-A Truck Driver Jobs | West Wind Logistics — Reefer & Dry Van, Paid Weekly | IL · AZ · CA · UT',
+  title: 'CDL-A Truck Driver Jobs | West Wind Logistics — Reefer, $0.70/mi + Extra Stops | IL · AZ · CA · UT',
   description:
-    'Family-run since 1999. CDL-A reefer & dry van drivers wanted — Local, Regional, OTR. Paid weekly, our own repair shops, year-round freight. FMCSA Satisfactory rated. Run our DOT 1302563 before you call.',
+    'Family-run since 1999. CDL-A reefer drivers — $0.70 a mile plus extra stops, 1099, paid per round trip (~$3,500 IL to CA and back). No fake sign-on bonus. Our own shops. FMCSA Satisfactory. Run our DOT 1302563 before you call.',
 }
 
 export const announcement = {
-  text: `Now hiring CDL-A drivers — ${payRange.seatsOpen} seats open across IL · AZ · CA · UT.`,
+  text: `45 seats open. Real trucks, ready now. Call ${'800-400-9956'} ext 2040.`,
   link: 'Apply',
   href: '#apply',
 }
@@ -76,9 +83,7 @@ export const announcement = {
 export const nav = {
   items: [
     { label: 'Pay', href: '#pay' },
-    { label: 'Fleet', href: '#fleet' },
-    { label: 'Network', href: '#network' },
-    { label: 'Why drivers stay', href: '#why' },
+    { label: 'Trucks', href: '#equipment' },
     { label: 'Verify us', href: '#proof' },
     { label: 'FAQ', href: '#faq' },
   ],
@@ -87,62 +92,73 @@ export const nav = {
 
 /** Hero headline as lines of segments; segments with hl:true get the highlight bar. */
 export const hero = {
-  eyebrow: 'CDL-A Reefer & Dry Van · Family-run since 1999',
+  eyebrow: 'CDL-A Drivers — 2 Years Experience',
   lines: [
     [{ t: 'The trucks are ready.' }],
     [{ t: 'The pay ' }, { t: 'shows up.', hl: true }],
   ] as Array<Array<{ t: string; hl?: boolean }>>,
-  sub: 'Direct reefer freight that runs all year. Our own repair shops. Family-run out of Chicago since 1999. The safety numbers on this page are FMCSA’s — look us up before you call.',
-  payLine: `From $${payRange.low.toLocaleString()}/wk to start, paid weekly — not biweekly, not when the load settles.`,
+  sub: 'Reefer freight. You’re rarely waiting on a load — almost always loaded both ways.',
+  payLine:
+    '$0.70 a mile + extra stops. Paid per trip — about $3,500 for an IL to CA round trip. No fake sign-on bonus.',
   cta: 'See if you qualify',
-  ctaSecondary: 'Why drivers stay',
-  chips: ['FMCSA Satisfactory rating', 'Family-run since 1999', '4 terminals · IL · AZ · CA · UT'],
-  image: truckHero,
-  imageAlt: 'A real West Wind green Kenworth tractor on the open road',
+  ctaSecondary: 'Call a real recruiter',
+  chips: ['FMCSA Satisfactory', 'Family-run since 1999', '4 terminals', 'USDOT 1302563'],
+  image: windHero,
+  imageAlt: 'West Wind Logistics green Kenworth #577 with the company logo, at the Bedford Park yard',
 }
 
-export const trustStrip = [
-  { label: 'FMCSA Satisfactory', badge: true },
-  { label: 'Active authority — no out-of-service order' },
-  { label: 'Family-run since 1999' },
-  { label: 'FMCSA-registered 20+ years' },
-]
+/** Six hero stats rendered as a tight scannable strip under the hero.
+ *  `to` (with optional prefix/suffix/dec) drives CountUp for numeric stats;
+ *  `stat` is the plain string fallback for non-numeric ones. */
+export const heroStats = [
+  { stat: '$0.70/mi', to: 0.7, dec: 2, prefix: '$', suffix: '/mi', after: ' + stops', label: 'Honest pay — no flat-weekly lies' },
+  { stat: '~$3,500', to: 3500, prefix: '~$', label: '1099, paid per round trip (IL→CA→IL)' },
+  { stat: '60+', to: 60, suffix: '+', label: 'Loads a day — barely any waiting' },
+  { stat: 'No bonus', label: 'No sign-on bonus — we won’t dangle $5k' },
+  { stat: '3.2%', to: 3.2, dec: 1, suffix: '%', label: 'OOS rate — about half the 6.67% national' },
+  { stat: 'Since 1999', label: 'Family-run · FMCSA Satisfactory · USDOT 1302563' },
+] as Array<{ stat: string; to?: number; dec?: number; prefix?: string; suffix?: string; after?: string; label: string }>
 
 export const pay = {
-  headline: 'The numbers, up front.',
-  sub: 'We’ll show you the math before you ever pick up the phone.',
-  rangeNote: `${payDisplay}/week to start, paid weekly. $${payRange.signOn.toLocaleString()} sign-on. Health, dental, vision. Local, Regional or OTR — your call.`,
-  disclaimer: 'A range to start, set by route and experience.',
+  headline: 'The numbers. No BS.',
+  sub: 'We put it on the page and in writing. Different on the phone? Hang up on us.',
+  rangeNote: '$0.70 / mile + extra stops',
+  disclaimer:
+    'Extra stops: 1st $75, 2nd $100, 3rd+ $120. 1099, paid per round trip — about $3,500 for IL to CA and back. Cash advance up to $300 a week. No sign-on bonus.',
   reasons: [
-    { title: 'Direct, contracted freight', body: 'Produce, meat and beverages, booked direct. People eat year-round — so your miles don’t dry up.' },
-    { title: 'Our own repair shops', body: 'Tractor, trailer & reefer bays in IL, AZ and CA keep you rolling — not stuck on a vendor’s waitlist.' },
-    { title: 'No wasted money', body: '14M miles a year across 148 trucks. Steady freight, steady paycheck — every Friday.' },
+    { title: 'Barely any waiting', body: 'Customer freight = 60+ loads a day, so you’re rarely sitting and waiting on a load.' },
+    { title: 'Our own shops', body: 'Tractor, trailer & reefer bays in IL, AZ, CA. Break down, you roll fast.' },
+    { title: 'Pay in writing', body: 'We put the pay in writing. If it’s different on the phone, hang up on us.' },
   ],
   guarantee:
-    'The hang-up guarantee: if a number on this page turns out different on the phone, hang up on us. We put the offer in writing before you do. No pressure, no pitch.',
+    'No sign-on bonus — on purpose. Other carriers promise $5k, then use one violation to never pay it. We don’t play that game. We pay you per mile, every mile.',
 }
 
 export const network = {
-  headline: 'The network.',
-  sub: 'Four terminals — IL, AZ, CA and UT — with fuel, parts and people close to your lanes.',
+  headline: 'Where we run.',
+  sub:
+    'Midwest to West Coast, both ways loaded. Some Florida. We skip the East Coast — low miles, you’d hate it.',
   counters: [
     { to: 148, label: 'Power units in the fleet' },
-    { to: 4, label: 'Terminals' },
+    { to: 4, label: 'Terminals: IL, AZ, CA, UT' },
     { to: 14, suffix: 'M', label: 'Miles run every year' },
-    { to: 3.2, dec: 1, suffix: '%', label: 'Driver OOS rate · half the national average' },
+    { to: 3.2, dec: 1, suffix: '%', label: 'Out-of-service rate · about half the national rate' },
   ] as Array<{ to: number; dec?: number; suffix?: string; label: string }>,
 }
 
 export const fleet = {
-  headline: 'The truck is waiting.',
-  sub: '53-foot air-ride trailers, well-kept equipment, and our own shops behind every unit. Real photos of our real fleet — no stock trucks.',
+  headline: 'Real trucks. Real name on the side.',
+  sub:
+    'Kenworth and Peterbilt tractors, 53-ft air-ride reefers — all ours, all branded. Kept up in our own shops in IL, AZ, and CA, not stuck at some vendor for a week.',
+  note:
+    'Reefer runs 24/7. It can’t shut off. That’s why the freight — and the pay — never stops.',
   items: [
-    { image: truckOtr, title: 'OTR on the road', caption: 'Real West Wind power on a real highway — national reefer and dry-van miles.' },
-    { image: truckYellow, title: 'A real, varied fleet', caption: 'Part of a 100-plus truck fleet — not one hero truck recycled five times.' },
-    { image: truckSlide, title: '53′ air-ride trailers', caption: 'Clean 53-foot air-ride reefer and dry-van trailers, maintained in-house.' },
-    { image: shop, title: 'Our own repair bays', caption: 'Tractor, trailer, reefer and A/C work in IL, AZ and CA — no week-long wait in a strange town.' },
-    { image: hq, title: 'Bedford Park HQ', caption: '7050 S Archer Rd — a real place you can drive to, not a P.O. box.' },
-    { image: warehouse, title: 'Cross-dock & warehousing', caption: 'Proof of scale: real operations behind the freight.' },
+    { image: windTruckReefers, title: 'Our own power', caption: 'A West Wind Peterbilt hooked to our own reefers — DOT 1302563 right on the door.' },
+    { image: windFleetLineup, title: 'A real fleet', caption: 'Part of a 148-truck fleet — Kenworths and Peterbilts, all ours, not one hero truck recycled.' },
+    { image: windTrailerLogo, title: 'Our name on the trailer', caption: '53-ft air-ride reefers with the West Wind logo — not a leased box with a stranger’s name.' },
+    { image: windHero, title: 'The green Kenworth', caption: 'Our green Kenworth #577 — air-ride reefer power, kept up in-house.' },
+    { image: windHq, title: 'Bedford Park HQ', caption: '7050 S Archer Rd — a real building you can drive to, not a P.O. box.' },
+    { image: windYard, title: 'The yard', caption: 'West Wind reefers lined up and loaded — most trips start and finish here.' },
   ],
 }
 
@@ -150,204 +166,109 @@ export const fleet = {
  *  % of the image box; tune against the chosen photo in preview. */
 export const truckExplorer = {
   eyebrow: 'The equipment',
-  headline: 'Walk around the truck.',
-  sub: 'Tap a marker. Honest spec sheet — no “newest” or “spotless” claims. Model years and APU are confirmed at orientation.',
-  image: truckOtr,
-  imageAlt: 'A West Wind tractor-trailer — tap the markers to explore the equipment',
+  headline: 'Walk the truck.',
+  sub:
+    'Tap a marker. Straight spec sheet — model years confirmed at orientation, no “newest” or “spotless” claims.',
+  image: windTruckReefers,
+  imageAlt: 'A West Wind Peterbilt tractor hooked to West Wind reefer trailers in the yard — tap the markers to explore the equipment',
   hotspots: [
-    { x: 30, y: 30, title: 'Reefer unit', body: 'Temperature-controlled freight that runs year-round — produce, meat, beverages.' },
-    { x: 58, y: 46, title: '53′ air-ride trailer', body: 'Reefer or dry van. Smooth ride, easy on the freight and on you.' },
-    { x: 17, y: 44, title: 'Kenworth power', body: 'Well-kept tractors in the fleet, maintained at our own shops. Model years confirmed at orientation. [P]' },
-    { x: 22, y: 74, title: 'Air-ride suspension', body: 'Less bounce, less fatigue across a long lane.' },
-    { x: 44, y: 78, title: 'In-house maintained', body: 'Tractor, trailer, reefer & A/C serviced at IL, AZ and CA — not a vendor’s waiting list.' },
-  ] as Array<{ x: number; y: number; title: string; body: string }>,
+    { id: 'reefer_unit', x: 69, y: 30, title: 'Reefer unit', body: 'Runs 24/7. Can’t be shut off. Keeps the produce cold both ways.' },
+    { id: 'trailer', x: 87, y: 52, title: 'Our 53′ reefer', body: 'Air-ride reefer trailer — West Wind’s own, not a leased box with a stranger’s name.' },
+    { id: 'tractor', x: 45, y: 50, title: 'The tractor', body: 'Kenworth and Peterbilt in the fleet. Engine and specs confirmed at orientation.' },
+    { id: 'branding', x: 30, y: 66, title: 'Run our DOT', body: 'USDOT 1302563 right on the door. Look us up on SAFER before you ever call.' },
+  ] as Array<{ id: string; x: number; y: number; title: string; body: string }>,
 }
 
-export const specGroups = [
-  {
-    group: 'Trailers',
-    rows: [
-      { k: 'Reefer', v: '53′ air-ride, refrigerated (verified)' },
-      { k: 'Dry van', v: '53′ air-ride (verified)' },
-      { k: 'Primary freight', v: 'Produce, meat, refrigerated food, beverages' },
-    ],
-  },
-  {
-    group: 'Tractor',
-    rows: [
-      { k: 'Make', v: 'Kenworth in the fleet' },
-      { k: 'Model years', v: 'Confirmed at orientation [P]' },
-      { k: 'APU / idle comfort', v: 'Confirmed at orientation [P]' },
-      { k: 'Transmission', v: 'Automatic vs manual — confirm at orientation [P]' },
-      { k: 'ELD', v: 'Yes — electronic logs, every truck' },
-    ],
-  },
-  {
-    group: 'Network & support',
-    rows: [
-      { k: 'Power units', v: '148 (verified MCS-150)' },
-      { k: 'In-house repair shops', v: 'Tractor / trailer / reefer / A/C at IL, AZ, CA' },
-      { k: 'Annual miles', v: '14,000,000 (fleet-wide)' },
-      { k: 'Operation type', v: 'For-hire, interstate' },
-    ],
-  },
-  {
-    group: 'Pay & schedule',
-    rows: [
-      { k: 'Weekly pay', v: `${payDisplay}/week to start, paid weekly [P]` },
-      { k: 'Sign-on bonus', v: '$2,500 [P]' },
-      { k: 'Home time', v: 'Varies by run type — confirm per lane [P]' },
-      { k: 'Detention pay', v: 'Confirm policy/rate at recruiter call [P]' },
-      { k: 'Minimum experience', v: 'About 12 months CDL-A [P]' },
-    ],
-  },
-]
-
 export const homeTime = {
-  headline: 'Pick the schedule that fits your life.',
-  sub: 'Local, Regional or OTR — same family carrier, your call on how often you’re home.',
+  headline: 'Home time, straight up.',
+  sub: 'We measure it in trips, not fake weekly promises.',
   options: [
-    { name: 'Local', homeTime: 'Home daily', tag: '[P]', blurb: 'Out of Chicagoland, Phoenix or Salt Lake — load, run your lane, sleep in your own bed. Best fit if you’ve got family at home.' },
-    { name: 'Regional', homeTime: 'Home weekly', tag: '[P]', blurb: 'Run the Southwest or steady California produce lanes out of Stockton. Real miles, home most weekends — the middle ground most of our drivers run.' },
-    { name: 'OTR', homeTime: 'Flexible rotation', tag: '[P]', blurb: 'National reefer and dry-van miles for drivers who want the highest weekly take-home. Your recruiter confirms the rotation for your lane.' },
+    { name: 'OTR', homeTime: '~2 days home between trips', tag: '', blurb: 'Round trips about 8–9 days. Start and finish at our IL yard.' },
+    { name: 'Regional', homeTime: 'Home more often', tag: '', blurb: 'Shorter lanes when we have them. Ask your recruiter what’s open.' },
+    { name: 'Local', homeTime: 'Home most nights', tag: '', blurb: 'About a 250-mile radius out of Chicago. Appointment freight when it’s available.' },
   ],
+  restart:
+    'Live in CA, AZ, or UT? Take a load home, park in our yard there, do your 34-hour restart at home. No extra flights.',
 }
 
 export const safety = {
-  eyebrow: 'A clean operation protects your CDL',
+  eyebrow: 'Don’t take our word. Take the government’s.',
   headline: 'Driver out-of-service rate: 3.2%.',
   sub: 'About half the 6.67% national average — and it’s FMCSA’s number, not ours.',
   bar: { westwind: 3.2, national: 6.67, callout: '~half' },
   transparencyLine:
-    'The record shows speeding flags and one fatal crash — we won’t pretend it’s spotless. It also shows a Satisfactory rating and a 3.2% driver OOS rate. Run USDOT 1302563 and judge for yourself.',
-}
-
-export const benefits = {
-  headline: 'What you get for keeping the wheels turning.',
-  sub: 'Real pay and real benefits — every detail confirmed at orientation, in writing.',
-  items: [
-    { icon: 'BadgeDollarSign', title: 'Weekly pay you can count on', body: `${payDisplay}/week to start, paid weekly — a real range, not an “up to.” [P]` },
-    { icon: 'Gift', title: '$2,500 sign-on bonus', body: 'Payout schedule confirmed at orientation. [P]' },
-    { icon: 'HeartPulse', title: 'Medical, dental & vision', body: 'Coverage for you and your family. [P]' },
-    { icon: 'PiggyBank', title: '401(k)', body: 'Put part of every mile toward your future. [P]' },
-    { icon: 'CalendarDays', title: 'Paid time off', body: 'Real time off without losing a paycheck. [P]' },
-    { icon: 'Wrench', title: 'In-house repair shops', body: 'Tractor, trailer & reefer fixed at our own IL/AZ/CA bays.' },
-  ] as Array<{ icon: string; title: string; body: string }>,
+    'Our record shows speeding flags and one fatal crash. It also shows a Satisfactory rating and a 3.2% out-of-service rate — about half the national 6.67%. We won’t hide it. Look it up. We’ll walk you through it. USDOT 1302563.',
 }
 
 export const whyStay = [
-  { icon: 'Wrench', title: 'Breakdowns happen. Sitting four days shouldn’t.', body: 'Our own tractor, trailer & reefer shops in IL, AZ and CA fix you fast — no vendor waitlist.' },
-  { icon: 'Snowflake', title: 'Direct reefer freight. No dead season.', body: 'Contracted produce, meat and beverage loads that move in January and July alike.' },
-  { icon: 'Phone', title: 'A phone that gets answered, 7 days a week.', body: 'Call ext. 2040 at 1 PM on a Sunday — a real person picks up.' },
-  { icon: 'Home', title: 'Built truck by truck, not bought by a fund.', body: 'Family-run since 1999, grown to 100+ trucks. Same name on the door.' },
-  { icon: 'ShieldCheck', title: 'A clean operation protects your CDL.', body: 'Satisfactory FMCSA rating and a 3.2% driver out-of-service rate — half the national average.' },
+  { icon: 'Snowflake', title: 'No waiting for loads', body: 'Ours are booked. 60+ a day ready to roll.' },
+  { icon: 'Wrench', title: 'Breakdowns fixed in-house', body: 'Our shops, not a vendor’s waitlist.' },
+  { icon: 'Home', title: 'You’re not a number', body: 'Same family, same name since 1999.' },
 ] as Array<{ icon: string; title: string; body: string }>
 
 export const process = {
-  headline: 'What happens after you apply.',
-  sub: 'No SSN, no commitment, no surprises. Here’s every step, start to finish.',
+  headline: 'How it works.',
+  sub: 'No SSN, no runaround. Here’s every step, start to finish.',
   steps: [
-    { n: '01', title: 'Answer a few questions', body: 'A 60-second quiz — experience, location, the schedule you want. No SSN.' },
-    { n: '02', title: 'A recruiter calls you', body: 'A real person walks you through pay, lanes and home time and confirms your CDL-A. 7 days a week.' },
-    { n: '03', title: 'Orientation', body: 'Cleared, oriented, and into a truck. Details on your call. [P]' },
-    { n: '04', title: 'Your first dispatch', body: 'Keys, first load, and a dispatcher who knows your name.' },
-  ],
-}
-
-export const dayInLife = {
-  eyebrow: 'A day at West Wind',
-  headline: 'Roll out loaded. Get home on schedule.',
-  blocks: [
-    { image: truckSlide, title: 'Roll out loaded', body: 'A 53′ reefer behind you and a load already booked. No hunting for freight, no sitting in the yard.' },
-    { image: shop, title: 'Backed by the shop', body: 'A dispatcher who picks up and four terminals for fuel, parts or a fast repair. Run your lane, home on schedule, paid Friday. [P]' },
+    { n: '01', title: '60-second quiz', body: '6 quick questions. No SSN.' },
+    { n: '02', title: 'Real recruiter calls', body: 'Today, if hours are open.' },
+    { n: '03', title: 'Orientation', body: '3–4 hours. The mechanic shows you the reefer unit.' },
+    { n: '04', title: 'First load', body: 'Start and finish at our IL yard.' },
   ],
 }
 
 export const proof = {
   eyebrow: 'Don’t take our word for it',
   headline: 'Take the government’s.',
-  body: 'These are FMCSA’s numbers, not ours. Run West Wind Logistics Inc — USDOT 1302563 — on SAFER before you call. Straight up: the record shows speeding flags and one fatal crash, plus a Satisfactory rating. We’ll walk you through it.',
-  disambiguation: 'Heads up: there’s a different Chicago carrier, West Wind Express — make sure you’re looking at USDOT 1302563.',
+  body:
+    'These are FMCSA’s numbers, not ours — a Satisfactory rating and a 3.2% out-of-service rate, about half the national average. Run West Wind Logistics Inc — USDOT 1302563 — on SAFER and see for yourself. (Pulled from FMCSA SAFER, June 2026 — re-run it any time.)',
+  disambiguation:
+    'Heads up: there’s a different Chicago carrier, West Wind Express — make sure you’re looking at USDOT 1302563.',
   cta: 'Look us up on FMCSA SAFER',
   facts: [
     { k: 'Driver out-of-service rate', v: '3.2%', note: 'vs 6.67% national — about half' },
     { k: 'FMCSA safety rating', v: 'Satisfactory', note: 'the best rating FMCSA issues' },
     { k: 'Operating authority', v: 'Active', note: 'no out-of-service order · for-hire interstate' },
-    { k: 'On the road since', v: '1999', note: 'FMCSA-registered 20+ years' },
-  ],
-}
-
-/** Driver resources — GP-Transco-style blog strip. PLACEHOLDER articles, swappable. */
-export const resources = {
-  eyebrow: 'Straight talk for drivers',
-  headline: 'Know before you sign.',
-  sub: 'No fluff — the stuff that actually changes your paycheck and your week.',
-  note: '[P] Placeholder articles — swap for real posts when ready.',
-  items: [
-    { tag: 'Pay', title: 'How weekly pay really works at a reefer carrier', read: '4 min read', date: 'Coming soon' },
-    { tag: 'Home time', title: 'Local vs Regional vs OTR: which one actually gets you home', read: '5 min read', date: 'Coming soon' },
-    { tag: 'CDL rules', title: 'Non-domicile CDL changes — what they mean for your job', read: '6 min read', date: 'Coming soon' },
-    { tag: 'Recruiting', title: '7 questions to ask any recruiter before you switch carriers', read: '4 min read', date: 'Coming soon' },
+    { k: 'On the road since', v: '1999', note: 'family-run · FMCSA-registered interstate carrier' },
   ],
 }
 
 export const faq = [
-  { q: 'Every carrier promises big pay. Why should I believe yours?', a: 'Don’t believe it yet. Get the numbers on a call, then decide — that’s the whole ask. If a number on this page turns out different on the phone, hang up on us. We put it in writing before you do. [P]' },
-  { q: 'How does the pay actually work — cents per mile or weekly?', a: 'You’ll run for $1,800–$2,200 a week to start, paid weekly, based on your lane and miles rather than a flat guarantee. Reefer freight runs year-round, so the miles stay steady. Your recruiter breaks down the exact structure for your schedule on the call. [P]' },
-  { q: 'How many miles a week can I expect?', a: 'We run 14 million miles a year across 148 trucks, so freight is steady — not a parking lot. Average weekly miles depend on whether you run Local, Regional or OTR; your recruiter gives you a realistic number for your lane. [P]' },
-  { q: 'Is there a sign-on bonus, and how is it paid?', a: 'There’s a $2,500 sign-on bonus. The exact payout schedule is confirmed on your recruiter call so you know when it hits. [P]' },
-  { q: 'Do you pay detention and layover?', a: 'Yes — sitting shouldn’t cost you. The exact detention and layover rates are confirmed on your recruiter call so you know what you’re getting before you sign on. [P]' },
-  { q: 'How much home time will I get?', a: 'Your choice of lane sets it: Local is home daily, Regional is home weekly, and OTR is a flexible rotation for more miles. Exact home time per run type is confirmed by your recruiter for your specific lane. [P]' },
-  { q: 'What freight will I be hauling, and is it reefer or dry van?', a: 'Mostly refrigerated — produce, meat, refrigerated food and beverages — plus dry-van lanes for drivers who want them. Reefer is our main division, which is what keeps the freight coming all year.' },
-  { q: 'What kind of equipment will I drive?', a: '53-foot air-ride trailers, reefer or dry van, with Kenworth tractors in the fleet, maintained at our own shops in IL, AZ and CA. Truck model years, APU and transmission are confirmed at orientation. [P]' },
-  { q: 'What are the benefits, and is there a waiting period?', a: 'Medical, dental, vision, 401(k) and paid time off. The plan details and waiting period are confirmed at orientation so there are no surprises. [P]' },
-  { q: 'Is orientation paid, and where is it?', a: 'Orientation gets you set up and into a truck. Location, length and orientation pay are confirmed on your recruiter call. [P]' },
-  { q: 'How much experience do I need? What if I’m newer?', a: 'We’re looking for about 12 months of CDL-A experience to start, but we have a newer-driver path. [P] The quiz won’t tell you “you’re in” if you’re under our line — it’ll be honest and route you to a recruiter who reviews newer drivers personally. You’ll need a valid Class A CDL, authorization to work in the U.S., and a record we can review.' },
-  { q: 'Can I bring a pet or a rider?', a: 'Pet and rider policies are confirmed on your recruiter call. Tell us your situation up front and we’ll give you a straight answer before you commit. [P]' },
-  { q: 'Why are 45 seats open? What’s wrong over there?', a: 'Two things hit at once: the fleet grew, and we lost a few drivers to recent non-domicile CDL rule changes. The trucks are here, the freight is here, the seats need drivers. We’d rather tell you the real reason than a pretty one.' },
-  { q: 'Is this quiz going to blast my info to 40 carriers?', a: 'No. This is not a job-board lead trap. Your answers go to West Wind’s recruiting office and nowhere else — one company, one call. No SSN to apply, and we don’t sell your info.' },
-  { q: 'I see a crash and speeding flags on your SAFER record. Is this safe?', a: 'Good — you should look. Across 148 trucks and 14 million miles a year our record is in line with the industry; our public record shows speeding flags and one fatal crash and we won’t hide it behind “spotless fleet” talk. What’s also on the record: a Satisfactory FMCSA rating and a 3.2% driver out-of-service rate, about half the national average. Run USDOT 1302563 and call us — we’ll talk you through all of it, straight.' },
+  { q: 'Why should I believe your pay?', a: 'Because we put it on the page and in writing. $0.70/mile + extra stops, 1099, paid per trip. If a number is different on the phone, hang up on us.' },
+  { q: 'How does pay actually work?', a: '$0.70 a mile plus extra stops (1st $75, 2nd $100, 3rd+ $120). You’re paid per round trip — about $3,500 for IL to CA and back. Not a flat weekly check.' },
+  { q: 'Is there a sign-on bonus?', a: 'No. Other carriers promise $5k, then use one violation to never pay it. We don’t play that game. We pay you per mile, every mile.' },
+  { q: 'W-2 or 1099?', a: '1099 — you run as an independent contractor and handle your own taxes. The recruiter will walk you through how settlements work.' },
+  { q: 'Can I get a cash advance?', a: 'Yes. Up to $300 a week.' },
+  { q: 'How much experience do I need?', a: '2 years CDL-A. It’s an insurance rule. We have no trainer, so no green drivers.' },
+  { q: 'I run dry van, not reefer. Can I switch?', a: 'Yes, if you’ve got solid experience. Just know reefer runs 24/7 and can’t be shut off. The mechanic shows you the unit at orientation.' },
+  { q: 'How much home time?', a: 'OTR trips run about 8–9 days, then about 2 days home. We measure it in trips, not weeks. Start and finish at our IL yard.' },
+  { q: 'I live in CA, AZ, or UT. Can I restart at home?', a: 'Yes. We route you home, you park in our yard there, do your 34-hour restart at home. No extra flights.' },
+  { q: 'Can I bring my dog? My wife?', a: 'Yes. Pet-friendly. Passengers, spouse, and kids are allowed.' },
+  { q: 'What about my driving record?', a: 'We run MVR, PSP, and Clearinghouse. A fresh accident (under ~2 years) is too fresh; 3+ years old, we’ll talk. 5 speeding tickets in 2 years is a no.' },
+  { q: 'Do I wait around for loads?', a: 'Rarely. We run customer freight — 60+ loads a day ready — so you’re hardly ever sitting, and almost always loaded back.' },
+  { q: 'What if my truck breaks down?', a: 'We have our own shops in IL, AZ, and CA. You’re not stuck at a vendor for a week.' },
+  { q: 'Why are 45 seats open?', a: 'The freight is here and the trucks are here. We’re growing. That’s it — no catch.' },
+  { q: 'Is this a lead-board trap?', a: 'No. No SSN to apply. A real recruiter calls you. We don’t sell or blast your info.' },
 ]
 
 export const finalCta = {
   headline: 'We have the trucks. We need you.',
-  sub: 'Forty-five seats open across four terminals. Answer a few questions, get a call from a real recruiter, and find out what you’d run. No SSN, no pressure.',
-  cta: 'Start your application',
-  secondaryCta: 'Call recruiting',
-  image: truckOtr,
+  sub: 'Real freight. Honest pay. A carrier that won’t jerk you around.',
+  cta: 'See if you qualify',
+  secondaryCta: 'Call 800-400-9956 ext 2040',
+  image: windYard,
 }
 
 export const footer = {
-  blurb: 'West Wind Logistics Inc (DBA West Wind) — family-run CDL-A reefer and dry-van carrier since 1999, FMCSA-registered 20+ years.',
+  blurb:
+    'West Wind Logistics Inc (DBA West Wind) — family-run CDL-A reefer carrier, FMCSA-registered interstate, family-owned since 1999.',
   legal: 'USDOT 1302563 · MC-503969 · FMCSA Satisfactory',
   terminals: 'Bedford Park IL · Phoenix AZ · Stockton CA · Lake Point UT',
-  equalOpportunity: 'West Wind Logistics is an equal-opportunity employer. We hire qualified CDL-A drivers authorized to work in the U.S. and comply with all FMCSA and DOT requirements.',
+  equalOpportunity:
+    'West Wind Logistics is an equal-opportunity employer. We hire qualified CDL-A drivers authorized to work in the U.S. based on lawful, job-related criteria, and comply with all FMCSA and DOT requirements.',
 }
 
 export const stickyBar = { left: `Questions? ${'800-400-9956'} ext 2040`, cta: 'Apply now' }
-
-export const testimonialsNote =
-  'No testimonials ship until Peter provides REAL named, photographed long-tenure drivers (face + first name + tenure + run type + one plain “why I stayed” quote; video preferred). No stock, no AI faces.'
-
-/** Video section — swappable placeholder until Peter supplies footage. */
-export const video = {
-  eyebrow: 'See it for yourself',
-  headline: 'A look down the road.',
-  sub: 'A real truck. A real terminal. A real day. Less to read, more to see.',
-  caption: 'Add a 60–90s walkaround or driver day-in-the-life — 16:9 MP4, or a YouTube / Vimeo link.',
-}
-
-/** Driver stories — REAL drivers only. These are empty slots to drop real photos/clips + quotes into. */
-export const testimonials = {
-  eyebrow: 'Drivers, in their own words',
-  headline: 'Real drivers. Real miles.',
-  sub: 'We only post real West Wind drivers — names, faces, the lanes they run. Your photos and clips drop right in here.',
-  items: [
-    { kind: 'video' as const, name: 'Driver name', role: 'OTR · 6 yrs', quote: 'One plain line on why they stayed.' },
-    { kind: 'image' as const, name: 'Driver name', role: 'Regional · Stockton', quote: 'One plain line on why they stayed.' },
-    { kind: 'image' as const, name: 'Driver name', role: 'Local · Chicago', quote: 'One plain line on why they stayed.' },
-  ],
-}
 
 /* ---- The honest 60-second qualification quiz (logic lives in QualForm) ---- */
 export type Choice = { v: string; label: string }
@@ -359,34 +280,50 @@ export type Step =
 export const quiz = {
   headline: '60-second driver qualification',
   intro: '6 questions. No SSN. A real person calls you — not a robot. Your answers go only to West Wind, never sold.',
-  hiringNote: 'Now hiring in IL · AZ · CA · UT and across our national lanes.',
+  hiringNote: 'Now hiring CDL-A reefer drivers — IL · AZ · CA · UT and our Midwest-to-West-Coast lanes.',
+  /** Tenstreet / IntelliApp handoff link — user supplies later. Empty = keep on-site. */
+  intelliappUrl: '',
   consent:
     'I agree West Wind may call or text me about driving positions at the number above. Consent isn’t a condition of any job, and msg & data rates may apply.',
+  /** Honest result copy the QualForm renders after the quiz. */
+  result: {
+    qualified: {
+      title: 'Looks like a fit',
+      body: 'A real recruiter calls you today if hours are open. We’ll walk you through the pay, the lanes, and the trip — straight, no gatekeeping.',
+    },
+    soft: {
+      title: 'We might be able to work with you',
+      body: 'A recruiter will call and tell you straight — no gatekeeping, no surprises. We’ll look at your record and your miles before anything’s promised.',
+    },
+    hard_no: {
+      title: 'Straight talk',
+      body: 'We can’t hire you right now. Here’s exactly why: {reason}. We don’t want to waste your time — get this squared away and come back.',
+    },
+  },
   steps: [
-    { id: 'cdl', q: 'Do you have a valid Class A CDL?', type: 'choice', options: [
-      { v: 'yes', label: 'Yes, I have my CDL-A' },
-      { v: 'soon', label: 'In CDL school / getting it now' },
-      { v: 'no', label: 'No, not yet' },
+    { id: 'experience', q: 'How many years driving CDL-A?', type: 'choice', options: [
+      { v: '2plus', label: '2+ years' },
+      { v: '1-2', label: '1–2 years' },
+      { v: 'under1', label: 'Under 1 year' },
     ] },
-    { id: 'experience', q: 'How much CDL-A driving experience do you have?', type: 'choice', options: [
-      { v: 'none', label: 'None yet' },
-      { v: 'lt1', label: 'Less than 1 year' },
-      { v: '1-3', label: '1–3 years' },
-      { v: '3plus', label: '3+ years' },
+    { id: 'reefer', q: 'Have you run reefer?', type: 'choice', options: [
+      { v: 'reefer', label: 'Yes, reefer' },
+      { v: 'dry', label: 'Dry van or flatbed' },
+      { v: 'mixed', label: 'Mixed' },
     ] },
-    { id: 'runType', q: 'What kind of run fits your life?', type: 'choice', options: [
-      { v: 'otr', label: 'OTR (national)' },
-      { v: 'regional', label: 'Regional (home weekly)' },
-      { v: 'local', label: 'Local (home daily)' },
-      { v: 'open', label: 'Open — show me what’s best' },
+    { id: 'runType', q: 'What do you want to run?', type: 'choice', options: [
+      { v: 'otr', label: 'OTR (most miles)' },
+      { v: 'regional', label: 'Regional' },
+      { v: 'local', label: 'Local (home most nights)' },
     ] },
-    { id: 'record', q: 'How’s your driving record the last 3 years?', type: 'choice', options: [
-      { v: 'clean', label: 'Clean' },
-      { v: 'minor', label: '1 minor ticket' },
-      { v: 'major', label: '2 or more / a major' },
+    { id: 'record', q: 'Any accident in the last 2 years, or 5+ speeding tickets in 2 years?', type: 'choice', options: [
+      { v: 'clean', label: 'No, I’m clean' },
+      { v: 'old', label: 'Accident 3+ years ago' },
+      { v: 'fresh', label: 'Fresh accident (under 2 yrs)' },
+      { v: 'tickets', label: '5+ tickets in 2 yrs' },
     ] },
-    { id: 'state', q: 'What state are you based in?', type: 'select', placeholder: 'Select your state',
+    { id: 'state', q: 'What state do you live in?', type: 'select', placeholder: 'Select your state',
       options: ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'] },
-    { id: 'contact', q: 'Where should your recruiter reach you?', type: 'contact' },
+    { id: 'contact', q: 'Where can a recruiter reach you today?', type: 'contact' },
   ] as Step[],
 }

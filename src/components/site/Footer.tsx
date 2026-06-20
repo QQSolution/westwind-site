@@ -1,5 +1,6 @@
 import { Phone } from 'lucide-react'
 import { company, contact, footer, nav } from '@/content/site'
+import logo from '@/assets/photos/logo.png'
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -8,11 +9,10 @@ export function Footer() {
       <div className="container-tight pb-28 pt-16 lg:pb-16">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded-md bg-accent text-white">
-                <span className="text-lg font-extrabold leading-none">W</span>
+            <div className="flex items-center">
+              <span className="grid place-items-center rounded-lg bg-white p-1.5 shadow-sm">
+                <img src={logo} alt="West Wind Logistics" className="h-9 w-auto" />
               </span>
-              <span className="text-lg font-extrabold tracking-tight">West Wind Logistics</span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">{footer.blurb}</p>
             <a href={`tel:${contact.tel}`} className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-foreground transition-colors hover:text-accent">

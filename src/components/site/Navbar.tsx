@@ -3,6 +3,7 @@ import { Menu, Phone, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { contact, nav } from '@/content/site'
+import logo from '@/assets/photos/logo.png'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -23,12 +24,9 @@ export function Navbar() {
       )}
     >
       <nav className="container-tight flex h-16 items-center justify-between">
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid size-8 place-items-center rounded-md bg-accent text-white shadow-[0_6px_18px_-8px_hsl(var(--accent)/0.9)]">
-            <span className="text-lg font-extrabold leading-none">W</span>
-          </span>
-          <span className="text-lg font-extrabold tracking-tight">
-            West Wind <span className="text-xs font-medium uppercase tracking-[0.2em] text-white/60">Logistics</span>
+        <a href="#top" className="flex items-center" aria-label="West Wind Logistics — home">
+          <span className="grid place-items-center rounded-lg bg-white p-1.5 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.5)]">
+            <img src={logo} alt="West Wind Logistics" className="h-9 w-auto" />
           </span>
         </a>
 
@@ -45,7 +43,7 @@ export function Navbar() {
             <Phone className="size-4" /> {contact.phone}
           </a>
           <Button asChild variant="accent" size="sm" className="h-10 px-5">
-            <a href="#apply">{nav.cta}</a>
+            <a href="#apply" data-track="nav_apply">{nav.cta}</a>
           </Button>
         </div>
 
@@ -69,7 +67,7 @@ export function Navbar() {
             ))}
             <div className="mt-2 flex flex-col gap-2">
               <Button asChild variant="accent" size="lg">
-                <a href="#apply" onClick={() => setOpen(false)}>{nav.cta}</a>
+                <a href="#apply" data-track="nav_apply" onClick={() => setOpen(false)}>{nav.cta}</a>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
                 <a href={`tel:${contact.tel}`}>

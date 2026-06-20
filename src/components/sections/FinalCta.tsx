@@ -24,18 +24,22 @@ export function FinalCta() {
             {finalCta.sub}
           </p>
           <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-            <MagneticButton href="#apply" variant="accent" className="justify-center">
-              {finalCta.cta}
-              <ArrowRight className="h-5 w-5" />
-            </MagneticButton>
-            <MagneticButton
-              href={`tel:${contact.tel}`}
-              variant="outline"
-              className="justify-center border-white/30 text-white hover:bg-white/10"
-            >
-              <Phone className="h-5 w-5" />
-              {finalCta.secondaryCta}
-            </MagneticButton>
+            <span data-track="final_apply" className="w-full sm:w-auto">
+              <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
+                {finalCta.cta}
+                <ArrowRight className="h-5 w-5" />
+              </MagneticButton>
+            </span>
+            <span data-track="final_call" className="w-full sm:w-auto">
+              <MagneticButton
+                href={`tel:${contact.tel}`}
+                variant="outline"
+                className="w-full justify-center border-white/30 text-white hover:bg-white/10 sm:w-auto"
+              >
+                <Phone className="h-5 w-5" />
+                {finalCta.secondaryCta}
+              </MagneticButton>
+            </span>
           </div>
         </Reveal>
       </div>
