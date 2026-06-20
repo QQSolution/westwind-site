@@ -1,12 +1,13 @@
 import { ArrowRight, Phone } from 'lucide-react'
 import { finalCta, contact } from '@/content/site'
 import { MagneticButton } from '@/components/site/MagneticButton'
+import { SmartImage } from '@/components/site/SmartImage'
 import { Reveal } from '@/components/Reveal'
 
 export function FinalCta() {
   return (
-    <section className="relative isolate flex min-h-[70svh] items-center overflow-hidden">
-      <img
+    <section className="relative isolate flex min-h-[70svh] items-center overflow-hidden bg-[hsl(var(--navy))]">
+      <SmartImage
         src={finalCta.image}
         alt=""
         aria-hidden

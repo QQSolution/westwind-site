@@ -1,26 +1,28 @@
+import { useRef } from 'react'
 import { ArrowRight, Check, ChevronDown } from 'lucide-react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { HighlightHeadline } from '@/components/site/HighlightHeadline'
 import { MagneticButton } from '@/components/site/MagneticButton'
 import { hero } from '@/content/site'
 
 export function Hero() {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
+
   return (
-    <section id="top" className="relative isolate flex min-h-[100svh] items-center overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <img src={hero.image} alt={hero.imageAlt} decoding="async" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--navy))]/95 via-[hsl(var(--navy))]/72 to-[hsl(var(--navy))]/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))]/85 via-transparent to-[hsl(var(--navy))]/40" />
+    <section ref={ref} id="top" className="relative isolate flex min-h-[100svh] items-center overflow-hidden">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <motion.div className="absolute inset-x-0 top-[-12%] h-[124%]" style={reduce ? undefined : { y }}>
+          <img src={hero.image} alt={hero.imageAlt} decoding="async" className="h-full w-full object-cover" />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--navy))]/96 via-[hsl(var(--navy))]/82 to-[hsl(var(--navy))]/45" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))]/85 via-transparent to-[hsl(var(--navy))]/45" />
       </div>
 
       <div className="container-tight py-16 text-white sm:py-28">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 22 }}
-          animate={reduce ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-3xl"
-        >
+        <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] backdrop-blur">
             <span className="size-1.5 rounded-full bg-accent" />
             {hero.eyebrow}
@@ -51,7 +53,7 @@ export function Hero() {
               </span>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <motion.a

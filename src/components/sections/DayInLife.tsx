@@ -1,6 +1,7 @@
 import { dayInLife } from '@/content/site'
 import { Section, SectionHeading } from '@/components/site/kit'
 import { Reveal } from '@/components/Reveal'
+import { SmartImage } from '@/components/site/SmartImage'
 import { cn } from '@/lib/utils'
 
 export function DayInLife() {
@@ -17,15 +18,14 @@ export function DayInLife() {
                 <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
                   <div
                     className={cn(
-                      'group relative overflow-hidden rounded-3xl border border-border bg-card shadow-card',
+                      'group relative overflow-hidden rounded-3xl border border-border bg-secondary shadow-card',
                       imageRight ? 'lg:order-2' : 'lg:order-1',
                     )}
                   >
-                    <img
+                    <SmartImage
                       src={block.image}
                       alt={block.title}
-                      loading="lazy"
-                      className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+                      className="aspect-[4/3] w-full object-cover transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
                     />
                   </div>
 

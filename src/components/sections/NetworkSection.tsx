@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
 import { Section, SectionHeading, StatCard } from '@/components/site/kit'
 import { Reveal } from '@/components/Reveal'
@@ -32,7 +33,9 @@ function MapFrame() {
     <div ref={ref} className="h-full overflow-hidden rounded-3xl border border-border bg-card p-2 shadow-card sm:p-6">
       {near ? (
         <Suspense fallback={<div className="aspect-[975/610] w-full animate-pulse rounded-2xl bg-secondary" />}>
-          <UsTerminalsMap />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, ease: 'easeOut' }}>
+            <UsTerminalsMap />
+          </motion.div>
         </Suspense>
       ) : (
         <div className="aspect-[975/610] w-full rounded-2xl bg-secondary" />

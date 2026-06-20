@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Section, SectionHeading } from '@/components/site/kit'
+import { SmartImage } from '@/components/site/SmartImage'
 import { truckExplorer } from '@/content/site'
 import { cn } from '@/lib/utils'
 
@@ -34,11 +35,9 @@ export function TruckExplorer() {
 
         <div className="mt-10 overflow-hidden rounded-3xl border border-border bg-card shadow-card">
           <div className="relative aspect-[4/3] w-full sm:aspect-[16/9]">
-            <img
+            <SmartImage
               src={truckExplorer.image}
               alt={truckExplorer.imageAlt}
-              loading="lazy"
-              decoding="async"
               className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent" />

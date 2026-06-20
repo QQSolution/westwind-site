@@ -7,15 +7,15 @@
    ============================================================================ */
 
 import logo from '@/assets/photos/logo.png'
-import truckHero from '@/assets/photos/truck-hero.jpg'
-import truckOtr from '@/assets/photos/truck-otr.jpg'
-import truckYellow from '@/assets/photos/truck-yellow.jpg'
-import truckSlide from '@/assets/photos/truck-slide.jpg'
-import shop from '@/assets/photos/shop.jpg'
-import warehouse from '@/assets/photos/warehouse.jpg'
-import intermodal from '@/assets/photos/intermodal.jpg'
-import hq from '@/assets/photos/hq.jpg'
-import building from '@/assets/photos/building.jpg'
+import truckHero from '@/assets/photos/truck-hero.webp'
+import truckOtr from '@/assets/photos/truck-otr.webp'
+import truckYellow from '@/assets/photos/truck-yellow.webp'
+import truckSlide from '@/assets/photos/truck-slide.webp'
+import shop from '@/assets/photos/shop.webp'
+import warehouse from '@/assets/photos/warehouse.webp'
+import intermodal from '@/assets/photos/intermodal.webp'
+import hq from '@/assets/photos/hq.webp'
+import building from '@/assets/photos/building.webp'
 
 export const assets = { logo, truckHero, truckOtr, truckYellow, truckSlide, shop, warehouse, intermodal, hq, building }
 

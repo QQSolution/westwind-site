@@ -14,15 +14,16 @@ import { Testimonials } from '@/components/sections/Testimonials'
 import { DayInLife } from '@/components/sections/DayInLife'
 import { ProofSection } from '@/components/sections/ProofSection'
 import { Process } from '@/components/sections/Process'
-import { Resources } from '@/components/sections/Resources'
 import { ApplySection } from '@/components/sections/ApplySection'
 import { FaqSection } from '@/components/sections/FaqSection'
+import { Resources } from '@/components/sections/Resources'
 import { FinalCta } from '@/components/sections/FinalCta'
 
 export function Home() {
   useSEO({ title: meta.title, description: meta.description })
   return (
     <>
+      {/* Hook → what's in it for me → what I'd run → the equipment → proof → why us → how to start → apply */}
       <Hero />
       <PaySection />
       <HomeTime />
@@ -37,9 +38,9 @@ export function Home() {
       <DayInLife />
       <ProofSection />
       <Process />
-      <Resources />
       <ApplySection />
       <FaqSection />
+      <Resources />
       <FinalCta />
     </>
   )

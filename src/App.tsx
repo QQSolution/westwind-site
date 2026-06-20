@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { ScrollProgress } from '@/components/site/ScrollProgress'
 import { AnnouncementBar } from '@/components/site/AnnouncementBar'
 import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
@@ -9,6 +10,7 @@ import { Home } from '@/pages/Home'
 export default function App() {
   return (
     <div className="min-h-svh bg-background">
+      <ScrollProgress />
       <AnnouncementBar />
       <Navbar />
       <main>
