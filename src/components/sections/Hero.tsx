@@ -12,17 +12,20 @@ export function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
 
   return (
-    <section ref={ref} id="top" className="relative isolate flex min-h-[100svh] items-center overflow-hidden">
+    <section ref={ref} id="top" className="relative isolate flex min-h-[100svh] items-end overflow-hidden sm:items-center">
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div className="absolute inset-x-0 top-[-12%] h-[124%]" style={reduce ? undefined : { y }}>
-          <img src={hero.image} alt={hero.imageAlt} decoding="async" className="h-full w-full object-cover" />
+          <img src={hero.image} alt={hero.imageAlt} decoding="async" className="h-full w-full object-cover object-[62%_center] sm:object-center" />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--navy))]/97 via-[hsl(var(--navy))]/84 to-[hsl(var(--navy))]/35" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))]/95 via-[hsl(var(--navy))]/35 to-[hsl(var(--navy))]/55" />
+        {/* mobile: vertical scrim — real truck reads up top, text stays legible down low */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--navy))]/20 via-[hsl(var(--navy))]/55 to-[hsl(var(--navy))]/97 sm:hidden" />
+        {/* desktop: left-weighted so the truck fills the right of the frame */}
+        <div className="absolute inset-0 hidden sm:block sm:bg-gradient-to-r sm:from-[hsl(var(--navy))]/97 sm:via-[hsl(var(--navy))]/84 sm:to-[hsl(var(--navy))]/35" />
+        <div className="absolute inset-0 hidden sm:block sm:bg-gradient-to-t sm:from-[hsl(var(--navy))]/90 sm:via-[hsl(var(--navy))]/30 sm:to-[hsl(var(--navy))]/55" />
       </div>
 
-      <div className="container-tight py-16 text-white sm:py-28">
-        <div className="max-w-3xl">
+      <div className="container-tight pb-28 pt-16 text-white sm:py-28">
+        <div className="max-w-3xl [text-shadow:0_2px_16px_hsl(var(--navy)/0.55)] sm:[text-shadow:none]">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] backdrop-blur">
             <span className="size-1.5 rounded-full bg-accent" />
             {hero.eyebrow}
@@ -30,12 +33,15 @@ export function Hero() {
 
           <HighlightHeadline
             lines={hero.lines}
-            className="mt-6 text-balance text-[clamp(2.7rem,7.4vw,5.2rem)] font-bold leading-[1.02] tracking-tight"
+            className="mt-5 text-balance text-[clamp(3rem,9vw,5.2rem)] font-bold leading-[1.03] tracking-tight sm:mt-6"
           />
 
-          <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-white/80 sm:text-xl">{hero.sub}</p>
+          <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-white/85 sm:mt-6 sm:text-xl">{hero.sub}</p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+          {/* Pay detail above the CTA so the money is the last thing read before tapping */}
+          <p className="mt-5 max-w-xl text-base font-medium leading-relaxed text-white/90">{hero.payLine}</p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
             <span data-track="hero_apply" className="w-full sm:w-auto">
               <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
                 {hero.cta} <ArrowRight />
@@ -48,9 +54,7 @@ export function Hero() {
             </span>
           </div>
 
-          <p className="mt-5 text-sm text-white/65">{hero.payLine}</p>
-
-          <div className="mt-9 flex flex-wrap gap-x-6 gap-y-2.5 text-sm text-white/80">
+          <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2.5 text-sm text-white/80">
             {hero.chips.map((c) => (
               <span key={c} className="inline-flex items-center gap-1.5">
                 <Check className="size-4 text-[hsl(var(--gold))]" strokeWidth={2.5} /> {c}

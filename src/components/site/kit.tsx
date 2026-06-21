@@ -21,7 +21,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        'py-20 sm:py-28',
+        'py-11 sm:py-28',
         tone === 'surface' && 'bg-[hsl(var(--surface))]',
         tone === 'navy' && 'bg-[hsl(var(--navy))] text-white',
         className,

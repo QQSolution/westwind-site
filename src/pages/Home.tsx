@@ -19,17 +19,17 @@ export function Home() {
   useSEO({ title: meta.title, description: meta.description })
   return (
     <>
-      {/* Hook → stats → pay → why stay → home time → the truck → fleet → network → real footage → proof+safety → how it works → apply → faq → final */}
+      {/* Hook → stats → pay → IS IT REAL (proof) → yes-you-can → home time → the truck → fleet → network → real footage → how it works → apply → faq → final */}
       <Hero />
       <TrustStrip />
       <PaySection />
+      <ProofSection />
       <WhyStay />
       <HomeTime />
       <TruckExplorer />
       <FleetGallery />
       <NetworkSection />
       <VideoSection />
-      <ProofSection />
       <Process />
       <ApplySection />
       <FaqSection />

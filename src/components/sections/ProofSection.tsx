@@ -80,7 +80,7 @@ export function ProofSection() {
               </a>
             </div>
 
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-white/55">
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-white/70">
               {proof.disambiguation}
             </p>
           </Reveal>

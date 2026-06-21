@@ -16,7 +16,11 @@ export function PaySection() {
             <p className="text-balance text-xl font-bold leading-snug tracking-tight sm:text-2xl md:text-[2.5rem]">
               {pay.rangeNote}
             </p>
-            <p className="mt-5 text-sm text-white/60">{pay.disclaimer}</p>
+            {/* The math, shown — so a miles driver can do it himself and it closes */}
+            <p className="mt-5 border-t border-white/15 pt-5 text-[15px] leading-relaxed text-white/85 sm:text-base">
+              {pay.tripMath}
+            </p>
+            <p className="mt-4 text-sm text-white/55">{pay.disclaimer}</p>
           </div>
         </Reveal>
 
