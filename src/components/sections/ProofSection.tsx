@@ -73,7 +73,7 @@ export function ProofSection() {
                 rel="noopener noreferrer"
                 data-track="safer_lookup"
                 data-company_usdot="1302563"
-                className="sheen relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-full bg-accent px-8 text-base font-semibold text-accent-foreground shadow-[0_12px_34px_-12px_hsl(var(--accent)/0.5)] transition-[box-shadow,background] duration-300 ease-out hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-5"
+                className="sheen relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-full bg-accent px-8 text-base font-semibold text-accent-foreground shadow-[0_12px_34px_-12px_hsl(var(--accent)/0.5)] transition-[box-shadow,background] duration-300 ease-out hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-0 [&_svg]:size-5"
               >
                 {proof.cta}
                 <ExternalLink aria-hidden />

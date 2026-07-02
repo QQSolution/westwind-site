@@ -22,9 +22,19 @@
     <meta property="og:image" content="https://qqsolution.github.io/westwind-site/og.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://qqsolution.github.io/westwind-site/og.jpg" />
+    <!-- Hero LCP: start fetching the exact hero variant before any JS/CSS parses -->
+    <link
+      rel="preload"
+      as="image"
+      href="/hero/wind-hero-1280.webp"
+      imagesrcset="/hero/wind-hero-768.webp 768w, /hero/wind-hero-1280.webp 1280w, /hero/wind-hero-1920.webp 1920w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- One variable-font request covers 400–800 (replaces five static weights) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap" rel="stylesheet" />
     <title>West Wind Logistics — CDL-A Reefer & Dry Van Driver Jobs</title>
   </head>
   <body>

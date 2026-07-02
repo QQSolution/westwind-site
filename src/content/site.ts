@@ -235,26 +235,33 @@ export const proof = {
   ],
 }
 
+/** Ordered so the 6 highest-stakes questions render first (FAQ shows 6, then expands). */
 export const faq = [
   { q: 'Why should I believe your pay?', a: 'Because we put it on the page and in writing. $0.70/mile + extra stops, 1099, paid per trip. If a number is different on the phone, hang up on us.' },
   { q: 'How does pay actually work?', a: '$0.70 a mile plus extra stops (1st $75, 2nd $100, 3rd and up $120). IL to CA and back is about 4,100 miles — roughly $2,870 in line miles, and the stops on a produce load push it up around $3,500. You’re paid per round trip, not a flat weekly check.' },
   { q: 'Is there a sign-on bonus?', a: 'No. Other carriers promise $5k, then use one violation to never pay it. We don’t play that game. We pay you per mile, every mile.' },
   { q: 'W-2 or 1099?', a: 'Straight up: it’s 1099. You run as your own boss on taxes — no check with taxes already taken out, no benefits. We pay you $0.70 a mile, the whole number, per trip. The recruiter walks you through exactly how settlements work before you ever roll — we’d rather you know now than be surprised on payday.' },
-  { q: 'Can I get a cash advance?', a: 'Yes. Up to $300 a week.' },
   { q: 'How much experience do I need?', a: '2 years CDL-A, minimum — it’s an insurance rule, and we’ve got no trainer. No green drivers holding up the freight. You’ll be running with pros.' },
-  { q: 'I run dry van, not reefer. Can I switch?', a: 'Yes, if you’ve got solid experience. Just know reefer runs 24/7 and can’t be shut off. The mechanic shows you the unit at orientation.' },
+  { q: 'Is this a lead-board trap?', a: 'No. No SSN to apply. A real recruiter calls you. We don’t sell or blast your info.' },
+  { q: 'Can I get a cash advance?', a: 'Yes. Up to $300 a week.' },
+  { q: 'Do I sit waiting for loads?', a: 'No. We haul our own customer freight — 60+ loads a day. You’re not parked three days waiting on a dispatcher. You’re loaded both ways and rolling.' },
   { q: 'How much home time?', a: 'OTR trips run about 8–9 days, then about 2 days home. We measure it in trips, not weeks. Start and finish at our IL yard.' },
   { q: 'I live in CA, AZ, or UT. Can I restart at home?', a: 'Yes. We route you home, you park in our yard there, do your 34-hour restart at home. No extra flights.' },
-  { q: 'Can I bring my dog? My wife?', a: 'Yes. Pet-friendly. Passengers, spouse, and kids are allowed.' },
+  { q: 'I run dry van, not reefer. Can I switch?', a: 'Yes, if you’ve got solid experience. Just know reefer runs 24/7 and can’t be shut off. The mechanic shows you the unit at orientation.' },
   { q: 'What about my driving record?', a: 'We run MVR, PSP, and Clearinghouse. A fresh accident (under ~2 years) is too fresh; 3+ years old, we’ll talk. 5 speeding tickets in 2 years is a no.' },
-  { q: 'Do I sit waiting for loads?', a: 'No. We haul our own customer freight — 60+ loads a day. You’re not parked three days waiting on a dispatcher. You’re loaded both ways and rolling.' },
   { q: 'What if my truck breaks down?', a: 'We have our own shops in IL, AZ, and CA. You’re not stuck at a vendor for a week.' },
+  { q: 'Can I bring my dog? My wife?', a: 'Yes. Pet-friendly. Passengers, spouse, and kids are allowed.' },
   { q: 'Why are 45 seats open?', a: 'The freight is here and the trucks are here. We’re growing. That’s it — no catch.' },
-  { q: 'Is this a lead-board trap?', a: 'No. No SSN to apply. A real recruiter calls you. We don’t sell or blast your info.' },
 ]
 
 export const finalCta = {
+  /** Plain-string fallback / meta uses. The rendered close uses `lines` below. */
   headline: 'We’ve got the trucks. We need you.',
+  /** Headline as HighlightHeadline segments — `hl` gets the highlight bar. */
+  lines: [
+    [{ t: 'We’ve got the trucks.' }],
+    [{ t: 'We need ' }, { t: 'you.', hl: true }],
+  ] as Array<Array<{ t: string; hl?: boolean }>>,
   sub: 'The freight’s here. The miles are here. We just need a driver who’s done getting jerked around.',
   cta: 'See if you qualify',
   secondaryCta: 'Call 800-400-9956 ext 2040',

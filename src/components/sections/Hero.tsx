@@ -1,9 +1,30 @@
 import { useRef } from 'react'
-import { ArrowRight, Check, ChevronDown, Phone } from 'lucide-react'
+import { ArrowRight, Check, ChevronDown, Lock, Phone } from 'lucide-react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { HighlightHeadline } from '@/components/site/HighlightHeadline'
 import { MagneticButton } from '@/components/site/MagneticButton'
-import { hero, contact } from '@/content/site'
+import { hero, contact, quiz } from '@/content/site'
+import { track } from '@/lib/track'
+
+/** First quiz question, answered right in the hero — zero scroll to start.
+ *  Hands off to the full QualForm at #apply with Q1 pre-filled. */
+function startPrescreen(experience: string) {
+  track('hero_prescreen', { experience })
+  window.dispatchEvent(new CustomEvent('ww:prescreen', { detail: { experience } }))
+  // plain scrollIntoView respects the CSS scroll-behavior (smooth, auto under reduced motion)
+  document.querySelector('#apply')?.scrollIntoView()
+}
+
+const expStep = quiz.steps[0]
+const expOptions = expStep.type === 'choice' ? expStep.options : []
+
+/* Responsive hero variants live in public/hero/ (stable URLs, preloaded from index.html).
+   Phones fetch the 73KB 768w file instead of the 456KB original. */
+const BASE = import.meta.env.BASE_URL
+const heroSrc = `${BASE}hero/wind-hero-1280.webp`
+const heroSrcSet = `${BASE}hero/wind-hero-768.webp 768w, ${BASE}hero/wind-hero-1280.webp 1280w, ${BASE}hero/wind-hero-1920.webp 1920w`
+/* React 18 passes lowercase custom attributes through; camelCase fetchPriority warns. */
+const highPriority = { fetchpriority: 'high' } as Record<string, string>
 
 export function Hero() {
   const reduce = useReducedMotion()
@@ -15,7 +36,15 @@ export function Hero() {
     <section ref={ref} id="top" className="relative isolate flex min-h-[100svh] items-end overflow-hidden sm:items-center">
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div className="absolute inset-x-0 top-[-12%] h-[124%]" style={reduce ? undefined : { y }}>
-          <img src={hero.image} alt={hero.imageAlt} decoding="async" className="h-full w-full object-cover object-[62%_center] sm:object-center" />
+          <img
+            src={heroSrc}
+            srcSet={heroSrcSet}
+            sizes="100vw"
+            alt={hero.imageAlt}
+            decoding="async"
+            {...highPriority}
+            className="h-full w-full object-cover object-[62%_center] sm:object-center"
+          />
         </motion.div>
         {/* mobile: vertical scrim — real truck reads up top, text stays legible down low */}
         <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--navy))]/20 via-[hsl(var(--navy))]/55 to-[hsl(var(--navy))]/97 sm:hidden" />
@@ -25,7 +54,8 @@ export function Hero() {
       </div>
 
       <div className="container-tight pb-28 pt-16 text-white sm:py-28">
-        <div className="max-w-3xl [text-shadow:0_2px_16px_hsl(var(--navy)/0.55)] sm:[text-shadow:none]">
+        <div className="flex items-center gap-10 xl:gap-16">
+        <div className="max-w-3xl [text-shadow:0_2px_16px_hsl(var(--navy)/0.55)] sm:[text-shadow:none] lg:max-w-2xl xl:max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] backdrop-blur">
             <span className="size-1.5 rounded-full bg-accent" />
             {hero.eyebrow}
@@ -33,7 +63,7 @@ export function Hero() {
 
           <HighlightHeadline
             lines={hero.lines}
-            className="mt-5 text-balance text-[clamp(3rem,9vw,5.2rem)] font-bold leading-[1.03] tracking-tight sm:mt-6"
+            className="mt-5 text-balance text-[clamp(3rem,9vw,5.2rem)] font-extrabold leading-[1.03] tracking-[-0.035em] sm:mt-6"
           />
 
           <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-white/85 sm:mt-6 sm:text-xl">{hero.sub}</p>
@@ -61,6 +91,31 @@ export function Hero() {
               </span>
             ))}
           </div>
+        </div>
+
+        {/* Desktop pre-screen card — start the quiz without scrolling (glass over the truck).
+            Rendered static (no JS entrance) so it can never be stuck invisible. */}
+        <div className="ml-auto hidden w-[350px] shrink-0 lg:block">
+          <div className="rounded-3xl border border-white/15 bg-[hsl(var(--navy))]/75 p-6 shadow-[0_24px_70px_-24px_rgba(0,0,0,0.7)] backdrop-blur-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[hsl(var(--gold))]">{quiz.headline}</p>
+            <p className="mt-2.5 text-xl font-bold leading-snug">{expStep.q}</p>
+            <div className="mt-4 grid gap-2.5">
+              {expOptions.map((o) => (
+                <button
+                  key={o.v}
+                  type="button"
+                  onClick={() => startPrescreen(o.v)}
+                  className="min-h-[52px] rounded-xl bg-white px-4 text-left text-base font-semibold text-foreground shadow-sm transition-[transform,background-color] duration-200 hover:scale-[1.02] hover:bg-white/95 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]"
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-4 flex items-center gap-1.5 text-xs text-white/65">
+              <Lock className="size-3.5" aria-hidden /> No SSN. A real recruiter calls you.
+            </p>
+          </div>
+        </div>
         </div>
       </div>
 

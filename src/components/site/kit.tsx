@@ -23,10 +23,16 @@ export function Section({
       className={cn(
         'py-11 sm:py-28',
         tone === 'surface' && 'bg-[hsl(var(--surface))]',
-        tone === 'navy' && 'bg-[hsl(var(--navy))] text-white',
+        tone === 'navy' && 'relative bg-[hsl(var(--navy))] text-white',
         className,
       )}
     >
+      {tone === 'navy' ? (
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/40 to-transparent"
+        />
+      ) : null}
       {children}
     </section>
   )
@@ -71,7 +77,7 @@ export function SectionHeading({
       className={cn('max-w-3xl', align === 'center' && 'mx-auto text-center')}
     >
       {eyebrow ? <Eyebrow light={light}>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-5 text-balance text-3xl font-bold leading-[1.06] tracking-tight sm:text-4xl md:text-[3.25rem]">{title}</h2>
+      <h2 className="mt-5 text-balance text-[clamp(2.125rem,1.35rem+3.5vw,3.5rem)] font-extrabold leading-[1.05] tracking-[-0.03em]">{title}</h2>
       {sub ? (
         <p className={cn('mt-5 text-pretty text-lg leading-relaxed', light ? 'text-white/70' : 'text-muted-foreground')}>{sub}</p>
       ) : null}

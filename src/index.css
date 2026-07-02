@@ -55,6 +55,12 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* Anchor targets land below the sticky navbar (h-16) + breathing room,
+     so nav clicks never bury a section heading under the header. */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
   body {
     margin: 0;
     min-height: 100svh;
@@ -67,10 +73,16 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
-  h1, h2, h3, h4 {
+  h1, h2 {
+    font-family: Inter, -apple-system, system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  h3, h4 {
     font-family: Inter, -apple-system, system-ui, sans-serif;
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
   }
 
   ::selection {
@@ -117,10 +129,13 @@
     inset: 0;
     background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
     transform: translateX(-120%);
-    transition: transform 0.7s ease;
     pointer-events: none;
   }
-  .sheen:hover::after { transform: translateX(120%); }
+  /* Hover-only: touch devices never get a stuck mid-sweep sheen flash */
+  @media (hover: hover) and (pointer: fine) {
+    .sheen::after { transition: transform 0.7s ease; }
+    .sheen:hover::after { transform: translateX(120%); }
+  }
 
   .mask-fade-b {
     -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);

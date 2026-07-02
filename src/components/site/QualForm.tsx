@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Check, Loader2, Lock, Phone, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { config, contact, quiz } from '@/content/site'
 import { track } from '@/lib/track'
 import { cn } from '@/lib/utils'
@@ -108,6 +107,7 @@ async function deliver(lead: Record<string, unknown>): Promise<boolean> {
 export function QualForm() {
   const reduce = useReducedMotion()
   const [idx, setIdx] = useState(0)
+  const [dir, setDir] = useState(1)
   const [answers, setAnswers] = useState<Answers>({})
   const [result, setResult] = useState<Result | null>(null)
 
@@ -123,9 +123,32 @@ export function QualForm() {
   const total = steps.length
   const progress = result ? 100 : Math.round((idx / total) * 100)
 
+  // Sprung progress bar: the motion value is initialized at the correct width,
+  // so the bar is visible at its true position immediately on mount.
+  const progressMv = useMotionValue(progress / 100)
+  const progressSpring = useSpring(progressMv, { stiffness: 220, damping: 28 })
+  useEffect(() => {
+    progressMv.set(progress / 100)
+  }, [progress, progressMv])
+
   // Stamp the start time once on mount (kept out of render for purity).
   useEffect(() => {
     startedAt.current = Date.now()
+  }, [])
+
+  // Hero pre-screen handoff: the hero card answers Q1 (experience) up top,
+  // then jumps here with the quiz already advanced to Q2.
+  useEffect(() => {
+    const onPrescreen = (e: Event) => {
+      const exp = (e as CustomEvent<{ experience?: string }>).detail?.experience
+      if (!exp) return
+      setResult(null)
+      setAnswers((a) => ({ ...a, experience: exp }))
+      setDir(1)
+      setIdx(1)
+    }
+    window.addEventListener('ww:prescreen', onPrescreen)
+    return () => window.removeEventListener('ww:prescreen', onPrescreen)
   }, [])
 
   // Fire form_step on each step view.
@@ -134,19 +157,26 @@ export function QualForm() {
     track('form_step', { step_id: steps[idx].id, step_index: idx + 1, step_total: total })
   }, [idx, result, total])
 
-  const goBack = () => idx > 0 && setIdx(idx - 1)
+  const goBack = () => {
+    if (idx > 0) {
+      setDir(-1)
+      setIdx(idx - 1)
+    }
+  }
 
   function choose(stepId: string, v: string) {
     setAnswers((a) => ({ ...a, [stepId]: v }))
-    if (idx < total - 1) setIdx(idx + 1)
+    if (idx < total - 1) {
+      setDir(1)
+      setIdx(idx + 1)
+    }
   }
 
-  function continueState() {
-    if (!stateVal) {
-      setErrors((e) => ({ ...e, state: true }))
-      return
-    }
-    setAnswers((a) => ({ ...a, state: stateVal }))
+  function chooseState(v: string) {
+    setStateVal(v)
+    setErrors((e) => ({ ...e, state: false }))
+    setAnswers((a) => ({ ...a, state: v }))
+    setDir(1)
     setIdx(idx + 1)
   }
 
@@ -159,7 +189,16 @@ export function QualForm() {
       consent: !consent,
     }
     setErrors(e)
-    return !e.name && !e.phone && !e.email && !e.consent
+    const ok = !e.name && !e.phone && !e.email && !e.consent
+    if (!ok) {
+      const first = ['name', 'phone', 'email', 'consent'].find((k) => e[k])
+      const el = first ? document.getElementById(`ww-${first}`) : null
+      if (el) {
+        el.focus({ preventScroll: true })
+        el.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' })
+      }
+    }
+    return ok
   }
 
   async function submit() {
@@ -291,17 +330,25 @@ export function QualForm() {
           <span>{progress}%</span>
         </div>
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
-          <div className="h-full rounded-full bg-accent transition-[width] duration-300" style={{ width: `${progress}%` }} />
+          {reduce ? (
+            <div className="h-full origin-left rounded-full bg-accent" style={{ transform: `scaleX(${progress / 100})` }} />
+          ) : (
+            <motion.div className="h-full origin-left rounded-full bg-accent" style={{ scaleX: progressSpring }} />
+          )}
         </div>
       </div>
 
-      <AnimatePresence mode="wait">
+      {/* Keyed motion.div, NO AnimatePresence/exit: the new step mounts instantly
+          instead of waiting on an exit animation that can stall in a throttled tab
+          and strand the driver mid-quiz. Transform-only slide with opacity fixed at
+          1, so the step is always visible and clickable even if the animation never
+          runs. Direction-aware via `dir`. */}
+      <div className="overflow-hidden">
         <motion.div
           key={idx}
-          initial={reduce ? false : { opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={reduce ? { opacity: 0 } : { opacity: 0, x: -24 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          initial={reduce ? false : { x: 26 * dir }}
+          animate={{ x: 0 }}
+          transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
         >
           <h3 className="text-balance font-display text-xl font-semibold leading-snug sm:text-2xl">{step.q}</h3>
 
@@ -331,44 +378,53 @@ export function QualForm() {
 
           {step.type === 'select' && (
             <div className="mt-5">
-              <Select
+              {/* Native select: better picker UX on mobile; choosing a state auto-advances. */}
+              <select
                 value={stateVal}
-                onValueChange={(v) => {
-                  setStateVal(v)
-                  setErrors((e) => ({ ...e, state: false }))
-                }}
+                aria-label="Select your state"
+                autoComplete="address-level1"
+                className={cn(
+                  'w-full min-h-[56px] rounded-xl border border-border bg-card px-4 text-base',
+                  !stateVal && 'text-muted-foreground',
+                )}
+                onChange={(e) => chooseState(e.target.value)}
               >
-                <SelectTrigger aria-label="Select your state" className="min-h-[56px]">
-                  <SelectValue placeholder={step.placeholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  {step.options.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {s}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="" disabled>
+                  {step.placeholder}
+                </option>
+                {step.options.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
               {errors.state && <p className="mt-2 text-sm text-accent">Please choose your state.</p>}
               <div className="mt-6 flex items-center gap-3">
                 <Button type="button" variant="ghost" size="icon" onClick={goBack} aria-label="Back">
                   <ArrowLeft className="size-5" />
-                </Button>
-                <Button type="button" className="min-h-[56px] flex-1" onClick={continueState}>
-                  Continue
                 </Button>
               </div>
             </div>
           )}
 
           {step.type === 'contact' && (
-            <div className="mt-5 space-y-4">
+            <form
+              noValidate
+              className="mt-5 space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault()
+                void submit()
+              }}
+            >
               <div>
                 <Label htmlFor="ww-name">Your name</Label>
                 <Input
                   id="ww-name"
+                  name="name"
                   className="mt-1.5 min-h-[52px]"
                   autoComplete="name"
+                  autoCapitalize="words"
+                  enterKeyHint="next"
                   placeholder="First and last name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -381,10 +437,12 @@ export function QualForm() {
                 <Label htmlFor="ww-phone">Cell phone</Label>
                 <Input
                   id="ww-phone"
+                  name="tel"
                   className="mt-1.5 min-h-[52px]"
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
+                  enterKeyHint="next"
                   placeholder="(555) 555-5555"
                   value={phone}
                   onChange={(e) => setPhone(formatPhone(e.target.value))}
@@ -397,10 +455,12 @@ export function QualForm() {
                 <Label htmlFor="ww-email">Email</Label>
                 <Input
                   id="ww-email"
+                  name="email"
                   className="mt-1.5 min-h-[52px]"
                   type="email"
                   inputMode="email"
                   autoComplete="email"
+                  enterKeyHint="go"
                   placeholder="you@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -411,7 +471,7 @@ export function QualForm() {
               </div>
 
               <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-secondary p-4">
-                <Checkbox checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" aria-invalid={!!errors.consent} aria-describedby={errors.consent ? 'ww-consent-err' : undefined} />
+                <Checkbox id="ww-consent" checked={consent} onCheckedChange={(v) => setConsent(v === true)} className="mt-0.5" aria-invalid={!!errors.consent} aria-describedby={errors.consent ? 'ww-consent-err' : undefined} />
                 <span className="text-sm leading-relaxed text-muted-foreground">
                   {quiz.consent}{' '}
                   <a href={contact.smsUrl} target="_blank" rel="noopener" className="text-foreground underline underline-offset-2">
@@ -430,7 +490,7 @@ export function QualForm() {
                 <Button type="button" variant="ghost" size="icon" onClick={goBack} aria-label="Back">
                   <ArrowLeft className="size-5" />
                 </Button>
-                <Button type="button" className="min-h-[56px] flex-1" size="lg" disabled={sending} onClick={submit}>
+                <Button type="submit" className="min-h-[56px] flex-1" size="lg" disabled={sending}>
                   {sending ? (
                     <>
                       <Loader2 className="size-5 animate-spin" /> Sending…
@@ -444,7 +504,7 @@ export function QualForm() {
               <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                 <Lock className="size-3.5" /> No SSN here. Your info goes straight to West Wind — never sold.
               </p>
-            </div>
+            </form>
           )}
 
           {step.type === 'choice' && idx > 0 && (
@@ -453,7 +513,7 @@ export function QualForm() {
             </button>
           )}
         </motion.div>
-      </AnimatePresence>
+      </div>
     </div>
   )
 }

@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { Menu, Phone, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { contact, nav } from '@/content/site'
 import logo from '@/assets/photos/logo.png'
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
+
+const menuItemVariants: Variants = {
+  hidden: { opacity: 0, y: 6 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: EASE } },
+}
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -47,37 +57,77 @@ export function Navbar() {
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="grid size-10 place-items-center rounded-lg text-white lg:hidden"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="size-6" /> : <Menu className="size-6" />}
-        </button>
+        <div className="flex items-center gap-1 lg:hidden">
+          <a
+            href={`tel:${contact.tel}`}
+            aria-label="Call West Wind recruiting"
+            data-track="nav_call_mobile"
+            className="grid size-11 place-items-center rounded-lg text-white transition-colors hover:bg-white/10"
+          >
+            <Phone className="size-5" />
+          </a>
+          <a
+            href="#apply"
+            data-track="nav_apply"
+            className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+          >
+            {nav.cta}
+          </a>
+          <button
+            type="button"
+            className="grid size-10 place-items-center rounded-lg text-white"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className={cn('transition-transform duration-200', open ? 'rotate-90' : 'rotate-0')}>
+              {open ? <X className="size-6" /> : <Menu className="size-6" />}
+            </span>
+          </button>
+        </div>
       </nav>
 
-      {open && (
-        <div className="border-t border-white/10 bg-[hsl(var(--navy))] lg:hidden">
-          <div className="container-tight flex flex-col gap-1 py-4">
-            {nav.items.map((n) => (
-              <a key={n.href} href={n.href} onClick={() => setOpen(false)} className="rounded-lg px-3 py-3 text-base font-medium text-white/90 hover:bg-white/10">
-                {n.label}
-              </a>
-            ))}
-            <div className="mt-2 flex flex-col gap-2">
-              <Button asChild variant="accent" size="lg">
-                <a href="#apply" data-track="nav_apply" onClick={() => setOpen(false)}>{nav.cta}</a>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
-                <a href={`tel:${contact.tel}`}>
-                  <Phone className="size-4" /> Call {contact.phone}
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="mobile-menu"
+            initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={reduceMotion ? { duration: 0 } : { duration: 0.32, ease: EASE }}
+            className="overflow-hidden border-t border-white/10 bg-[hsl(var(--navy))] lg:hidden"
+          >
+            <motion.div
+              className="container-tight flex flex-col gap-1 py-4"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04 } } }}
+              initial={reduceMotion ? false : 'hidden'}
+              animate="show"
+            >
+              {nav.items.map((n) => (
+                <motion.a
+                  key={n.href}
+                  variants={menuItemVariants}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-3 text-base font-medium text-white/90 hover:bg-white/10"
+                >
+                  {n.label}
+                </motion.a>
+              ))}
+              <motion.div variants={menuItemVariants} className="mt-2 flex flex-col gap-2">
+                <Button asChild variant="accent" size="lg">
+                  <a href="#apply" data-track="nav_apply" onClick={() => setOpen(false)}>{nav.cta}</a>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
+                  <a href={`tel:${contact.tel}`}>
+                    <Phone className="size-4" /> Call {contact.phone}
+                  </a>
+                </Button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }

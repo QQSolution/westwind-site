@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Phone } from 'lucide-react'
 import { company, contact, faq } from '@/content/site'
 import {
@@ -12,6 +13,8 @@ import { MagneticButton } from '@/components/site/MagneticButton'
 import { track } from '@/lib/track'
 
 export function FaqSection() {
+  const [showAll, setShowAll] = useState(false)
+
   return (
     <Section id="faq" tone="surface">
       <div className="container-tight">
@@ -32,7 +35,7 @@ export function FaqSection() {
                 if (value) track('faq_expand', { faq_item_id: value })
               }}
             >
-              {faq.map((f, i) => (
+              {faq.slice(0, showAll ? faq.length : 6).map((f, i) => (
                 <AccordionItem
                   key={i}
                   value={String(i)}
@@ -48,6 +51,20 @@ export function FaqSection() {
               ))}
             </Accordion>
           </Reveal>
+
+          {/* Outside Reveal on purpose: expand control never depends on an entrance animation. */}
+          {!showAll && (
+            <button
+              type="button"
+              onClick={() => {
+                setShowAll(true)
+                track('faq_show_all')
+              }}
+              className="mt-4 min-h-[48px] w-full rounded-xl border border-border bg-transparent px-6 text-sm font-semibold text-foreground transition-colors hover:border-foreground/30 hover:bg-card"
+            >
+              Show all {faq.length} questions
+            </button>
+          )}
 
           <Reveal className="mt-10">
             <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-card sm:p-8">

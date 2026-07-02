@@ -1,11 +1,20 @@
 type Seg = { t: string; hl?: boolean }
 
-/** Hero headline with GP-Transco-style highlight bars behind key words.
+/** Headline with GP-Transco-style highlight bars behind key words.
  *  The bar is static (always visible) so the headline is readable instantly —
- *  no dependency on a JS animation for legibility. */
-export function HighlightHeadline({ lines, className }: { lines: Seg[][]; className?: string }) {
+ *  no dependency on a JS animation for legibility. Defaults to <h1> (hero);
+ *  pass as="h2" for secondary headlines so there's only one h1 per page. */
+export function HighlightHeadline({
+  lines,
+  className,
+  as: Tag = 'h1',
+}: {
+  lines: Seg[][]
+  className?: string
+  as?: 'h1' | 'h2'
+}) {
   return (
-    <h1 className={className}>
+    <Tag className={className}>
       {lines.map((line, li) => (
         <span key={li} className="block">
           {line.map((seg, si) =>
@@ -20,6 +29,6 @@ export function HighlightHeadline({ lines, className }: { lines: Seg[][]; classN
           )}
         </span>
       ))}
-    </h1>
+    </Tag>
   )
 }

@@ -15,6 +15,9 @@ export function VideoSection() {
     if (reduceMotion) return
     const el = frameRef.current
     if (!el) return
+    // Respect Data Saver / very slow connections: stay on the poster image.
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+    if (conn?.saveData === true || conn?.effectiveType?.includes('2g')) return
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
@@ -22,7 +25,7 @@ export function VideoSection() {
           io.disconnect()
         }
       },
-      { rootMargin: '300px' },
+      { rootMargin: window.innerWidth < 640 ? '150px' : '300px' },
     )
     io.observe(el)
     return () => io.disconnect()

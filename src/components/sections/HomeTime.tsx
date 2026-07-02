@@ -6,17 +6,17 @@ import { cn } from '@/lib/utils'
 
 export function HomeTime() {
   return (
-    <Section id="positions" tone="surface">
+    <Section id="positions" tone="white">
       <div className="container-tight">
         <SectionHeading eyebrow="Open seats" title={homeTime.headline} sub={homeTime.sub} />
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-4 md:grid-cols-3 md:gap-6">
           {homeTime.options.map((opt, i) => (
             <Reveal key={opt.name} delay={i * 0.08} className="h-full">
               <a
                 href="#apply"
                 className={cn(
-                  'group flex h-full min-h-[16rem] flex-col rounded-3xl border border-border bg-card p-7 shadow-card',
+                  'group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-card md:min-h-[16rem] md:p-7',
                   'transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
                   'hover:-translate-y-1 hover:border-accent/40 hover:shadow-pop',
                 )}

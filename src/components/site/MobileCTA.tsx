@@ -9,7 +9,7 @@ export function MobileCTA() {
   const [applyInView, setApplyInView] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 640)
+    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.85)
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
 

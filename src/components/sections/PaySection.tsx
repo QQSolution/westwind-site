@@ -12,8 +12,12 @@ export function PaySection() {
 
         {/* Prominent pricing line */}
         <Reveal className="mt-10">
-          <div className="overflow-hidden rounded-3xl bg-[hsl(var(--navy))] p-7 text-white shadow-pop sm:p-10">
-            <p className="text-balance text-xl font-bold leading-snug tracking-tight sm:text-2xl md:text-[2.5rem]">
+          <div className="relative overflow-hidden rounded-3xl bg-[hsl(var(--navy))] p-7 text-white shadow-lift sm:p-10">
+            <div
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/40 to-transparent"
+            />
+            <p className="text-balance text-2xl font-extrabold leading-snug tracking-tight sm:text-3xl md:text-[2.75rem]">
               {pay.rangeNote}
             </p>
             {/* The math, shown — so a miles driver can do it himself and it closes */}

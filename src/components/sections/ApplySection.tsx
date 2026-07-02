@@ -1,5 +1,5 @@
 import { Lock, PhoneCall, Shield } from 'lucide-react'
-import { Section } from '@/components/site/kit'
+import { Eyebrow, Section } from '@/components/site/kit'
 import { Reveal } from '@/components/Reveal'
 import { QualForm } from '@/components/site/QualForm'
 import { quiz } from '@/content/site'
@@ -10,22 +10,31 @@ const POINTS = [
   { icon: Shield, text: 'Your answers go straight to our recruiting office and are never sold.' },
 ]
 
+/** Mobile: heading → form → trust points (order utilities), so the form is one
+ *  scroll away from the heading. lg: classic two-column, sticky form on the right. */
 export function ApplySection() {
   return (
     <Section id="apply" tone="surface" className="scroll-mt-20">
-      <div className="container-tight grid gap-10 lg:grid-cols-2 lg:items-start">
-        <Reveal>
-          <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-accent">
-            <span className="size-1.5 rounded-full bg-accent" />
-            {quiz.headline}
-          </p>
+      <div className="container-tight grid gap-8 lg:grid-cols-2 lg:items-start">
+        <Reveal className="order-1 lg:order-none lg:col-start-1 lg:row-start-1">
+          <Eyebrow>{quiz.headline}</Eyebrow>
           <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
             See where you stand in 60 seconds.
           </h2>
           <p className="mt-4 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
             {quiz.intro}
           </p>
-          <ul className="mt-8 space-y-4">
+        </Reveal>
+
+        <Reveal
+          delay={0.1}
+          className="order-2 lg:order-none lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+        >
+          <QualForm />
+        </Reveal>
+
+        <Reveal className="order-3 lg:order-none lg:col-start-1 lg:row-start-2">
+          <ul className="space-y-4">
             {POINTS.map((p) => {
               const Icon = p.icon
               return (
@@ -39,10 +48,6 @@ export function ApplySection() {
             })}
           </ul>
           <p className="mt-8 text-sm text-muted-foreground">{quiz.hiringNote}</p>
-        </Reveal>
-
-        <Reveal delay={0.1} className="lg:sticky lg:top-24">
-          <QualForm />
         </Reveal>
       </div>
     </Section>
