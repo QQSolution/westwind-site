@@ -6,6 +6,7 @@ import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
 import { MobileCTA } from '@/components/site/MobileCTA'
 import { initTracking, observeSections } from '@/lib/track'
+import { captureAttribution } from '@/lib/attribution'
 import { Home } from '@/pages/Home'
 import { ApplyPage } from '@/pages/ApplyPage'
 
@@ -29,6 +30,7 @@ export default function App() {
   const { pathname } = useLocation()
 
   useEffect(() => {
+    captureAttribution() // first-touch source, before anything else reads it
     initTracking()
   }, [])
 

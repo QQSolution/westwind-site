@@ -290,8 +290,21 @@ export const quiz = {
   headline: '60-second driver qualification',
   intro: '6 questions. No SSN. A real person calls you — not a robot. Your answers go only to West Wind, never sold.',
   hiringNote: 'Now hiring CDL-A reefer drivers — IL · AZ · CA · UT and our Midwest-to-West-Coast lanes.',
-  /** Tenstreet / IntelliApp handoff link — user supplies later. Empty = keep on-site. */
-  intelliappUrl: '',
+  /** Tenstreet / IntelliApp handoff. The site appends ?r=<channel> (source
+   *  attribution inside IntelliApp) + the driver's utm_* so every application
+   *  is tagged by where it came from. */
+  intelliappUrl: 'https://intelliapp.driverapponline.com/c/westwindusa',
+  /** Landing-URL source → IntelliApp ?r= value. utm_source / ?src / ?r are all
+   *  matched (lowercased); anything unmatched falls back to 'Website'. */
+  intelliappSources: {
+    meta: 'Meta', facebook: 'Meta', fb: 'Meta', 'facebook-ads': 'Meta',
+    instagram: 'Meta', ig: 'Meta', fbig: 'Meta',
+    google: 'Google', 'google-ads': 'Google', googleads: 'Google',
+    gads: 'Google', adwords: 'Google', cpc: 'Google', youtube: 'Google', gdn: 'Google',
+    email: 'Email', klaviyo: 'Email', newsletter: 'Email', mailchimp: 'Email',
+    dima: 'Dima',
+    website: 'Website', direct: 'Website', organic: 'Website', referral: 'Website',
+  } as Record<string, string>,
   consent:
     'I agree West Wind may call or text me about driving positions at the number above. Consent isn’t a condition of any job, and msg & data rates may apply.',
   /** Honest result copy the QualForm renders after the quiz. */

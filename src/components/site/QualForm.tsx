@@ -6,6 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { config, contact, quiz } from '@/content/site'
+import { buildIntelliappUrl, getChannel, getUtms } from '@/lib/attribution'
 import { track } from '@/lib/track'
 import { cn } from '@/lib/utils'
 
@@ -228,6 +229,8 @@ export function QualForm() {
         lead_outcome: outcome,
         reason_code: reasonCode,
         source: 'westwind-site',
+        channel: getChannel(), // Meta / Google / Email / Website / Dima …
+        ...getUtms(), // utm_source/medium/campaign/content/term
         page: typeof location !== 'undefined' ? location.pathname : '',
         timestamp_utc: new Date().toISOString(),
       }
@@ -251,7 +254,7 @@ export function QualForm() {
   /* ---------- RESULT SCREEN ---------- */
   if (result) {
     const good = result.outcome !== 'hard_no'
-    const intelliapp = quiz.intelliappUrl
+    const intelliapp = buildIntelliappUrl()
     return (
       <div className="rounded-3xl border border-border bg-card p-6 shadow-card sm:p-10">
         <motion.div
