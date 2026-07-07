@@ -21,7 +21,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        'py-11 sm:py-28',
+        'py-14 sm:py-20 lg:py-28',
         tone === 'surface' && 'bg-[hsl(var(--surface))]',
         tone === 'navy' && 'relative bg-[hsl(var(--navy))] text-white',
         className,
@@ -74,12 +74,12 @@ export function SectionHeading({
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '0px 0px -12% 0px' }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={cn('max-w-3xl', align === 'center' && 'mx-auto text-center')}
+      className={cn('max-w-2xl sm:max-w-3xl', align === 'center' && 'mx-auto text-center')}
     >
       {eyebrow ? <Eyebrow light={light}>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-5 text-balance text-[clamp(2.125rem,1.35rem+3.5vw,3.5rem)] font-extrabold leading-[1.05] tracking-[-0.03em]">{title}</h2>
+      <h2 className="mt-5 text-balance text-[clamp(1.75rem,1.1rem+2.9vw,3.5rem)] font-extrabold leading-[1.1] tracking-[-0.03em] sm:leading-[1.05]">{title}</h2>
       {sub ? (
-        <p className={cn('mt-5 text-pretty text-lg leading-relaxed', light ? 'text-white/70' : 'text-muted-foreground')}>{sub}</p>
+        <p className={cn('mt-4 text-pretty text-[0.95rem] leading-relaxed sm:mt-5 sm:text-lg', light ? 'text-white/70' : 'text-muted-foreground')}>{sub}</p>
       ) : null}
     </motion.div>
   )

@@ -289,7 +289,7 @@ export function QualForm() {
                       Finish your application <ArrowRight className="size-5" />
                     </a>
                   </Button>
-                  <Button asChild variant="outline" size="lg" data-track="final_call" data-gtm_cta="final_call">
+                  <Button asChild variant="navy" size="lg" data-track="final_call" data-gtm_cta="final_call">
                     <a href={`tel:${contact.tel}`}>
                       <Phone className="size-5" /> Call recruiting: {contact.phone}
                     </a>
@@ -310,7 +310,7 @@ export function QualForm() {
               )}
             </div>
           ) : (
-            <Button asChild variant="outline" size="lg" className="mt-7" data-track="final_call" data-gtm_cta="final_call">
+            <Button asChild variant="navy" size="lg" className="mt-7" data-track="final_call" data-gtm_cta="final_call">
               <a href={`tel:${contact.tel}`}>
                 <Phone className="size-5" /> Questions? Call {contact.phone}
               </a>

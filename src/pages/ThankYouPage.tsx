@@ -65,7 +65,7 @@ export function ThankYouPage() {
               </a>
             </Button>
           ) : null}
-          <Button asChild variant="outline" size="lg" data-track="final_call">
+          <Button asChild variant="navy" size="lg" data-track="final_call">
             <a href={`tel:${contact.tel}`}>
               <Phone className="size-5" /> Or call recruiting: {contact.phone}
             </a>

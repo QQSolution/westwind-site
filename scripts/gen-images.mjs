@@ -5,7 +5,7 @@ import sharp from 'sharp'
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const SRC = join(import.meta.dirname, '../src/assets/photos/wind-hero.webp')
+const SRC = join(import.meta.dirname, '../src/assets/photos/wind-truck-reefers.webp')
 const OUT = join(import.meta.dirname, '../public/hero')
 mkdirSync(OUT, { recursive: true })
 

@@ -43,7 +43,7 @@ export function ApplyPage() {
           <p className="mt-3 text-sm font-medium text-foreground">
             Hate getting hung up on? So do we. A real person calls you back.
           </p>
-          <Button asChild variant="outline" size="sm" className="mt-4" data-track="hero_call" data-gtm_cta="hero_call">
+          <Button asChild variant="navy" size="sm" className="mt-4" data-track="hero_call" data-gtm_cta="hero_call">
             <a href={`tel:${contact.tel}`}>
               <Phone className="size-4" /> Or call a recruiter now
             </a>

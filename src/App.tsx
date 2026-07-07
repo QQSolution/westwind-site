@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ScrollProgress } from '@/components/site/ScrollProgress'
-import { AnnouncementBar } from '@/components/site/AnnouncementBar'
 import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
 import { MobileCTA } from '@/components/site/MobileCTA'
@@ -16,7 +15,6 @@ function SiteShell() {
   return (
     <div className="min-h-svh bg-background">
       <ScrollProgress />
-      <AnnouncementBar />
       <Navbar />
       <main>
         <Home />

@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Lock, Phone } from 'lucide-react'
+import { ArrowRight, Lock, Phone } from 'lucide-react'
 import { HighlightHeadline } from '@/components/site/HighlightHeadline'
 import { MagneticButton } from '@/components/site/MagneticButton'
 import { Eyebrow } from '@/components/site/kit'
@@ -45,10 +45,10 @@ export function Hero() {
 
             <HighlightHeadline
               lines={hero.lines}
-              className="mt-5 text-balance text-[clamp(2.9rem,11vw,5.2rem)] font-extrabold leading-[1.02] tracking-[-0.035em]"
+              className="mt-5 text-balance text-[clamp(2.25rem,8.5vw,5.2rem)] font-extrabold leading-[1.05] tracking-[-0.035em]"
             />
 
-            <p className="mx-auto mt-5 max-w-md text-pretty text-lg leading-relaxed text-white/85 lg:mx-0">
+            <p className="mx-auto mt-4 max-w-md text-pretty text-base leading-relaxed text-white/85 sm:mt-5 sm:text-lg lg:mx-0">
               {hero.sub}
             </p>
 
@@ -65,18 +65,10 @@ export function Hero() {
                 </MagneticButton>
               </span>
               <span data-track="hero_call" className="w-full sm:w-auto">
-                <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="w-full justify-center border-white/30 text-white hover:border-white/50 hover:bg-white/10 sm:w-auto">
+                <MagneticButton href={`tel:${contact.tel}`} variant="gold" className="w-full justify-center sm:w-auto">
                   <Phone /> {hero.ctaSecondary}
                 </MagneticButton>
               </span>
-            </div>
-
-            <div className="mt-7 flex flex-wrap justify-center gap-x-5 gap-y-2.5 text-sm font-medium text-white/85 lg:justify-start">
-              {hero.chips.map((c) => (
-                <span key={c} className="inline-flex items-center gap-1.5">
-                  <Check className="size-4 text-[hsl(var(--gold))]" strokeWidth={2.5} /> {c}
-                </span>
-              ))}
             </div>
           </div>
 

@@ -25,7 +25,7 @@ function ApplyCard() {
         <MagneticButton href={buildIntelliappUrl()} variant="accent" className="justify-center">
           Apply now <ArrowRight />
         </MagneticButton>
-        <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="justify-center">
+        <MagneticButton href={`tel:${contact.tel}`} variant="gold" className="justify-center">
           <Phone /> Call {contact.phone}
         </MagneticButton>
       </div>
@@ -40,7 +40,7 @@ export function ApplySection() {
       <div className="container-tight grid gap-8 lg:grid-cols-2 lg:items-start">
         <Reveal className="order-1 lg:order-none lg:col-start-1 lg:row-start-1">
           <Eyebrow>{quiz.headline}</Eyebrow>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
+          <h2 className="mt-3 text-balance text-2xl font-bold tracking-tight text-foreground sm:mt-4 sm:text-4xl lg:text-5xl">
             See where you stand in 60 seconds.
           </h2>
           <p className="mt-4 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">

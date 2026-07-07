@@ -10,7 +10,7 @@ export function HomeTime() {
       <div className="container-tight">
         <SectionHeading eyebrow="Open seats" title={homeTime.headline} sub={homeTime.sub} />
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3 md:gap-6">
+        <div className="mt-8 grid gap-4 sm:mt-12 md:grid-cols-3 md:gap-6">
           {homeTime.options.map((opt, i) => (
             <Reveal key={opt.name} delay={i * 0.08} className="h-full">
               <a
@@ -25,7 +25,7 @@ export function HomeTime() {
                   {opt.homeTime}
                 </span>
 
-                <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                <h3 className="mt-3 text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
                   {opt.name}
                 </h3>
 

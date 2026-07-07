@@ -15,6 +15,8 @@ const buttonVariants = cva(
           'sheen relative overflow-hidden bg-accent text-accent-foreground shadow-[0_10px_28px_-12px_hsl(var(--accent)/0.5)] hover:brightness-105 active:translate-y-px',
         gold:
           'sheen relative overflow-hidden bg-[hsl(var(--gold))] text-[hsl(var(--navy))] shadow-[0_10px_28px_-12px_hsl(var(--gold)/0.5)] hover:brightness-105 active:translate-y-px',
+        navy:
+          'sheen relative overflow-hidden bg-[hsl(var(--navy))] text-white shadow-[0_10px_28px_-12px_hsl(var(--navy)/0.6)] hover:bg-[hsl(var(--navy))]/90 active:translate-y-px',
         outline:
           'border border-foreground/15 bg-transparent text-foreground hover:border-foreground/30 hover:bg-foreground/[0.04]',
         ghost: 'text-foreground/70 hover:bg-foreground/[0.05] hover:text-foreground',

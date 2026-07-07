@@ -44,7 +44,7 @@ export function MobileCTA() {
           <a
             href={`tel:${contact.tel}`}
             aria-label={`Call West Wind at ${contact.phone}`}
-            className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-secondary text-foreground"
+            className="grid h-12 w-12 place-items-center rounded-xl bg-[hsl(var(--gold))] text-[hsl(var(--navy))]"
           >
             <Phone className="size-5" />
           </a>

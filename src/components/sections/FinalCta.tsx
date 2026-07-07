@@ -24,14 +24,14 @@ export function FinalCta() {
             <HighlightHeadline
               as="h2"
               lines={finalCta.lines}
-              className="mt-5 text-balance text-4xl font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-5xl lg:text-6xl"
+              className="mt-4 text-balance text-[2rem] font-extrabold leading-[1.05] tracking-[-0.03em] sm:mt-5 sm:text-5xl lg:text-6xl"
             />
-            <p className="mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-white/80 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-white/80 sm:text-lg">
               {finalCta.sub}
             </p>
-            <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
               <span data-track="final_apply" className="w-full sm:w-auto">
-                <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
+                <MagneticButton href="#apply" variant="gold" className="w-full justify-center sm:w-auto">
                   {finalCta.cta}
                   <ArrowRight className="h-5 w-5" />
                 </MagneticButton>
@@ -39,8 +39,8 @@ export function FinalCta() {
               <span data-track="final_call" className="w-full sm:w-auto">
                 <MagneticButton
                   href={`tel:${contact.tel}`}
-                  variant="outline"
-                  className="w-full justify-center border-white/30 text-white hover:bg-white/10 sm:w-auto"
+                  variant="accent"
+                  className="w-full justify-center sm:w-auto"
                 >
                   <Phone className="h-5 w-5" />
                   {finalCta.secondaryCta}

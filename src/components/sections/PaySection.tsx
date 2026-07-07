@@ -8,7 +8,15 @@ import {
 } from '@/components/ui/accordion'
 import { Reveal } from '@/components/Reveal'
 import { MagneticButton } from '@/components/site/MagneticButton'
+import { FactPills } from '@/components/site/FactPills'
 import { contact, pay } from '@/content/site'
+
+const PILLS = [
+  { text: '$0.70 / mile', tone: 'gold' as const },
+  { text: 'Stop pay on top', tone: 'gold' as const },
+  { text: 'Loaded both ways', tone: 'navy' as const },
+  { text: 'No fake bonus', tone: 'accent' as const },
+]
 
 export function PaySection() {
   return (
@@ -16,12 +24,16 @@ export function PaySection() {
       <div className="container-tight">
         <SectionHeading eyebrow="The pay" title={pay.headline} sub={pay.sub} />
 
+        <Reveal className="mt-5">
+          <FactPills items={PILLS} />
+        </Reveal>
+
         {/* Big earnings numbers, no reading required */}
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-3">
           {pay.facts.map((f, i) => (
-            <Reveal key={f.l} delay={i * 0.06}>
-              <div className="rounded-2xl bg-[hsl(var(--navy))] p-7 text-center text-white shadow-lift">
-                <div className="font-display text-5xl font-extrabold tracking-tight text-[hsl(var(--gold))] sm:text-6xl">
+            <Reveal key={f.l} delay={i * 0.06} className="h-full">
+              <div className="flex h-full flex-col justify-center rounded-2xl bg-[hsl(var(--navy))] p-7 text-center text-white shadow-lift">
+                <div className="font-display text-4xl font-extrabold tracking-tight text-[hsl(var(--gold))] sm:text-6xl">
                   {f.v}
                 </div>
                 <div className="mt-2 text-sm font-semibold text-white/85">{f.l}</div>
@@ -85,7 +97,7 @@ export function PaySection() {
               </MagneticButton>
             </span>
             <span data-track="pay_phone" className="w-full sm:w-auto">
-              <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="w-full justify-center sm:w-auto">
+              <MagneticButton href={`tel:${contact.tel}`} variant="navy" className="w-full justify-center sm:w-auto">
                 <Phone /> {contact.phone}
               </MagneticButton>
             </span>

@@ -51,7 +51,7 @@ export function NetworkSection() {
         <SectionHeading eyebrow="Our own terminals" title={network.headline} sub={network.sub} />
 
         {/* Map + fleet counters */}
-        <div className="mt-8 grid gap-4 sm:mt-10 sm:gap-6 lg:grid-cols-[1.65fr_1fr] lg:items-stretch">
+        <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-6 lg:grid-cols-[1.65fr_1fr] lg:items-stretch">
           <Reveal className="h-full">
             <MapFrame />
           </Reveal>
@@ -67,7 +67,7 @@ export function NetworkSection() {
         {/* Owned-terminals showcase, real yard photo + the four yards */}
         <div className="mt-12 sm:mt-16">
           <div className="mx-auto max-w-2xl text-center">
-            <h3 className="text-balance font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+            <h3 className="text-balance font-display text-xl font-extrabold tracking-tight sm:text-2xl">
               {network.terminalsLead}
             </h3>
             <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
