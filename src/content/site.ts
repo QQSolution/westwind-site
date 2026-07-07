@@ -86,12 +86,6 @@ export const meta = {
     'Family-run since 1999. CDL-A reefer drivers, $0.70 a mile plus extra stops, 1099, paid per round trip (~$3,500 IL to CA and back). No fake sign-on bonus. Our own shops. FMCSA Satisfactory. Run our DOT 1302563 before you call.',
 }
 
-export const announcement = {
-  text: `We’re growing, trucks here, freight here, seats open. No “only 3 left” games. Call ${'800-400-9956'} ext 2040.`,
-  link: 'Apply',
-  href: '#apply',
-}
-
 export const nav = {
   items: [
     { label: 'Pay', href: '#pay' },
@@ -113,7 +107,6 @@ export const hero = {
   payPill: '$0.70/mi + stops · ~$2,500/wk',
   cta: 'See if you qualify',
   ctaSecondary: 'Call a recruiter',
-  image: windHero,
   imageAlt: 'West Wind Logistics black Peterbilt #712 pulling a reefer',
 }
 
@@ -121,11 +114,11 @@ export const hero = {
  *  `to` (with optional prefix/suffix/dec) drives CountUp for numeric stats;
  *  `stat` is the plain string fallback for non-numeric ones. */
 export const heroStats = [
-  { stat: '$0.70/mi', to: 0.7, dec: 2, prefix: '$', suffix: '/mi', after: ' + stops', label: 'Per mile, plus pay for every extra stop' },
+  { stat: '$0.70/mi', to: 0.7, dec: 2, prefix: '$', suffix: '/mi', after: ' + stops', label: 'Per mile, plus every stop' },
   { stat: '~$3,500', to: 3500, prefix: '~$', label: 'A round trip, IL to California and back' },
   { stat: '60+', to: 60, suffix: '+', label: 'Loads a day. You don’t sit waiting.' },
-  { stat: 'No bonus', label: 'Other guys dangle $5k and never pay it. We just pay you.' },
-  { stat: '3.2%', to: 3.2, dec: 1, suffix: '%', label: 'Our out-of-service rate, half the national' },
+  { stat: 'No bonus', label: 'Others promise $5k and never pay. We just pay you.' },
+  { stat: '3.2%', to: 3.2, dec: 1, suffix: '%', label: 'Out-of-service rate. Half the national.' },
   { stat: 'Since ’99', label: 'Family-run. A real person picks up.' },
 ] as Array<{ stat: string; to?: number; dec?: number; prefix?: string; suffix?: string; after?: string; label: string }>
 
@@ -222,15 +215,15 @@ export const insideCompany = {
 }
 
 export const homeTime = {
-  headline: 'Live in CA, AZ, or UT? Restart at home.',
-  sub: 'No fake “weekly home time.” Most work is OTR. We count it in trips, not promises.',
+  headline: 'Restart at home.',
+  sub: 'Most runs are OTR. We count home time in trips, not promises.',
   options: [
     { name: 'OTR · most of our work', homeTime: '~2 days home between trips', tag: '', blurb: '8-9 days out, then ~2 days home, then go again. Real paid miles every trip. No sitting.' },
     { name: 'Regional', homeTime: 'Home more often', tag: '', blurb: 'Shorter lanes open up sometimes. We’ll tell you straight what’s running when you call.' },
     { name: 'Local', homeTime: 'Home most nights', tag: '', blurb: 'About 250 miles out of Chicago, when it’s open. Appointment freight.' },
   ],
   restart:
-    'Live near Stockton CA, Phoenix AZ, or Lake Point UT? Run a load home, park in our yard, take your 34 in your own bed. No plane ticket.',
+    'Near Stockton CA, Phoenix AZ, or Lake Point UT? Run a load home, do your 34 in your own bed. No plane ticket.',
 }
 
 export const safety = {
@@ -244,7 +237,7 @@ export const safety = {
 
 export const whyStay = [
   { icon: 'Dog', title: 'Bring your dog. Bring your wife.', body: 'Pets are fine. Spouse and kids can ride along.' },
-  { icon: 'Switch', title: 'Run dry van now? You can switch.', body: 'A reefer is just a van that stays cold. No reefer time needed, just 2 solid years and a clean record. The mechanic shows you at orientation.' },
+  { icon: 'Switch', title: 'Run dry van now? You can switch.', body: 'A reefer is just a cold van. Got 2 solid years and a clean record? The mechanic shows you the rest.' },
   { icon: 'Snowflake', title: 'The reefer never sleeps, so your pay doesn’t', body: 'The unit runs 24/7 because the freight does. That’s why the miles never dry up.' },
 ] as Array<{ icon: string; title: string; body: string }>
 
@@ -267,7 +260,7 @@ export const proof = {
   facts: [
     { k: 'Trucks pulled off the road', v: '3.2%', note: 'Half the national average.' },
     { k: 'Government safety rating', v: 'Satisfactory', note: 'The best rating FMCSA gives.' },
-    { k: 'Years on the road', v: '25+', note: 'Same company since 1999.' },
+    { k: 'Years on the road', v: '27+', note: 'Same company since 1999.' },
     { k: 'Trucks in the fleet', v: '148', note: 'All ours. Ready now.' },
   ],
 }
@@ -314,7 +307,7 @@ export const footer = {
     'West Wind Logistics is an equal-opportunity employer. We hire qualified CDL-A drivers authorized to work in the U.S. based on lawful, job-related criteria, and comply with all FMCSA and DOT requirements.',
 }
 
-export const stickyBar = { left: `Questions? ${'800-400-9956'} ext 2040`, cta: 'Apply now' }
+export const stickyBar = { cta: 'Apply now' }
 
 /* ---- The honest 60-second qualification quiz (logic lives in QualForm) ---- */
 export type Choice = { v: string; label: string }

@@ -12,7 +12,7 @@ import { insideCompany as c } from '@/content/site'
 export function InsideCompany() {
   const support = [c.brandMap, c.mural]
   return (
-    <Section id="company" tone="surface">
+    <Section id="company" tone="white">
       <div className="container-tight">
         <SectionHeading eyebrow={c.eyebrow} title={c.headline} sub={c.sub} />
 

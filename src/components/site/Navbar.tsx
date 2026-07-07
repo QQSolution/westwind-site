@@ -20,7 +20,7 @@ export function Navbar() {
         'sticky top-0 z-50 border-b transition-colors duration-300',
         scrolled
           ? 'border-white/10 bg-[hsl(var(--navy))]/90 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl'
-          : 'border-transparent bg-[hsl(var(--navy))]',
+          : 'border-white/10 bg-[hsl(var(--navy))]',
       )}
     >
       <nav className="container-tight flex h-16 items-center justify-center">

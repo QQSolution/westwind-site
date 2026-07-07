@@ -367,7 +367,7 @@ export function QualForm() {
                     type="button"
                     onClick={() => choose(step.id, o.v)}
                     className={cn(
-                      'group flex min-h-[56px] items-center gap-3 rounded-xl border px-4 py-4 text-left text-base font-medium transition-all',
+                      'group flex min-h-[56px] items-center gap-3 rounded-xl border px-4 py-4 text-left text-base font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-card',
                       sel ? 'border-accent bg-accent/10' : 'border-border bg-card hover:border-foreground/30 hover:bg-foreground/[0.03]',
                     )}
                   >
@@ -389,7 +389,7 @@ export function QualForm() {
                 aria-label="Select your state"
                 autoComplete="address-level1"
                 className={cn(
-                  'w-full min-h-[56px] rounded-xl border border-border bg-card px-4 text-base',
+                  'w-full min-h-[56px] rounded-xl border border-border bg-card px-4 text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-card',
                   !stateVal && 'text-muted-foreground',
                 )}
                 onChange={(e) => chooseState(e.target.value)}

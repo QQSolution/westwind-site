@@ -16,7 +16,7 @@ import { ApplySection } from '@/components/sections/ApplySection'
 import { FaqSection } from '@/components/sections/FaqSection'
 import { FinalCta } from '@/components/sections/FinalCta'
 import windTruckReefers from '@/assets/photos/wind-truck-reefers.webp'
-import windYard from '@/assets/photos/wind-yard.webp'
+import windHero from '@/assets/photos/wind-hero.webp'
 import windFleetLineup from '@/assets/photos/wind-fleet-lineup.webp'
 
 export function Home() {
@@ -38,13 +38,13 @@ export function Home() {
       <ProofSection />
       <WhyStay />
       <InsideCompany />
-      <PhotoBreak
-        src={windYard}
-        alt="West Wind reefer trailers lined up in the Bedford Park yard"
-        kicker="Home base"
-        line="Most trips start and end right here."
-      />
       <HomeTime />
+      <PhotoBreak
+        src={windHero}
+        alt="West Wind green Kenworth #577 at the yard"
+        kicker="Our own shops"
+        line="Break down? You roll again fast."
+      />
       <Process />
       <PhotoBreak
         src={windFleetLineup}

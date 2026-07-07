@@ -1,11 +1,11 @@
-import { ArrowLeftRight, Dog, Home, Phone, Quote, ShieldCheck, Snowflake, Wrench } from 'lucide-react'
+import { ArrowLeftRight, Dog, Quote, Snowflake, Wrench } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { Section, SectionHeading } from '@/components/site/kit'
 import { Reveal } from '@/components/Reveal'
 import { company, whyStay } from '@/content/site'
 import { cn } from '@/lib/utils'
 
-const ICONS: Record<string, LucideIcon> = { Wrench, Snowflake, Phone, Home, ShieldCheck, Dog, Switch: ArrowLeftRight }
+const ICONS: Record<string, LucideIcon> = { Wrench, Snowflake, Dog, Switch: ArrowLeftRight }
 
 export function WhyStay() {
   return (

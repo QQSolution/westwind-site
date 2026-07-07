@@ -60,7 +60,7 @@ export function FaqSection() {
                 setShowAll(true)
                 track('faq_show_all')
               }}
-              className="mt-4 min-h-[48px] w-full rounded-xl border border-border bg-transparent px-6 text-sm font-semibold text-foreground transition-colors hover:border-foreground/30 hover:bg-card"
+              className="mt-4 min-h-[48px] w-full rounded-xl border border-border bg-secondary px-6 text-sm font-semibold text-foreground transition-colors hover:border-foreground/30 hover:bg-[hsl(var(--surface-2))]"
             >
               Show all {faq.length} questions
             </button>
