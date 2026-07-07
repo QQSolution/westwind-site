@@ -3,7 +3,7 @@ import type { MouseEvent, ReactNode } from 'react'
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-type Variant = 'primary' | 'accent' | 'gold' | 'navy' | 'outline'
+type Variant = 'primary' | 'accent' | 'gold' | 'navy' | 'white' | 'outline'
 
 type Props = {
   href: string
@@ -25,6 +25,8 @@ const VARIANTS: Record<Variant, string> = {
     'bg-[hsl(var(--gold))] text-[hsl(var(--navy))] shadow-[0_12px_34px_-12px_hsl(var(--gold)/0.55)] hover:brightness-105 focus-visible:ring-2 focus-visible:ring-[hsl(var(--navy))] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
   navy:
     'bg-[hsl(var(--navy))] text-white shadow-[0_12px_34px_-12px_hsl(var(--navy)/0.6)] hover:bg-[hsl(var(--navy))]/90 focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+  white:
+    'bg-white text-[hsl(var(--navy))] shadow-[0_12px_34px_-12px_rgba(0,0,0,0.45)] hover:bg-white/90 focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
   outline:
     'border border-foreground/15 text-foreground hover:border-foreground/30 hover:bg-foreground/[0.04] focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
 }

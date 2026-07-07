@@ -90,8 +90,16 @@ async function deliver(lead: Record<string, unknown>): Promise<boolean> {
       return true
     }
     if (mode === 'webhook' && webhookUrl) {
-      const res = await fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lead) })
-      if (!res.ok) throw new Error(`webhook ${res.status}`)
+      // Google Apps Script web app (Telegram + Sheet). Send as a "simple" request
+      // (text/plain, no-cors) so there is no CORS preflight and the POST always reaches
+      // the script; the response is opaque, so we also mirror the lead to localStorage.
+      await fetch(webhookUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(lead),
+      })
+      queueLocal(lead)
       return true
     }
   } catch (e) {

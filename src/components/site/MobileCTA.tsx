@@ -51,7 +51,7 @@ export function MobileCTA() {
             href={`tel:${contact.tel}`}
             aria-label={`Call West Wind at ${contact.phone}`}
             tabIndex={visible ? undefined : -1}
-            className="grid h-12 w-12 place-items-center rounded-xl bg-[hsl(var(--gold))] text-[hsl(var(--navy))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--navy))] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="grid h-12 w-12 place-items-center rounded-xl bg-[hsl(var(--navy))] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--navy))] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
             <Phone className="size-5" />
           </a>

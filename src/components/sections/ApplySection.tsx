@@ -25,7 +25,7 @@ function ApplyCard() {
         <MagneticButton href={buildIntelliappUrl()} variant="accent" className="justify-center">
           Apply now <ArrowRight />
         </MagneticButton>
-        <MagneticButton href={`tel:${contact.tel}`} variant="gold" className="justify-center">
+        <MagneticButton href={`tel:${contact.tel}`} variant="navy" className="justify-center">
           <Phone /> Call {contact.phone}
         </MagneticButton>
       </div>

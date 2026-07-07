@@ -23,7 +23,7 @@ export function Navbar() {
           : 'border-white/10 bg-[hsl(var(--navy))]',
       )}
     >
-      <nav className="container-tight flex h-16 items-center justify-center">
+      <nav className="container-tight flex h-20 items-center justify-center">
         <a href="#top" aria-label="West Wind Logistics, home">
           <img
             src={logo}
@@ -31,7 +31,7 @@ export function Navbar() {
             width={200}
             height={200}
             draggable={false}
-            className="h-11 w-auto sm:h-12"
+            className="h-14 w-auto sm:h-16"
           />
         </a>
       </nav>

@@ -26,8 +26,10 @@ export const config = {
   /** Master switch for the on-site 60-second quiz. When false, Apply goes straight to Tenstreet/IntelliApp. */
   showQuiz: true,
   lead: {
-    mode: 'demo' as 'demo' | 'web3forms' | 'webhook',
+    mode: 'webhook' as 'demo' | 'web3forms' | 'webhook',
     web3formsKey: '',
+    // Paste the Google Apps Script Web App URL (ends in /exec) here to turn on
+    // Telegram + Google Sheet delivery. Until it's set, leads are captured locally.
     webhookUrl: '',
     notifyEmail: 'recruiting@westwindusa.com',
   },
@@ -162,10 +164,10 @@ export const network = {
   photoAlt: 'West Wind reefer trailers lined up in the company’s own Bedford Park yard',
   photoCaption: 'Our own yard. A real terminal you can drive to.',
   counters: [
-    { to: 148, label: 'Power units in the fleet' },
+    { to: 148, label: 'Trucks in the fleet' },
     { to: 4, label: 'Terminals: IL, AZ, CA, UT' },
     { to: 14, suffix: 'M', label: 'Miles run every year' },
-    { to: 3.2, dec: 1, suffix: '%', label: 'Out-of-service rate · about half the national rate' },
+    { to: 2050, label: 'Miles, IL to California' },
   ] as Array<{ to: number; dec?: number; suffix?: string; label: string }>,
 }
 

@@ -31,7 +31,7 @@ export function FinalCta() {
             </p>
             <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
               <span data-track="final_apply" className="w-full sm:w-auto">
-                <MagneticButton href="#apply" variant="gold" className="w-full justify-center sm:w-auto">
+                <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
                   {finalCta.cta}
                   <ArrowRight className="h-5 w-5" />
                 </MagneticButton>
@@ -39,7 +39,7 @@ export function FinalCta() {
               <span data-track="final_call" className="w-full sm:w-auto">
                 <MagneticButton
                   href={`tel:${contact.tel}`}
-                  variant="accent"
+                  variant="white"
                   className="w-full justify-center sm:w-auto"
                 >
                   <Phone className="h-5 w-5" />

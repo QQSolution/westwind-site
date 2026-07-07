@@ -8,25 +8,13 @@ import {
 } from '@/components/ui/accordion'
 import { Reveal } from '@/components/Reveal'
 import { MagneticButton } from '@/components/site/MagneticButton'
-import { FactPills } from '@/components/site/FactPills'
 import { contact, pay } from '@/content/site'
-
-const PILLS = [
-  { text: '$0.70 / mile', tone: 'gold' as const },
-  { text: 'Stop pay on top', tone: 'gold' as const },
-  { text: 'Loaded both ways', tone: 'navy' as const },
-  { text: 'No fake bonus', tone: 'accent' as const },
-]
 
 export function PaySection() {
   return (
     <Section id="pay" tone="white">
       <div className="container-tight">
         <SectionHeading eyebrow="The pay" title={pay.headline} sub={pay.sub} />
-
-        <Reveal className="mt-5">
-          <FactPills items={PILLS} />
-        </Reveal>
 
         {/* Big earnings numbers, no reading required */}
         <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-3">
@@ -73,31 +61,18 @@ export function PaySection() {
                 {pay.tripMath}
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="why" className="shadow-card">
-              <AccordionTrigger className="text-base">{pay.reasonsTitle}</AccordionTrigger>
-              <AccordionContent>
-                <ul className="grid gap-4">
-                  {pay.reasons.map((r) => (
-                    <li key={r.title}>
-                      <p className="font-bold text-foreground">{r.title}</p>
-                      <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">{r.body}</p>
-                    </li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
           </Accordion>
         </Reveal>
 
         <Reveal className="mt-8">
           <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
             <span data-track="pay_quiz" className="w-full sm:w-auto">
-              <MagneticButton href="#apply" variant="navy" className="w-full justify-center sm:w-auto">
+              <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
                 See if you qualify <ArrowRight />
               </MagneticButton>
             </span>
             <span data-track="pay_phone" className="w-full sm:w-auto">
-              <MagneticButton href={`tel:${contact.tel}`} variant="gold" className="w-full justify-center sm:w-auto">
+              <MagneticButton href={`tel:${contact.tel}`} variant="navy" className="w-full justify-center sm:w-auto">
                 <Phone /> {contact.phone}
               </MagneticButton>
             </span>

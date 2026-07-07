@@ -1,8 +1,6 @@
 import { useSEO } from '@/hooks/useSEO'
 import { meta } from '@/content/site'
 import { Hero } from '@/components/sections/Hero'
-import { TrustStrip } from '@/components/sections/TrustStrip'
-import { StatTicker } from '@/components/site/StatTicker'
 import { PhotoBreak } from '@/components/site/PhotoBreak'
 import { PaySection } from '@/components/sections/PaySection'
 import { WhyStay } from '@/components/sections/WhyStay'
@@ -24,14 +22,12 @@ export function Home() {
   return (
     <>
       <Hero />
-      <TrustStrip />
-      <StatTicker />
       <PaySection />
       <PhotoBreak
         src={windTruckReefers}
         alt="A West Wind Peterbilt hooked to our own reefer trailers"
-        kicker="Our trucks, our trailers"
-        line="You drive our iron. Not a leased box."
+        kicker="Straight deal"
+        line="You've hauled worse for a lot less."
       />
       <NetworkSection />
       <FleetGallery />
@@ -42,15 +38,15 @@ export function Home() {
       <PhotoBreak
         src={windHero}
         alt="West Wind green Kenworth #577 at the yard"
-        kicker="Our own shops"
-        line="Break down? You roll again fast."
+        kicker="Real dispatch"
+        line="Drive for people who pick up the phone."
       />
       <Process />
       <PhotoBreak
         src={windFleetLineup}
         alt="A lineup of West Wind Kenworth and Peterbilt trucks"
-        kicker="148 trucks strong"
-        line="A real fleet. Room for one more driver."
+        kicker="Now hiring CDL-A"
+        line="The seat's open. Come get it."
         align="center"
       />
       <ApplySection />

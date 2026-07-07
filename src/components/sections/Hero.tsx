@@ -65,7 +65,7 @@ export function Hero() {
                 </MagneticButton>
               </span>
               <span data-track="hero_call" className="w-full sm:w-auto">
-                <MagneticButton href={`tel:${contact.tel}`} variant="gold" className="w-full justify-center sm:w-auto">
+                <MagneticButton href={`tel:${contact.tel}`} variant="white" className="w-full justify-center sm:w-auto">
                   <Phone /> {hero.ctaSecondary}
                 </MagneticButton>
               </span>
