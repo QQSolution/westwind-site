@@ -71,7 +71,7 @@ export function FaqSection() {
               <p className="text-lg font-bold text-foreground">Still have a question?</p>
               <p className="mt-1.5 text-sm text-muted-foreground">Get a real recruiter on the phone, {company.hours}.</p>
               <div className="mt-5 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-                <MagneticButton href="#apply" variant="accent" className="justify-center">
+                <MagneticButton href="/apply" variant="accent" className="justify-center">
                   See if you qualify
                 </MagneticButton>
                 <MagneticButton href={`tel:${contact.tel}`} variant="navy" className="justify-center">

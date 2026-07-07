@@ -311,6 +311,28 @@ export const footer = {
 
 export const stickyBar = { cta: 'Apply now' }
 
+/** Full-screen /apply flow: a gate question, then the quiz, with a trust/reviews rail. */
+export const apply = {
+  gate: {
+    q: 'Do you have a valid US CDL-A?',
+    yes: 'Yes, I have my CDL-A',
+    no: 'Not yet',
+    noTitle: 'You’ll need your CDL-A first',
+    noBody:
+      'We hire licensed CDL-A drivers with 2+ years. Get your CDL-A and come back, the seat will be here.',
+  },
+  /** Honest trust points shown beside the form. */
+  trust: [
+    '$0.70 a mile, plus every stop. In writing.',
+    'Family-run since 1999. 148 trucks.',
+    '3.2% out-of-service. Half the national average.',
+    'A real recruiter calls you. No robots.',
+  ],
+  /** REAL driver quotes only. Add them as { name, where, quote } and they render as
+   *  reviews beside the form. Leave empty to show the trust points instead. */
+  reviews: [] as Array<{ name: string; where: string; quote: string }>,
+}
+
 /* ---- The honest 60-second qualification quiz (logic lives in QualForm) ---- */
 export type Choice = { v: string; label: string }
 export type Step =

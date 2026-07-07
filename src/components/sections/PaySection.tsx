@@ -67,7 +67,7 @@ export function PaySection() {
         <Reveal className="mt-8">
           <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
             <span data-track="pay_quiz" className="w-full sm:w-auto">
-              <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
+              <MagneticButton href="/apply" variant="accent" className="w-full justify-center sm:w-auto">
                 See if you qualify <ArrowRight />
               </MagneticButton>
             </span>

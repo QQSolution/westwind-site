@@ -5,11 +5,11 @@ import { Eyebrow } from '@/components/site/kit'
 import { hero, contact, quiz } from '@/content/site'
 import { track } from '@/lib/track'
 
-/** First quiz question, answered right in the hero (desktop) so there's zero scroll to start. */
+/** First quiz question, answered right in the hero (desktop). Jumps to the full
+ *  application with the experience answer prefilled via the URL. */
 function startPrescreen(experience: string) {
   track('hero_prescreen', { experience })
-  window.dispatchEvent(new CustomEvent('ww:prescreen', { detail: { experience } }))
-  document.querySelector('#apply')?.scrollIntoView()
+  window.location.href = `${import.meta.env.BASE_URL}apply?exp=${encodeURIComponent(experience)}`
 }
 
 const expStep = quiz.steps[0]
@@ -60,7 +60,7 @@ export function Hero() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <span data-track="hero_apply" className="w-full sm:w-auto">
-                <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
+                <MagneticButton href="/apply" variant="accent" className="w-full justify-center sm:w-auto">
                   {hero.cta} <ArrowRight />
                 </MagneticButton>
               </span>

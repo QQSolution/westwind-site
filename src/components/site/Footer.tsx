@@ -29,7 +29,7 @@ export function Footer() {
                   <a href={n.href} className="text-foreground/80 transition-colors hover:text-foreground">{n.label}</a>
                 </li>
               ))}
-              <li><a href="#apply" className="font-semibold text-accent hover:underline">Apply now</a></li>
+              <li><a href="/apply" className="font-semibold text-accent hover:underline">Apply now</a></li>
             </ul>
           </div>
 

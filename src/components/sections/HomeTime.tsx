@@ -14,7 +14,7 @@ export function HomeTime() {
           {homeTime.options.map((opt, i) => (
             <Reveal key={opt.name} delay={i * 0.08} className="h-full">
               <a
-                href="#apply"
+                href="/apply"
                 className={cn(
                   'group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-card md:min-h-[16rem] md:p-7',
                   'transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',

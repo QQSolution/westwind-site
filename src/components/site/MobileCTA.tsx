@@ -41,7 +41,7 @@ export function MobileCTA() {
       >
         <div className="m-3 flex items-center gap-2 rounded-2xl border border-border bg-white/90 p-2 shadow-pop backdrop-blur-xl">
           <a
-            href="#apply"
+            href="/apply"
             tabIndex={visible ? undefined : -1}
             className="sheen relative flex h-12 flex-1 items-center justify-center overflow-hidden rounded-xl bg-accent px-4 font-semibold text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
@@ -68,7 +68,7 @@ export function MobileCTA() {
         }}
       >
         <a
-          href="#apply"
+          href="/apply"
           tabIndex={visible ? undefined : -1}
           className="sheen relative inline-flex h-12 items-center gap-2 overflow-hidden rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-pop hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
