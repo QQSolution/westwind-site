@@ -28,9 +28,9 @@ export const config = {
   lead: {
     mode: 'webhook' as 'demo' | 'web3forms' | 'webhook',
     web3formsKey: '',
-    // Paste the Google Apps Script Web App URL (ends in /exec) here to turn on
-    // Telegram + Google Sheet delivery. Until it's set, leads are captured locally.
-    webhookUrl: '',
+    // Google Apps Script Web App: appends each lead to the Google Sheet and sends
+    // it to Telegram (@westwindusabot). The bot token lives in the script, not here.
+    webhookUrl: 'https://script.google.com/macros/s/AKfycbxf_n0b-fyfzH_jeNv2RHvY7DtLumWwGtsmEifWPvjtYDSqzNLf8wOxjMOy4MPeKJKs/exec',
     notifyEmail: 'recruiting@westwindusa.com',
   },
   conversions: {
