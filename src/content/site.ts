@@ -26,6 +26,13 @@ export const config = {
     webhookUrl: '',
     notifyEmail: 'recruiting@westwindusa.com',
   },
+  conversions: {
+    /** Optional Google Ads conversion-event label, e.g. 'AW-18294197867/AbCdEf'.
+     *  Leave '' if you use a Google Ads PAGE-LOAD conversion pointed at the
+     *  /apply/thank-you URL (the base gtag fires it automatically). Set it to
+     *  also fire an explicit gtag('event','conversion') on the thank-you page. */
+    googleAdsSendTo: '',
+  },
 }
 
 export const company = {

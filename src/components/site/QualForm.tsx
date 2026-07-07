@@ -283,7 +283,9 @@ export function QualForm() {
               {intelliapp ? (
                 <>
                   <Button asChild variant="gold" size="lg" data-track="final_apply" data-gtm_cta="final_apply">
-                    <a href={intelliapp} target="_blank" rel="noopener">
+                    {/* Route through the conversion page (/apply/thank-you), which fires the
+                        ad pixel once, then hands off to Tenstreet with the ?r=/utm tags. */}
+                    <a href="/apply/thank-you">
                       Finish your application <ArrowRight className="size-5" />
                     </a>
                   </Button>

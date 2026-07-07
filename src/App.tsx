@@ -9,6 +9,7 @@ import { initTracking, observeSections } from '@/lib/track'
 import { captureAttribution } from '@/lib/attribution'
 import { Home } from '@/pages/Home'
 import { ApplyPage } from '@/pages/ApplyPage'
+import { ThankYouPage } from '@/pages/ThankYouPage'
 
 /** Full marketing chrome — only the home experience gets the nav/footer/sticky bars. */
 function SiteShell() {
@@ -44,6 +45,8 @@ export default function App() {
       <Route path="/" element={<SiteShell />} />
       {/* /apply is a standalone, deep-linkable ad landing page — its own minimal chrome, no global nav/footer. */}
       <Route path="/apply" element={<ApplyPage />} />
+      {/* Conversion page — its own URL so the ad pixel fires once here, then hands off to Tenstreet. */}
+      <Route path="/apply/thank-you" element={<ThankYouPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
