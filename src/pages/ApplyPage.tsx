@@ -38,7 +38,7 @@ export function ApplyPage() {
           </h1>
           <p className="mx-auto mt-3 max-w-md text-pretty leading-relaxed text-muted-foreground">
             CDL-A reefer. About ${payRange.tripExample.toLocaleString()} a round trip ({payRange.tripLane}). Extra stops pay extra.
-            Cash advance up to ${payRange.cashAdvance} a week. No sign-on gimmick — we just pay you to drive.
+            Cash advance up to ${payRange.cashAdvance} a week. No sign-on gimmick, we just pay you to drive.
           </p>
           <p className="mt-3 text-sm font-medium text-foreground">
             Hate getting hung up on? So do we. A real person calls you back.
@@ -50,7 +50,7 @@ export function ApplyPage() {
           </Button>
         </div>
 
-        {/* trust image — a real, established company, not a lead-board */}
+        {/* trust image, a real, established company, not a lead-board */}
         <figure className="mt-6 overflow-hidden rounded-2xl border border-border shadow-card">
           <img
             src={windOffice}
@@ -60,7 +60,7 @@ export function ApplyPage() {
             className="aspect-[16/9] w-full object-cover"
           />
           <figcaption className="bg-card px-4 py-2.5 text-center text-xs text-muted-foreground">
-            Real company since 1999 — our Bedford Park, IL headquarters. Not a lead board.
+            Real company since 1999, our Bedford Park, IL headquarters. Not a lead board.
           </figcaption>
         </figure>
 

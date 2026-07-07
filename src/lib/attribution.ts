@@ -3,7 +3,7 @@
  * One funnel, many sources: a driver lands from an ad with utm_source (or ?src / ?r),
  * we resolve a channel (Meta / Google / Email / Website / Dima …), remember it
  * first-touch (so it survives navigating to /apply and the 6-step quiz), then append
- * it to the IntelliApp link as ?r=<channel> plus the original utm_* — so every
+ * it to the IntelliApp link as ?r=<channel> plus the original utm_*, so every
  * submitted application is tagged by where it came from, in IntelliApp AND in GA/Meta. */
 import { quiz } from '@/content/site'
 
@@ -14,7 +14,7 @@ const K_UTMS = 'ww_utms'
 function mapChannel(raw: string): string {
   const hit = quiz.intelliappSources[raw.toLowerCase()]
   if (hit) return hit
-  // Unknown but explicit (e.g. a recruiter's own ?src=Andrew) — title-case it through.
+  // Unknown but explicit (e.g. a recruiter's own ?src=Andrew), title-case it through.
   return raw.slice(0, 1).toUpperCase() + raw.slice(1)
 }
 
@@ -40,7 +40,7 @@ export function captureAttribution(): void {
     sessionStorage.setItem(K_CHANNEL, channel)
     sessionStorage.setItem(K_UTMS, JSON.stringify(utms))
   } catch {
-    /* storage blocked — buildIntelliappUrl falls back to live URL read */
+    /* storage blocked, buildIntelliappUrl falls back to live URL read */
   }
 }
 

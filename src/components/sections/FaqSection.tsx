@@ -69,7 +69,7 @@ export function FaqSection() {
           <Reveal className="mt-10">
             <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-card sm:p-8">
               <p className="text-lg font-bold text-foreground">Still have a question?</p>
-              <p className="mt-1.5 text-sm text-muted-foreground">Get a real recruiter on the phone — {company.hours}.</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">Get a real recruiter on the phone, {company.hours}.</p>
               <div className="mt-5 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
                 <MagneticButton href="#apply" variant="accent" className="justify-center">
                   See if you qualify

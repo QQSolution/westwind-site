@@ -64,7 +64,7 @@ export function NetworkSection() {
           </div>
         </div>
 
-        {/* Owned-terminals showcase — real yard photo + the four yards */}
+        {/* Owned-terminals showcase, real yard photo + the four yards */}
         <div className="mt-12 sm:mt-16">
           <div className="mx-auto max-w-2xl text-center">
             <h3 className="text-balance font-display text-2xl font-extrabold tracking-tight sm:text-3xl">

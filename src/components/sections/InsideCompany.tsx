@@ -5,7 +5,7 @@ import { SmartImage } from '@/components/site/SmartImage'
 import { insideCompany as c } from '@/content/site'
 
 /**
- * Real interior shots of the Bedford Park HQ — the “we’re an established, real
+ * Real interior shots of the Bedford Park HQ, the “we’re an established, real
  * company” proof. Captions live BELOW each photo (never over it) so every word
  * stays clean and readable.
  */

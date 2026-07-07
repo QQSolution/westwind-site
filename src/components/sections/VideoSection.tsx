@@ -10,7 +10,7 @@ export function VideoSection() {
   const frameRef = useRef<HTMLDivElement>(null)
   const [load, setLoad] = useState(false)
 
-  // Only fetch the video when the frame is near the viewport — never block load.
+  // Only fetch the video when the frame is near the viewport, never block load.
   useEffect(() => {
     if (reduceMotion) return
     const el = frameRef.current
@@ -39,7 +39,7 @@ export function VideoSection() {
           align="center"
           eyebrow="Inside West Wind"
           title="A real place. Real people."
-          sub="Family-run since 1999. A real office with our name on the wall — not a P.O. box."
+          sub="Family-run since 1999. A real office with our name on the wall, not a P.O. box."
         />
         <Reveal className="mx-auto mt-10 max-w-4xl">
           <div

@@ -1,5 +1,11 @@
-import { ArrowRight, FileSignature, Phone } from 'lucide-react'
+import { ArrowRight, Phone } from 'lucide-react'
 import { Section, SectionHeading } from '@/components/site/kit'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Reveal } from '@/components/Reveal'
 import { MagneticButton } from '@/components/site/MagneticButton'
 import { contact, pay } from '@/content/site'
@@ -10,57 +16,69 @@ export function PaySection() {
       <div className="container-tight">
         <SectionHeading eyebrow="The pay" title={pay.headline} sub={pay.sub} />
 
-        {/* Prominent pricing line */}
-        <Reveal className="mt-10">
-          <div className="relative overflow-hidden rounded-3xl bg-[hsl(var(--navy))] p-7 text-white shadow-lift sm:p-10">
-            <div
-              aria-hidden
-              className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/40 to-transparent"
-            />
-            <p className="text-balance text-2xl font-extrabold leading-snug tracking-tight sm:text-3xl md:text-[2.75rem]">
-              {pay.rangeNote}
-            </p>
-            {/* The math, shown — so a miles driver can do it himself and it closes */}
-            <p className="mt-5 border-t border-white/15 pt-5 text-[15px] leading-relaxed text-white/85 sm:text-base">
-              {pay.tripMath}
-            </p>
-            <p className="mt-4 text-sm text-white/55">{pay.disclaimer}</p>
-          </div>
-        </Reveal>
-
-        {/* Numbered reason cards */}
-        <div className="mt-6 grid gap-5 md:grid-cols-3">
-          {pay.reasons.map((reason, i) => (
-            <Reveal key={reason.title} delay={i * 0.08} className="h-full">
-              <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-card transition-shadow hover:shadow-pop">
-                <span className="text-sm font-bold tabular-nums tracking-widest text-accent">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <h3 className="mt-4 text-lg font-bold leading-snug tracking-tight text-foreground">
-                  {reason.title}
-                </h3>
-                <p className="mt-3 text-pretty text-[0.95rem] leading-relaxed text-muted-foreground">
-                  {reason.body}
-                </p>
+        {/* Big earnings numbers, no reading required */}
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-3">
+          {pay.facts.map((f, i) => (
+            <Reveal key={f.l} delay={i * 0.06}>
+              <div className="rounded-2xl bg-[hsl(var(--navy))] p-7 text-center text-white shadow-lift">
+                <div className="font-display text-5xl font-extrabold tracking-tight text-[hsl(var(--gold))] sm:text-6xl">
+                  {f.v}
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white/85">{f.l}</div>
               </div>
             </Reveal>
           ))}
         </div>
 
-        {/* Hang-up guarantee callout */}
-        <Reveal className="mt-6">
-          <div className="flex items-start gap-4 rounded-2xl border border-l-4 border-border border-l-accent bg-[hsl(var(--accent)/0.05)] p-6 sm:gap-5 sm:p-8">
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground sm:size-12">
-              <FileSignature className="size-5 sm:size-6" aria-hidden="true" />
-            </span>
-            <p className="text-pretty text-base font-semibold leading-relaxed text-foreground sm:text-lg">
-              {pay.guarantee}
-            </p>
+        {/* How you earn it, three short steps */}
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {pay.steps.map((s, i) => (
+            <Reveal key={s.n} delay={i * 0.05} className="h-full">
+              <div className="flex h-full items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-card">
+                <span className="text-sm font-bold tabular-nums tracking-widest text-accent">{s.n}</span>
+                <div>
+                  <p className="font-bold leading-tight text-foreground">{s.t}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{s.d}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* One-line guarantee */}
+        <Reveal className="mt-4">
+          <div className="rounded-2xl border border-l-4 border-border border-l-accent bg-[hsl(var(--accent)/0.05)] p-5 text-base font-semibold leading-relaxed text-foreground sm:text-lg">
+            {pay.guarantee}
           </div>
         </Reveal>
 
+        {/* Detail lives in dropdowns for the drivers who want it */}
+        <Reveal className="mt-4">
+          <Accordion type="single" collapsible className="space-y-3">
+            <AccordionItem value="math" className="shadow-card">
+              <AccordionTrigger className="text-base">{pay.mathTitle}</AccordionTrigger>
+              <AccordionContent className="text-[15px] leading-relaxed text-muted-foreground">
+                {pay.tripMath}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="why" className="shadow-card">
+              <AccordionTrigger className="text-base">{pay.reasonsTitle}</AccordionTrigger>
+              <AccordionContent>
+                <ul className="grid gap-4">
+                  {pay.reasons.map((r) => (
+                    <li key={r.title}>
+                      <p className="font-bold text-foreground">{r.title}</p>
+                      <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">{r.body}</p>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Reveal>
+
         <Reveal className="mt-8">
-          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center">
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
             <span data-track="pay_quiz" className="w-full sm:w-auto">
               <MagneticButton href="#apply" variant="accent" className="w-full justify-center sm:w-auto">
                 See if you qualify <ArrowRight />

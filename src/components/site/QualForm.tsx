@@ -16,7 +16,7 @@ type Result = { outcome: Outcome; title: string; body: string; reasonCode: strin
 
 const steps = quiz.steps
 
-/** Recruiting hours: Mon–Fri 8–5, Sat–Sun 11–3. */
+/** Recruiting hours: Mon-Fri 8-5, Sat-Sun 11-3. */
 function inHours() {
   const now = new Date()
   const h = now.getHours()
@@ -45,7 +45,7 @@ function scoreLead(a: Answers): { outcome: Outcome; reasonCode: string } {
   if (a.experience === 'under1') return { outcome: 'hard_no', reasonCode: 'experience_under_1yr' }
   if (a.record === 'fresh') return { outcome: 'hard_no', reasonCode: 'fresh_accident' }
   if (a.record === 'tickets') return { outcome: 'hard_no', reasonCode: 'five_plus_tickets' }
-  // Soft: 1–2 yr experience (recruiter judgment).
+  // Soft: 1-2 yr experience (recruiter judgment).
   if (a.experience === '1-2') return { outcome: 'soft', reasonCode: 'experience_1_2yr' }
   // Qualified: 2+ yr and clean / 3+ yr-old record.
   return { outcome: 'qualified', reasonCode: 'meets_criteria' }
@@ -53,7 +53,7 @@ function scoreLead(a: Answers): { outcome: Outcome; reasonCode: string } {
 
 function hardReason(code: string) {
   if (code === 'experience_under_1yr')
-    return 'you need a year behind the wheel first — we don’t run a trainer and insurance sets the floor'
+    return 'you need a year behind the wheel first, we don’t run a trainer and insurance sets the floor'
   if (code === 'fresh_accident') return 'a fresh accident (under 2 years) puts you below what insurance lets us hire'
   if (code === 'five_plus_tickets') return '5+ tickets in 2 years is over the line for our insurance'
   return 'your record doesn’t clear our insurance floor right now'
@@ -71,7 +71,7 @@ function queueLocal(lead: Record<string, unknown>) {
 }
 
 /** Returns true if the lead was delivered (or captured in demo mode), false if a real
- *  delivery attempt failed — caller then shows a "call us now" fallback. */
+ *  delivery attempt failed, caller then shows a "call us now" fallback. */
 async function deliver(lead: Record<string, unknown>): Promise<boolean> {
   const { mode, web3formsKey, webhookUrl } = config.lead
   try {
@@ -95,11 +95,11 @@ async function deliver(lead: Record<string, unknown>): Promise<boolean> {
       return true
     }
   } catch (e) {
-    console.warn('Lead delivery failed — queued locally', e)
+    console.warn('Lead delivery failed, queued locally', e)
     queueLocal(lead) // don't lose the lead
     return false
   }
-  // demo mode — fully previewable with no backend
+  // demo mode, fully previewable with no backend
   console.log('%c[DEMO LEAD CAPTURED]', 'color:#c8102e;font-weight:bold', lead)
   queueLocal(lead)
   return true
@@ -246,7 +246,7 @@ export function QualForm() {
     if (outcome !== 'hard_no') {
       const when = inHours() ? 'We answer in a few rings.' : 'We call you first thing.'
       body = `${body} ${when}`
-      if (!delivered) body = `${body} If you don’t hear from us, call ${contact.phone} now — we don’t want to miss you.`
+      if (!delivered) body = `${body} If you don’t hear from us, call ${contact.phone} now, we don’t want to miss you.`
     }
     setResult({ outcome, title: first ? `${r.title}, ${first}` : r.title, body, reasonCode })
   }
@@ -275,7 +275,7 @@ export function QualForm() {
           <p className="mx-auto mt-3 max-w-md text-pretty leading-relaxed text-muted-foreground">{result.body}</p>
 
           <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground">
-            Recruiting hours: <span className="font-medium text-foreground">Mon–Fri 8–5, Sat–Sun 11–3</span>
+            Recruiting hours: <span className="font-medium text-foreground">Mon-Fri 8-5, Sat-Sun 11-3</span>
           </p>
 
           {good ? (
@@ -297,14 +297,14 @@ export function QualForm() {
                 </>
               ) : (
                 <>
-                  {/* No IntelliApp link yet — calling is the real next step, so make it primary. */}
+                  {/* No IntelliApp link yet, calling is the real next step, so make it primary. */}
                   <Button asChild variant="gold" size="lg" data-track="final_call" data-gtm_cta="final_call">
                     <a href={`tel:${contact.tel}`}>
                       <Phone className="size-5" /> Call recruiting: {contact.phone}
                     </a>
                   </Button>
                   <p className="text-xs leading-relaxed text-muted-foreground">
-                    A recruiter will call you — and the full online application opens here soon.
+                    A recruiter will call you, and the full online application opens here soon.
                   </p>
                 </>
               )}
@@ -507,7 +507,7 @@ export function QualForm() {
               </div>
 
               <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <Lock className="size-3.5" /> No SSN here. Your info goes straight to West Wind — never sold.
+                <Lock className="size-3.5" /> No SSN here. Your info goes straight to West Wind, never sold.
               </p>
             </form>
           )}

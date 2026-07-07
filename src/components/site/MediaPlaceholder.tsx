@@ -12,7 +12,7 @@ type Props = {
 }
 
 /**
- * Swappable media placeholder — a designed empty state, not a broken image.
+ * Swappable media placeholder, a designed empty state, not a broken image.
  * TO SWAP IN REAL CONTENT:
  *   • Photo  → drop the file in src/assets, import it, replace <MediaPlaceholder/> with <img src={…} alt="…" />
  *   • Video  → replace with <video controls poster={…}><source src={…} type="video/mp4" /></video>

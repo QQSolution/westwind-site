@@ -25,7 +25,7 @@ const VARIANTS: Record<Variant, string> = {
     'border border-foreground/15 text-foreground hover:border-foreground/30 hover:bg-foreground/[0.04] focus-visible:ring-2 focus-visible:ring-foreground/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
 }
 
-/** Custom magnetic CTA — the button leans toward the cursor and the label
+/** Custom magnetic CTA, the button leans toward the cursor and the label
  *  trails slightly, with a sheen sweep. Fully disabled for reduced-motion.
  *  Visibility never depends on JS: no entrance animation, springs rest at 0. */
 export function MagneticButton({ href, children, variant = 'primary', className, strength = 0.32, external }: Props) {

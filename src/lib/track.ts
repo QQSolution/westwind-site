@@ -17,7 +17,7 @@ function deviceType(): string {
   return window.matchMedia('(max-width: 767px)').matches ? 'mobile' : window.matchMedia('(max-width: 1023px)').matches ? 'tablet' : 'desktop'
 }
 
-/** Keys that may carry PII — kept first-party (dataLayer) only, never forwarded
+/** Keys that may carry PII, kept first-party (dataLayer) only, never forwarded
  *  to third-party pixels (gtag / Meta). */
 const PII_KEYS = new Set(['name', 'phone', 'email', 'lead_id', 'page'])
 
@@ -69,7 +69,7 @@ export function trackPageLoad(): void {
 const seen = new Set<string>()
 let io: IntersectionObserver | null = null
 
-/** (Re)observe every section[id] on the page. Safe to call repeatedly — observing
+/** (Re)observe every section[id] on the page. Safe to call repeatedly, observing
  *  the same element twice is a no-op and `seen` de-dupes the events. Call on each
  *  SPA route change so new pages (e.g. /apply) still emit section_view. */
 export function observeSections(): void {

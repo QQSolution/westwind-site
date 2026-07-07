@@ -12,7 +12,7 @@ export function WhyStay() {
       <div className="container-tight">
         <SectionHeading
           eyebrow="Before you even ask"
-          title="Yes — you can."
+          title="Yes, you can."
         />
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -31,7 +31,7 @@ export function WhyStay() {
             )
           })}
 
-          {/* Founder pull-quote — distinct navy panel with gold accent */}
+          {/* Founder pull-quote, distinct navy panel with gold accent */}
           <Reveal delay={0.16} className="h-full sm:col-span-2 lg:col-span-1">
             <figure className="relative flex h-full flex-col justify-between overflow-hidden rounded-2xl bg-[hsl(var(--navy))] p-7 text-white shadow-pop">
               <div aria-hidden className="pointer-events-none absolute -right-10 -top-12 size-44 rounded-full bg-[hsl(var(--gold))]/10 blur-2xl" />
@@ -43,7 +43,7 @@ export function WhyStay() {
               </blockquote>
               <figcaption className="mt-6 border-t border-white/15 pt-4 text-sm text-white/70">
                 <span className="font-semibold text-white">{company.name}</span>
-                {' — '}
+                {', '}
                 {company.tagline}
               </figcaption>
             </figure>

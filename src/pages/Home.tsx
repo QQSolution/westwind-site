@@ -8,7 +8,6 @@ import { HomeTime } from '@/components/sections/HomeTime'
 import { FleetGallery } from '@/components/sections/FleetGallery'
 import { NetworkSection } from '@/components/sections/NetworkSection'
 import { InsideCompany } from '@/components/sections/InsideCompany'
-import { VideoSection } from '@/components/sections/VideoSection'
 import { ProofSection } from '@/components/sections/ProofSection'
 import { Process } from '@/components/sections/Process'
 import { ApplySection } from '@/components/sections/ApplySection'
@@ -19,17 +18,16 @@ export function Home() {
   useSEO({ title: meta.title, description: meta.description })
   return (
     <>
-      {/* Hook → stats → pay → OUR TERMINALS (where you run) → real trucks → IS IT REAL (proof) → yes-you-can → home time → footage → how it works → apply → faq → final */}
+      {/* hook -> stats -> pay -> terminals -> trucks -> proof -> yes-you-can -> inside -> home time -> process -> apply -> faq -> final */}
       <Hero />
       <TrustStrip />
       <PaySection />
       <NetworkSection />
       <FleetGallery />
       <ProofSection />
-      <InsideCompany />
       <WhyStay />
+      <InsideCompany />
       <HomeTime />
-      <VideoSection />
       <Process />
       <ApplySection />
       <FaqSection />

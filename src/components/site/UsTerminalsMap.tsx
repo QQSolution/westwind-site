@@ -93,7 +93,7 @@ export function UsTerminalsMap() {
               {active ? t.role : t.hub ? 'Headquarters' : 'Terminal'}
             </text>
             <title>
-              {t.city}, {t.state} — {t.role}
+              {t.city}, {t.state}, {t.role}
             </title>
           </g>
         )

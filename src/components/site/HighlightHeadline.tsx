@@ -1,7 +1,7 @@
 type Seg = { t: string; hl?: boolean }
 
 /** Headline with GP-Transco-style highlight bars behind key words.
- *  The bar is static (always visible) so the headline is readable instantly —
+ *  The bar is static (always visible) so the headline is readable instantly ,
  *  no dependency on a JS animation for legibility. Defaults to <h1> (hero);
  *  pass as="h2" for secondary headlines so there's only one h1 per page. */
 export function HighlightHeadline({

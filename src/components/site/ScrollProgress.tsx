@@ -1,6 +1,6 @@
 import { motion, useScroll, useSpring } from 'framer-motion'
 
-/** Thin accent progress bar at the very top — signals reading progress (reduces
+/** Thin accent progress bar at the very top, signals reading progress (reduces
  *  abandonment) and adds a premium, cheap motion cue. Transform-only. */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll()

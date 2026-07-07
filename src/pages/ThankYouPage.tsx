@@ -7,7 +7,7 @@ import { track } from '@/lib/track'
 import logo from '@/assets/photos/logo.png'
 
 /**
- * /apply/thank-you — the conversion page. Its own distinct URL so a Google Ads
+ * /apply/thank-you, the conversion page. Its own distinct URL so a Google Ads
  * PAGE-LOAD conversion (or the explicit event below) fires exactly once when a
  * pre-qualified driver reaches it. Then it hands off to the Tenstreet/IntelliApp
  * application (different domain) with the ?r= source + UTM tags preserved.
@@ -53,7 +53,7 @@ export function ThankYouPage() {
           You’re pre-qualified.
         </h1>
         <p className="mx-auto mt-4 max-w-md text-pretty text-lg leading-relaxed text-muted-foreground">
-          A real recruiter will call you — {company.hours}. To lock in your spot, finish your
+          A real recruiter will call you, {company.hours}. To lock in your spot, finish your
           official application now. It takes a few minutes and there’s no SSN until the very end.
         </p>
 
@@ -73,7 +73,7 @@ export function ThankYouPage() {
         </div>
 
         <p className="mx-auto mt-6 max-w-md text-sm text-muted-foreground">
-          Your info goes only to West Wind — never sold. Want to double-check us first?{' '}
+          Your info goes only to West Wind, never sold. Want to double-check us first?{' '}
           <a href={contact.saferUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-foreground underline underline-offset-2">
             Run USDOT 1302563 on SAFER.
           </a>

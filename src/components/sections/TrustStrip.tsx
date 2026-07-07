@@ -5,7 +5,7 @@ import { heroStats } from '@/content/site'
 import { cn } from '@/lib/utils'
 
 /** Six hero stats as a Rogue-style navy stat band flowing straight out of the
- *  navy hero (no seam). Frameless columns — just a hairline top rule per stat.
+ *  navy hero (no seam). Frameless columns, just a hairline top rule per stat.
  *  The two money stats ($0.70/mi, ~$3,500) get gold numerals.
  *  Mobile: 2 columns, no horizontal scroll. */
 export function TrustStrip() {

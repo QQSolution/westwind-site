@@ -1,7 +1,7 @@
 import { announcement, contact } from '@/content/site'
 
 export function AnnouncementBar() {
-  // announcement.text ends with "Call <phone> ext <ext>." — split that off so the
+  // announcement.text ends with "Call <phone> ext <ext>.", split that off so the
   // phone number renders as a real tel: link instead of plain text.
   const [pitch] = announcement.text.split(/\s*Call\s/)
 

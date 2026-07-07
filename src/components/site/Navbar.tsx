@@ -5,13 +5,27 @@ import { Menu, Phone, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { contact, nav } from '@/content/site'
-import logo from '@/assets/photos/logo.png'
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 const menuItemVariants: Variants = {
   hidden: { opacity: 0, y: 6 },
   show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: EASE } },
+}
+
+/** Clean readable wordmark, replaces the busy emblem-on-white-square. */
+function WordMark({ compact = false }: { compact?: boolean }) {
+  return (
+    <span className="flex items-center gap-2" aria-label="West Wind Logistics">
+      <span className="inline-block size-2.5 rotate-45 rounded-[2px] bg-accent" aria-hidden />
+      <span className="flex items-baseline gap-1.5 leading-none">
+        <span className="font-display text-[18px] font-extrabold tracking-tight text-white">WEST WIND</span>
+        {!compact && (
+          <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/50">Logistics</span>
+        )}
+      </span>
+    </span>
+  )
 }
 
 export function Navbar() {
@@ -33,57 +47,47 @@ export function Navbar() {
         scrolled ? 'border-white/10 bg-[hsl(var(--navy))]/90 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)] backdrop-blur-xl' : 'border-transparent bg-[hsl(var(--navy))]',
       )}
     >
-      <nav className="container-tight flex h-16 items-center justify-between">
-        <a href="#top" className="flex items-center" aria-label="West Wind Logistics — home">
-          <span className="grid place-items-center rounded-lg bg-white p-1.5 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.5)]">
-            <img src={logo} alt="West Wind Logistics" className="h-9 w-auto" />
-          </span>
-        </a>
-
-        <div className="hidden items-center gap-8 lg:flex">
-          {nav.items.map((n) => (
-            <a key={n.href} href={n.href} className="text-sm font-medium text-white/80 transition-colors hover:text-white">
-              {n.label}
-            </a>
-          ))}
-        </div>
-
-        <div className="hidden items-center gap-4 lg:flex">
-          <a href={`tel:${contact.tel}`} className="flex items-center gap-2 text-sm font-semibold text-white/90 transition-colors hover:text-white">
-            <Phone className="size-4" /> {contact.phone}
-          </a>
-          <Button asChild variant="accent" size="sm" className="h-10 px-5">
-            <a href="#apply" data-track="nav_apply">{nav.cta}</a>
-          </Button>
-        </div>
-
-        <div className="flex items-center gap-1 lg:hidden">
-          <a
-            href={`tel:${contact.tel}`}
-            aria-label="Call West Wind recruiting"
-            data-track="nav_call_mobile"
-            className="grid size-11 place-items-center rounded-lg text-white transition-colors hover:bg-white/10"
-          >
-            <Phone className="size-5" />
-          </a>
-          <a
-            href="#apply"
-            data-track="nav_apply"
-            className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
-          >
-            {nav.cta}
-          </a>
+      <nav className="container-tight relative flex h-16 items-center justify-between">
+        {/* Left: mobile menu button + desktop wordmark & links */}
+        <div className="flex items-center gap-6">
           <button
             type="button"
-            className="grid size-10 place-items-center rounded-lg text-white"
+            className="grid size-10 place-items-center rounded-lg text-white lg:hidden"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            <span className={cn('transition-transform duration-200', open ? 'rotate-90' : 'rotate-0')}>
-              {open ? <X className="size-6" /> : <Menu className="size-6" />}
-            </span>
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
           </button>
+          <a href="#top" className="hidden items-center lg:flex" aria-label="West Wind Logistics, home">
+            <WordMark />
+          </a>
+          <div className="hidden items-center gap-8 lg:flex">
+            {nav.items.map((n) => (
+              <a key={n.href} href={n.href} className="text-sm font-medium text-white/80 transition-colors hover:text-white">
+                {n.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile: centered wordmark */}
+        <a
+          href="#top"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:hidden"
+          aria-label="West Wind Logistics, home"
+        >
+          <WordMark compact />
+        </a>
+
+        {/* Right: phone (desktop) + Apply */}
+        <div className="flex items-center gap-2 lg:gap-4">
+          <a href={`tel:${contact.tel}`} className="hidden items-center gap-2 text-sm font-semibold text-white/90 transition-colors hover:text-white lg:flex">
+            <Phone className="size-4" /> {contact.phone}
+          </a>
+          <Button asChild variant="accent" size="sm" className="h-9 px-4 lg:h-10 lg:px-5">
+            <a href="#apply" data-track="nav_apply">{nav.cta}</a>
+          </Button>
         </div>
       </nav>
 

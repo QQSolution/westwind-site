@@ -19,7 +19,7 @@ export const mapTerminals: MapTerminal[] = [
   { id: 'ut', city: 'Lake Point', state: 'UT', lng: -112.27, lat: 40.68, role: 'Salt Lake region', tag: 'Restart yard' },
 ]
 
-/** lane pairs by terminal id — the network the trucks actually run */
+/** lane pairs by terminal id, the network the trucks actually run */
 export const mapLanes: [string, string][] = [
   ['ca', 'ut'],
   ['ut', 'il'],

@@ -48,13 +48,13 @@ export function FinalCta() {
               </span>
             </div>
             <p className="mt-4 text-sm text-white/75">
-              60 seconds. No SSN, no résumé. A real person calls you — not a robot.
+              60 seconds. No SSN, no résumé. A real person calls you, not a robot.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Slim full-bleed call band — plain markup, never hidden behind an animation. */}
+      {/* Slim full-bleed call band, plain markup, never hidden behind an animation. */}
       <div className="bg-accent py-5 text-accent-foreground">
         <div className="container-tight flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-5">
           <p className="font-semibold">Rather talk to a person right now?</p>

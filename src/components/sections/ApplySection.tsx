@@ -1,17 +1,39 @@
-import { Lock, PhoneCall, Shield } from 'lucide-react'
+import { ArrowRight, Lock, Phone, PhoneCall, Shield } from 'lucide-react'
 import { Eyebrow, Section } from '@/components/site/kit'
 import { Reveal } from '@/components/Reveal'
 import { QualForm } from '@/components/site/QualForm'
-import { quiz } from '@/content/site'
+import { MagneticButton } from '@/components/site/MagneticButton'
+import { config, contact, quiz } from '@/content/site'
+import { buildIntelliappUrl } from '@/lib/attribution'
 
 const POINTS = [
-  { icon: PhoneCall, text: 'A real recruiter calls you — not a robot, and not 40 carriers at once.' },
-  { icon: Lock, text: 'No SSN and no DOT paperwork here — that only comes later, if you move forward.' },
+  { icon: PhoneCall, text: 'A real recruiter calls you, not a robot, and not 40 carriers at once.' },
+  { icon: Lock, text: 'No SSN and no DOT paperwork here, that only comes later, if you move forward.' },
   { icon: Shield, text: 'Your answers go straight to our recruiting office and are never sold.' },
 ]
 
-/** Mobile: heading → form → trust points (order utilities), so the form is one
- *  scroll away from the heading. lg: classic two-column, sticky form on the right. */
+/** The on-site quiz. Set config.showQuiz = false to send Apply straight to Tenstreet instead. */
+function ApplyCard() {
+  if (config.showQuiz) return <QualForm />
+  return (
+    <div className="rounded-3xl border border-border bg-card p-7 text-center shadow-card sm:p-9">
+      <h3 className="font-display text-2xl font-extrabold tracking-tight text-foreground">Start your application</h3>
+      <p className="mx-auto mt-2 max-w-xs text-pretty text-muted-foreground">
+        A few minutes. No SSN until the very end. A real recruiter follows up.
+      </p>
+      <div className="mt-6 flex flex-col items-stretch gap-3">
+        <MagneticButton href={buildIntelliappUrl()} variant="accent" className="justify-center">
+          Apply now <ArrowRight />
+        </MagneticButton>
+        <MagneticButton href={`tel:${contact.tel}`} variant="outline" className="justify-center">
+          <Phone /> Call {contact.phone}
+        </MagneticButton>
+      </div>
+    </div>
+  )
+}
+
+/** Mobile: heading -> form -> trust points. lg: two-column, sticky form on the right. */
 export function ApplySection() {
   return (
     <Section id="apply" tone="surface" className="scroll-mt-20">
@@ -30,7 +52,7 @@ export function ApplySection() {
           delay={0.1}
           className="order-2 lg:order-none lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1"
         >
-          <QualForm />
+          <ApplyCard />
         </Reveal>
 
         <Reveal className="order-3 lg:order-none lg:col-start-1 lg:row-start-2">

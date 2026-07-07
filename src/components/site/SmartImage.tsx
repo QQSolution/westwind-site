@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ImgHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
-/** Image that fades in once decoded — kills the pop-in/flash on load.
+/** Image that fades in once decoded, kills the pop-in/flash on load.
  *  Lazy + async by default; sits over a skeleton-toned container so there's no
  *  white flash or layout shift while it loads. */
 export function SmartImage({ className, onLoad, loading, ...props }: ImgHTMLAttributes<HTMLImageElement>) {
