@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "bun scripts/gen-images.mjs",
-    "build": "tsc -b && vite build && cp dist/index.html dist/404.html",
+    "build": "tsc -b && vite build && cp dist/index.html dist/404.html && mkdir -p dist/apply/thank-you && cp dist/index.html dist/apply/index.html && cp dist/index.html dist/apply/thank-you/index.html",
     "lint": "eslint .",
     "preview": "vite preview"
   },
