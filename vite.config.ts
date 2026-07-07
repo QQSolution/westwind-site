@@ -2,11 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { fileURLToPath, URL } from 'node:url'
 
-// Project Pages serve under /westwind-site/ — apply that base only at build time
-// so local dev keeps serving from root.
+// Served at the root of its own domain (drivewestwind.com) — base is '/'.
 // https://vite.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/westwind-site/' : '/',
+export default defineConfig(() => ({
+  base: '/',
   plugins: [react()],
   resolve: {
     alias: {
