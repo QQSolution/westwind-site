@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { QualForm } from '@/components/site/QualForm'
 import { contact, payRange } from '@/content/site'
 import logo from '@/assets/photos/logo.png'
+import windOffice from '@/assets/photos/wind-office.webp'
 
 /**
  * Standalone, deep-linkable /apply page for FB / IG / Google ads.
@@ -48,6 +49,20 @@ export function ApplyPage() {
             </a>
           </Button>
         </div>
+
+        {/* trust image — a real, established company, not a lead-board */}
+        <figure className="mt-6 overflow-hidden rounded-2xl border border-border shadow-card">
+          <img
+            src={windOffice}
+            alt="The West Wind Logistics headquarters lobby in Bedford Park, IL"
+            loading="lazy"
+            decoding="async"
+            className="aspect-[16/9] w-full object-cover"
+          />
+          <figcaption className="bg-card px-4 py-2.5 text-center text-xs text-muted-foreground">
+            Real company since 1999 — our Bedford Park, IL headquarters. Not a lead board.
+          </figcaption>
+        </figure>
 
         {/* the qualifying app */}
         <section id="apply" className="mt-6">

@@ -16,6 +16,10 @@ import windFleetLineup from '@/assets/photos/wind-fleet-lineup.webp'
 import windTrailerLogo from '@/assets/photos/wind-trailer-logo.webp'
 import windHq from '@/assets/photos/wind-hq.webp'
 import windYard from '@/assets/photos/wind-yard.webp'
+// Real interior shots of the Bedford Park HQ — the "we're a real company" proof.
+import windOffice from '@/assets/photos/wind-office.webp'
+import windBrandMap from '@/assets/photos/wind-brand-map.webp'
+import windMural from '@/assets/photos/wind-mural.webp'
 
 export const config = {
   /** Pay is real now — no DRAFT ribbon. */
@@ -146,7 +150,14 @@ export const pay = {
 export const network = {
   headline: 'Where you’ll run.',
   sub:
-    'Midwest to the West Coast, loaded both ways. IL to Stockton is about 2,050 miles — real miles, not 300-mile shuffles. Some Florida. We skip the East Coast on purpose: low miles, brutal traffic, you’d hate it.',
+    'Midwest to the West Coast, loaded both ways. IL to Stockton is about 2,050 real miles — not 300-mile shuffles. We skip the East Coast on purpose: low miles, brutal traffic, you’d hate it.',
+  /** The owned-terminals showcase below the map. */
+  terminalsLead: 'Four yards on the lane — every one ours.',
+  terminalsSub:
+    'Our own tractor, trailer and reefer shops in IL, AZ and CA. Break down and you’re rolling again fast — not stuck a week at a stranger’s vendor waiting on a part.',
+  photo: windYard,
+  photoAlt: 'West Wind reefer trailers lined up in the company’s own Bedford Park yard',
+  photoCaption: 'Our Bedford Park yard — a real terminal you can drive to. Most trips start and finish right here.',
   counters: [
     { to: 148, label: 'Power units in the fleet' },
     { to: 4, label: 'Terminals: IL, AZ, CA, UT' },
@@ -171,21 +182,33 @@ export const fleet = {
   ],
 }
 
-/** Interactive truck explorer — pulsing hotspots over a real photo. Positions are
- *  % of the image box; tune against the chosen photo in preview. */
-export const truckExplorer = {
-  eyebrow: 'The equipment',
-  headline: 'Walk the truck.',
+/** "Step inside West Wind" — real HQ interior shots that prove it's an established,
+ *  walk-in-able company. Captions sit BELOW the photos so nothing's hard to read. */
+export const insideCompany = {
+  eyebrow: 'Not a P.O. box',
+  headline: 'Step inside West Wind.',
   sub:
-    'Tap a marker. Straight spec sheet — model years confirmed at orientation, no “newest” or “spotless” claims.',
-  image: windTruckReefers,
-  imageAlt: 'A West Wind Peterbilt tractor hooked to West Wind reefer trailers in the yard — tap the markers to explore the equipment',
-  hotspots: [
-    { id: 'reefer_unit', x: 69, y: 30, title: 'Reefer unit', body: 'Runs 24/7. Can’t be shut off. Keeps the produce cold both ways.' },
-    { id: 'trailer', x: 87, y: 52, title: 'Our 53′ reefer', body: 'Air-ride reefer trailer — West Wind’s own, not a leased box with a stranger’s name.' },
-    { id: 'tractor', x: 45, y: 50, title: 'The tractor', body: 'Kenworth and Peterbilt in the fleet. Engine and specs confirmed at orientation.' },
-    { id: 'branding', x: 30, y: 66, title: 'Run our DOT', body: 'USDOT 1302563 right on the door. Look us up on SAFER before you ever call.' },
-  ] as Array<{ id: string; x: number; y: number; title: string; body: string }>,
+    'Twenty-five years in and still family-run — a real company you can walk into. Real recruiters who pick up, a real yard, real trucks. Come see for yourself.',
+  points: [
+    'Family-run since 1999 — same people, same phone number.',
+    'A real recruiter answers — Mon–Fri 8–5, Sat–Sun 11–3.',
+    'Drive to 7050 S Archer Rd and walk the yard yourself.',
+  ],
+  office: {
+    image: windOffice,
+    alt: 'The West Wind Logistics HQ lobby in Bedford Park — curved staircase and a hand-painted Peterbilt mural',
+    caption: 'Our Bedford Park HQ lobby — walk in the front door.',
+  },
+  brandMap: {
+    image: windBrandMap,
+    alt: 'West Wind logo with a lit-up national lane map and the tagline “Always with the wind”',
+    caption: '“Always with the wind” — our lanes, coast to coast.',
+  },
+  mural: {
+    image: windMural,
+    alt: 'A hand-painted Peterbilt mural on the wall of the West Wind office',
+    caption: 'Hand-painted in our lobby. We’re truckers first.',
+  },
 }
 
 export const homeTime = {

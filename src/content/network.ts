@@ -7,14 +7,16 @@ export type MapTerminal = {
   lng: number
   lat: number
   role: string
+  tag?: string
+  shop?: boolean
   hub?: boolean
 }
 
 export const mapTerminals: MapTerminal[] = [
-  { id: 'il', city: 'Bedford Park', state: 'IL', lng: -87.79, lat: 41.77, role: 'Chicago HQ · in-house shop', hub: true },
-  { id: 'az', city: 'Phoenix', state: 'AZ', lng: -112.07, lat: 33.45, role: 'Southwest · in-house shop' },
-  { id: 'ca', city: 'Stockton', state: 'CA', lng: -121.29, lat: 37.96, role: 'Central Valley reefer · in-house shop' },
-  { id: 'ut', city: 'Lake Point', state: 'UT', lng: -112.27, lat: 40.68, role: 'Salt Lake region' },
+  { id: 'il', city: 'Bedford Park', state: 'IL', lng: -87.79, lat: 41.77, role: 'Chicago HQ', tag: 'HQ + in-house shop', shop: true, hub: true },
+  { id: 'az', city: 'Phoenix', state: 'AZ', lng: -112.07, lat: 33.45, role: 'Southwest hub', tag: 'In-house shop', shop: true },
+  { id: 'ca', city: 'Stockton', state: 'CA', lng: -121.29, lat: 37.96, role: 'Central Valley reefer', tag: 'In-house shop', shop: true },
+  { id: 'ut', city: 'Lake Point', state: 'UT', lng: -112.27, lat: 40.68, role: 'Salt Lake region', tag: 'Restart yard' },
 ]
 
 /** lane pairs by terminal id — the network the trucks actually run */
