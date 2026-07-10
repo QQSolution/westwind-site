@@ -13,7 +13,7 @@ import { Process } from '@/components/sections/Process'
 import { ApplySection } from '@/components/sections/ApplySection'
 import { FaqSection } from '@/components/sections/FaqSection'
 import { FinalCta } from '@/components/sections/FinalCta'
-import windTruckReefers from '@/assets/photos/wind-truck-reefers.webp'
+import windTrailerLogo from '@/assets/photos/wind-trailer-logo.webp'
 import windHero from '@/assets/photos/wind-hero.webp'
 import windFleetLineup from '@/assets/photos/wind-fleet-lineup.webp'
 
@@ -24,8 +24,8 @@ export function Home() {
       <Hero />
       <PaySection />
       <PhotoBreak
-        src={windTruckReefers}
-        alt="A West Wind Peterbilt hooked to our own reefer trailers"
+        src={windTrailerLogo}
+        alt="A 53-foot West Wind reefer trailer with the company logo"
         kicker="Straight deal"
         line="You've hauled worse for a lot less."
       />

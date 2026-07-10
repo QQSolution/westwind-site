@@ -11,7 +11,6 @@
    These replace the earlier generic/AI stand-ins, every truck, trailer and
    building below carries the actual West Wind logo, DOT 1302563 and signage. */
 import windHero from '@/assets/photos/wind-hero.webp'
-import windTruckReefers from '@/assets/photos/wind-truck-reefers.webp'
 import windFleetLineup from '@/assets/photos/wind-fleet-lineup.webp'
 import windTrailerLogo from '@/assets/photos/wind-trailer-logo.webp'
 import windHq from '@/assets/photos/wind-hq.webp'
@@ -178,7 +177,6 @@ export const fleet = {
   note:
     'The reefer runs day and night so the food stays cold, that’s also why the freight never stops, and why your pay doesn’t. Never run one? The mechanic walks you through it before your first load.',
   items: [
-    { image: windTruckReefers, title: 'Our own power', caption: 'A West Wind Peterbilt hooked to our own reefers, DOT 1302563 right on the door.' },
     { image: windFleetLineup, title: 'A real fleet', caption: 'Part of a 148-truck fleet, Kenworths and Peterbilts, all ours, not one hero truck recycled.' },
     { image: windTrailerLogo, title: 'Our name on the trailer', caption: '53-ft air-ride reefers with the West Wind logo, not a leased box with a stranger’s name.' },
     { image: windHero, title: 'The green Kenworth', caption: 'Our green Kenworth #577, air-ride reefer power, kept up in-house.' },
