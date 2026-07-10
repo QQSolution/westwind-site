@@ -89,6 +89,18 @@ export function buildLead(fields: {
   }
 }
 
+/** A website "Call" tap — sent to the same webhook so it pings Telegram (and logs
+ *  to a Calls tab). This is intent-to-call from the site, not a Google-ad call. */
+export function buildCallEvent(): Record<string, unknown> {
+  return {
+    stage: 'call',
+    channel: getChannel(),
+    source: 'westwind-site',
+    page: typeof location !== 'undefined' ? location.pathname : '',
+    timestamp_utc: new Date().toISOString(),
+  }
+}
+
 /** Returns true if delivered (or captured in demo mode). Uses a no-cors text/plain
  *  POST so the Google Apps Script endpoint always receives it. */
 export async function deliver(lead: Record<string, unknown>): Promise<boolean> {

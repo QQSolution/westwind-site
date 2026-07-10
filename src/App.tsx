@@ -4,8 +4,9 @@ import { ScrollProgress } from '@/components/site/ScrollProgress'
 import { Navbar } from '@/components/site/Navbar'
 import { Footer } from '@/components/site/Footer'
 import { MobileCTA } from '@/components/site/MobileCTA'
-import { initTracking, observeSections } from '@/lib/track'
-import { captureAttribution } from '@/lib/attribution'
+import { initTracking, observeSections, track } from '@/lib/track'
+import { captureAttribution, getChannel } from '@/lib/attribution'
+import { buildCallEvent, deliver } from '@/lib/lead'
 import { Home } from '@/pages/Home'
 import { ApplyPage } from '@/pages/ApplyPage'
 import { ThankYouPage } from '@/pages/ThankYouPage'
@@ -31,6 +32,23 @@ export default function App() {
   useEffect(() => {
     captureAttribution() // first-touch source, before anything else reads it
     initTracking()
+  }, [])
+
+  // Ping Telegram when a driver taps any "Call" link on the site (debounced so a
+  // double-tap doesn't double-notify). Not the same as a Google-ad call.
+  useEffect(() => {
+    let last = 0
+    const onClick = (e: MouseEvent) => {
+      const el = e.target as HTMLElement | null
+      if (!el?.closest?.('a[href^="tel:"]')) return
+      const now = Date.now()
+      if (now - last < 4000) return
+      last = now
+      track('call_click', { channel: getChannel() })
+      void deliver(buildCallEvent())
+    }
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
   }, [])
 
   // Re-observe sections after each route change so /apply emits section_view too.

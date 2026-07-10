@@ -1,14 +1,12 @@
 /**
- * West Wind driver-lead receiver v2 (PRE-FILLED with your bot).
- * - Appends/UPDATES one row per driver in this spreadsheet (partial + complete merge
- *   into the same row by Lead ID, so no duplicates).
- * - Telegram: a "started" ping the moment they give name+phone, then a "completed"
- *   ping when they finish (skips a completed hard-no so you're not pinged for
- *   drivers who didn't qualify).
+ * West Wind lead + call receiver v3 (PRE-FILLED with your bot).
+ * - Applications: append/UPDATE one row per driver in the "Leads" tab by Lead ID
+ *   (partial + complete merge, no dupes). Telegram: "started" ping then "completed".
+ * - Website "Call" taps: log to a "Calls" tab AND ping Telegram in real time.
  *
  * To update: paste this over your existing script, Save, then
  * Deploy > Manage deployments > (pencil) > Version: New version > Deploy.
- * The /exec URL stays the same, so nothing on the website needs to change.
+ * The /exec URL stays the same, so nothing on the website changes.
  */
 
 var TELEGRAM_BOT_TOKEN = 'PASTE_YOUR_BOT_TOKEN';
@@ -22,8 +20,13 @@ var HEADERS = ['Received', 'Updated', 'Name', 'Phone', 'Email', 'State', 'Experi
 function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
-    upsertSheet_(d);
-    notifyTelegram_(d);
+    if (d.stage === 'call') {
+      logCall_(d);
+      notifyCall_(d);
+    } else {
+      upsertSheet_(d);
+      notifyTelegram_(d);
+    }
   } catch (err) {
     console.error(err);
   }
@@ -32,6 +35,14 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function telegram_(text) {
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+    method: 'post', muteHttpExceptions: true,
+    payload: { chat_id: TELEGRAM_CHAT_ID, text: text }
+  });
+}
+
+/* ---------- Applications ---------- */
 function upsertSheet_(d) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
@@ -49,7 +60,6 @@ function upsertSheet_(d) {
     d.lead_outcome || '', d.stage || '', d.source || '', d.channel || '',
     d.utm_campaign || '', d.lead_id || ''
   ];
-
   var last = sh.getLastRow();
   var found = 0;
   if (d.lead_id && last > 1) {
@@ -58,12 +68,11 @@ function upsertSheet_(d) {
       if (ids[i][0] === d.lead_id) { found = i + 2; break; }
     }
   }
-
   if (found) {
     var old = sh.getRange(found, 1, 1, HEADERS.length).getValues()[0];
-    row[0] = old[0] || row[0]; // keep original Received time
+    row[0] = old[0] || row[0];
     for (var c = 2; c < HEADERS.length; c++) {
-      if (row[c] === '' && old[c] !== '') row[c] = old[c]; // don't blank existing data
+      if (row[c] === '' && old[c] !== '') row[c] = old[c];
     }
     sh.getRange(found, 1, 1, HEADERS.length).setValues([row]);
   } else {
@@ -73,9 +82,9 @@ function upsertSheet_(d) {
 
 function notifyTelegram_(d) {
   var started = d.stage === 'partial';
-  if (!started && d.lead_outcome === 'hard_no') return; // don't ping completed non-qualifiers
+  if (!started && d.lead_outcome === 'hard_no') return;
   var head = started ? '🟡 Lead started (still filling out)' : '✅ Application completed';
-  var text = head + '\n' +
+  telegram_(head + '\n' +
     '👤 ' + (d.name || '-') + '\n' +
     '📞 ' + (d.phone || '-') + '\n' +
     '📍 ' + (d.state || '-') + '\n' +
@@ -83,15 +92,30 @@ function notifyTelegram_(d) {
       'Exp: ' + (d.experience_years || '-') + '  ·  Reefer: ' + (d.reefer || '-') + '\n' +
       '🚛 Wants: ' + (d.run_type || '-') + '\n' +
       'Result: ' + (d.lead_outcome || '-') + '\n') +
-    '📡 ' + (d.channel || d.source || '-');
-  UrlFetchApp.fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
-    method: 'post', muteHttpExceptions: true,
-    payload: { chat_id: TELEGRAM_CHAT_ID, text: text }
-  });
+    '📡 ' + (d.channel || d.source || '-'));
 }
 
-/** Optional: run once from the editor to send yourself a test ping. */
+/* ---------- Website call taps ---------- */
+function logCall_(d) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('Calls') || ss.insertSheet('Calls');
+  if (sh.getLastRow() === 0) {
+    sh.appendRow(['Time', 'Source', 'Page']);
+    sh.getRange(1, 1, 1, 3).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  sh.appendRow([new Date(), d.channel || d.source || '', d.page || '']);
+}
+
+function notifyCall_(d) {
+  telegram_('📞 Someone tapped Call on the site\n' +
+    '📡 Source: ' + (d.channel || d.source || '-') + '\n' +
+    '🔗 ' + (d.page || '/'));
+}
+
+/** Optional: run once from the editor to test. */
 function testTelegram() {
   notifyTelegram_({ stage: 'complete', name: 'Test Driver', phone: '8004009956', state: 'IL',
     experience_years: '2plus', reefer: 'reefer', run_type: 'otr', lead_outcome: 'qualified', channel: 'Website' });
+  notifyCall_({ channel: 'Google', page: '/apply' });
 }
