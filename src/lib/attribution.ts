@@ -25,8 +25,14 @@ function readFromUrl(): { channel: string; utms: Record<string, string> } {
     const v = p.get(k)
     if (v) utms[k] = v.slice(0, 100)
   })
+  // Priority: an explicit ?r/?src, then utm_source, then the ad platforms' own click
+  // ids (Google auto-tagging = gclid/gbraid/wbraid, Meta = fbclid), else direct.
   const explicit = p.get('r') || p.get('src') || p.get('source')
-  const channel = explicit ? mapChannel(explicit) : utms.utm_source ? mapChannel(utms.utm_source) : 'Website'
+  let channel = 'Website'
+  if (explicit) channel = mapChannel(explicit)
+  else if (utms.utm_source) channel = mapChannel(utms.utm_source)
+  else if (p.get('gclid') || p.get('gbraid') || p.get('wbraid')) channel = 'Google'
+  else if (p.get('fbclid')) channel = 'Meta'
   return { channel, utms }
 }
 
