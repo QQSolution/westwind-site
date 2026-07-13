@@ -1,2 +1,13 @@
+# Ads/creative assets must be fetchable by ad platforms; site pages stay noindex via meta tags.
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
 User-agent: *
 Disallow: /
+Allow: /ads/
