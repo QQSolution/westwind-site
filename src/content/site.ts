@@ -29,7 +29,7 @@ export const config = {
     web3formsKey: '',
     // Google Apps Script Web App: appends each lead to the Google Sheet and sends
     // it to Telegram (@westwindusabot). The bot token lives in the script, not here.
-    webhookUrl: 'https://script.google.com/macros/s/AKfycbzyUCFg3XaQKQl5ZVNBI4cyhBnEeYAc1Mqy8cV7rIUjYk4D52u7Y33kanY5Y7H2ME6g/exec',
+    webhookUrl: 'https://script.google.com/macros/s/AKfycbzVHn5eA7hCKDW-8B7FVBwyi55gatilGOYrVeHsTwZywXgnm9UbpC3HBSsBu35MApyC/exec',
     notifyEmail: 'recruiting@westwindusa.com',
   },
   conversions: {
