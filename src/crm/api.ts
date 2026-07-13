@@ -27,6 +27,7 @@ export interface CrmLead {
   due: string
   notes: string
   followed: boolean
+  tenstreet: boolean
 }
 
 export const STAGES = [
@@ -99,9 +100,82 @@ export function createLead(fields: Partial<CrmLead>) {
   return post({ action: 'create', fields })
 }
 
+export interface CallEvent {
+  ts: string
+  channel: string
+  page: string
+}
+
+export async function fetchCalls(): Promise<CallEvent[]> {
+  const res = await fetch(`${apiUrl()}?action=calls&token=${encodeURIComponent(getToken())}`)
+  const j = await res.json()
+  if (!j?.ok) throw new Error(j?.error || 'failed to load calls')
+  return j.calls as CallEvent[]
+}
+
+/* ---- date ranges (Meta Ads Manager style) ---- */
+
+export type RangeKey = 'today' | 'yesterday' | 'last7' | 'last30' | 'thisWeek' | 'thisMonth' | 'max' | 'custom'
+
+export const RANGE_LABELS: Record<RangeKey, string> = {
+  today: 'Today',
+  yesterday: 'Yesterday',
+  last7: 'Last 7 days',
+  last30: 'Last 30 days',
+  thisWeek: 'This week',
+  thisMonth: 'This month',
+  max: 'Maximum',
+  custom: 'Custom range',
+}
+
+function startOfDay(d: Date): Date {
+  const x = new Date(d)
+  x.setHours(0, 0, 0, 0)
+  return x
+}
+
+/** [from, to) window for a preset; null = no bound. */
+export function rangeWindow(key: RangeKey, customFrom?: string, customTo?: string): [Date | null, Date | null] {
+  const now = new Date()
+  const today = startOfDay(now)
+  const day = 86_400_000
+  switch (key) {
+    case 'today':
+      return [today, null]
+    case 'yesterday':
+      return [new Date(today.getTime() - day), today]
+    case 'last7':
+      return [new Date(today.getTime() - 6 * day), null]
+    case 'last30':
+      return [new Date(today.getTime() - 29 * day), null]
+    case 'thisWeek': {
+      const dow = (today.getDay() + 6) % 7 // Monday = 0
+      return [new Date(today.getTime() - dow * day), null]
+    }
+    case 'thisMonth':
+      return [new Date(now.getFullYear(), now.getMonth(), 1), null]
+    case 'custom': {
+      const f = customFrom ? startOfDay(new Date(customFrom)) : null
+      const t = customTo ? new Date(startOfDay(new Date(customTo)).getTime() + day) : null
+      return [f, t]
+    }
+    default:
+      return [null, null]
+  }
+}
+
+export function inRange(iso: string, win: [Date | null, Date | null]): boolean {
+  const t = new Date(iso).getTime()
+  if (Number.isNaN(t)) return true
+  if (win[0] && t < win[0].getTime()) return false
+  if (win[1] && t >= win[1].getTime()) return false
+  return true
+}
+
 /** Poll-refreshed lead list with optimistic local edits. */
 export function useLeads(authed: boolean) {
   const [leads, setLeads] = useState<CrmLead[]>([])
+  const [calls, setCalls] = useState<CallEvent[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const timer = useRef<number>()
@@ -109,7 +183,9 @@ export function useLeads(authed: boolean) {
   const refresh = useCallback(async (silent = false) => {
     if (!silent) setLoading(true)
     try {
-      setLeads(await fetchLeads())
+      const [ls, cs] = await Promise.all([fetchLeads(), fetchCalls().catch(() => [] as CallEvent[])])
+      setLeads(ls)
+      setCalls(cs)
       setError('')
     } catch (e) {
       setError(e instanceof Error ? e.message : 'failed to load')
@@ -157,7 +233,7 @@ export function useLeads(authed: boolean) {
     [leads],
   )
 
-  return { leads, loading, error, refresh, patch, setLeads }
+  return { leads, calls, loading, error, refresh, patch, setLeads }
 }
 
 export function daysSince(iso: string): number {

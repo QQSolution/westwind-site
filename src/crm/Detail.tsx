@@ -135,6 +135,19 @@ export function LeadDetail({
           />
         </Field>
 
+        {/* the goal: Tenstreet application */}
+        <button
+          type="button"
+          onClick={() => p({ tenstreet: !lead.tenstreet })}
+          className={`sm:col-span-2 flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-bold transition ${
+            lead.tenstreet
+              ? 'border-emerald-400/60 bg-emerald-400/20 text-emerald-300'
+              : 'border-white/15 bg-white/5 text-white/70 hover:border-emerald-400/40 hover:text-emerald-300'
+          }`}
+        >
+          {lead.tenstreet ? '✓ Tenstreet application filled — done, do not touch' : 'Mark: filled Tenstreet application with us'}
+        </button>
+
         {/* followed */}
         <label className="flex items-center gap-2 text-sm text-white/80 sm:col-span-2">
           <input

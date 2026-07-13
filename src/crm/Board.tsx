@@ -8,10 +8,12 @@ export function Board({
   leads,
   onMove,
   onOpen,
+  onTenstreet,
 }: {
   leads: CrmLead[]
   onMove: (id: string, stage: string) => void
   onOpen: (id: string) => void
+  onTenstreet: (id: string, v: boolean) => void
 }) {
   const [over, setOver] = useState<string | null>(null)
 
@@ -52,7 +54,11 @@ export function Board({
                   draggable
                   onDragStart={(e) => e.dataTransfer.setData('text/lead-id', l.id)}
                   onClick={() => onOpen(l.id)}
-                  className="cursor-pointer rounded-lg border border-white/10 bg-[#0D2648] p-3 shadow-sm transition hover:border-amber-400/40 hover:shadow-md active:cursor-grabbing"
+                  className={`cursor-pointer rounded-lg border p-3 shadow-sm transition hover:shadow-md active:cursor-grabbing ${
+                    l.tenstreet
+                      ? 'border-emerald-400/50 bg-emerald-500/15 hover:border-emerald-300/70'
+                      : 'border-white/10 bg-[#0D2648] hover:border-amber-400/40'
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
@@ -62,7 +68,24 @@ export function Board({
                       </div>
                       <p className="mt-0.5 text-[12px] tabular-nums text-white/55">{fmtPhone(l.phone)}</p>
                     </div>
-                    <AgeBadge date={l.date} />
+                    <div className="flex flex-col items-end gap-1">
+                      <AgeBadge date={l.date} />
+                      <button
+                        type="button"
+                        title={l.tenstreet ? 'Tenstreet done — click to undo' : 'Mark: filled Tenstreet app'}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onTenstreet(l.id, !l.tenstreet)
+                        }}
+                        className={`rounded px-1.5 py-0.5 text-[11px] font-bold transition ${
+                          l.tenstreet
+                            ? 'bg-emerald-400 text-[#0A2240]'
+                            : 'bg-white/10 text-white/40 hover:bg-white/20 hover:text-white/70'
+                        }`}
+                      >
+                        {l.tenstreet ? '✓ Tenstreet' : 'TS?'}
+                      </button>
+                    </div>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-1.5">
                     <Chip value={l.source} map={SOURCE_STYLE} />

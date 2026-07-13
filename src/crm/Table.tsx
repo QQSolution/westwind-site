@@ -28,12 +28,18 @@ export function LeadTable({
             <th className="px-3 py-2.5 font-semibold">Status</th>
             <th className="px-3 py-2.5 font-semibold">Stage</th>
             <th className="px-3 py-2.5 font-semibold">Caller</th>
+            <th className="px-3 py-2.5 text-center font-semibold">Tenstreet</th>
             <th className="px-3 py-2.5 text-center font-semibold">✓</th>
           </tr>
         </thead>
         <tbody>
           {leads.map((l) => (
-            <tr key={l.id} className="border-b border-white/5 transition-colors hover:bg-white/[0.04]">
+            <tr
+              key={l.id}
+              className={`border-b border-white/5 transition-colors ${
+                l.tenstreet ? 'bg-emerald-500/10 hover:bg-emerald-500/15' : 'hover:bg-white/[0.04]'
+              }`}
+            >
               <td className="whitespace-nowrap px-3 py-2">
                 <div className="flex items-center gap-1.5">
                   <AgeBadge date={l.date} />
@@ -99,6 +105,14 @@ export function LeadTable({
               <td className="px-3 py-2 text-center">
                 <input
                   type="checkbox"
+                  checked={l.tenstreet}
+                  onChange={(e) => onPatch(l.id, { tenstreet: e.target.checked })}
+                  className="h-4 w-4 accent-emerald-400"
+                />
+              </td>
+              <td className="px-3 py-2 text-center">
+                <input
+                  type="checkbox"
                   checked={l.followed}
                   onChange={(e) => onPatch(l.id, { followed: e.target.checked })}
                   className="h-4 w-4 accent-amber-400"
@@ -108,7 +122,7 @@ export function LeadTable({
           ))}
           {leads.length === 0 && (
             <tr>
-              <td colSpan={12} className="px-3 py-10 text-center text-white/35">
+              <td colSpan={13} className="px-3 py-10 text-center text-white/35">
                 No leads match.
               </td>
             </tr>
