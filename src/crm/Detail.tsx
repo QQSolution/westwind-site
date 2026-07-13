@@ -12,10 +12,12 @@ const QUAL_OPTS = ['in_progress', 'qualified', 'hard_no']
 export function LeadDetail({
   lead,
   onPatch,
+  onDelete,
   onClose,
 }: {
   lead: CrmLead
   onPatch: (id: string, fields: Partial<CrmLead> & { noteAppend?: string }) => void
+  onDelete: (id: string) => void
   onClose: () => void
 }) {
   const [note, setNote] = useState('')
@@ -195,6 +197,22 @@ export function LeadDetail({
             {lead.notes}
           </pre>
         )}
+      </div>
+
+      {/* danger zone */}
+      <div className="border-t border-white/10 px-4 py-3 sm:px-5">
+        <button
+          type="button"
+          onClick={() => {
+            if (window.confirm(`Delete ${lead.name || 'this lead'}? This removes them from the dashboard and the sheet.`)) {
+              onDelete(lead.id)
+              onClose()
+            }
+          }}
+          className="text-[13px] font-medium text-red-400/70 transition-colors hover:text-red-300"
+        >
+          Delete lead
+        </button>
       </div>
     </Overlay>
   )

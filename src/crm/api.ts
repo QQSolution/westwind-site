@@ -100,6 +100,10 @@ export function createLead(fields: Partial<CrmLead>) {
   return post({ action: 'create', fields })
 }
 
+export function deleteLead(id: string) {
+  return post({ action: 'delete', id })
+}
+
 export interface CallEvent {
   ts: string
   channel: string
@@ -233,7 +237,22 @@ export function useLeads(authed: boolean) {
     [leads],
   )
 
-  return { leads, calls, loading, error, refresh, patch, setLeads }
+  /** Optimistically drop a lead locally, delete remotely, restore on failure. */
+  const remove = useCallback(
+    (id: string) => {
+      const prev = leads
+      setLeads((ls) => ls.filter((l) => l.id !== id))
+      void deleteLead(id).then((r) => {
+        if (!r?.ok) {
+          setLeads(prev)
+          setError(r?.error || 'delete failed')
+        }
+      })
+    },
+    [leads],
+  )
+
+  return { leads, calls, loading, error, refresh, patch, remove, setLeads }
 }
 
 export function daysSince(iso: string): number {

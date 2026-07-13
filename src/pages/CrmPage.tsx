@@ -79,7 +79,7 @@ function LoadingSkeleton() {
 
 export default function CrmPage() {
   const [authed, setAuthed] = useState(() => Boolean(getToken()))
-  const { leads, calls, loading, error, refresh, patch } = useLeads(authed)
+  const { leads, calls, loading, error, refresh, patch, remove } = useLeads(authed)
 
   const [tab, setTab] = useState<Tab>('leads')
   const [view, setView] = useState<'board' | 'table'>('board')
@@ -321,7 +321,7 @@ export default function CrmPage() {
         )}
       </main>
 
-      {open && <LeadDetail lead={open} onPatch={patch} onClose={() => setOpenId(null)} />}
+      {open && <LeadDetail lead={open} onPatch={patch} onDelete={remove} onClose={() => setOpenId(null)} />}
       {adding && (
         <AddLead
           onClose={() => setAdding(false)}
