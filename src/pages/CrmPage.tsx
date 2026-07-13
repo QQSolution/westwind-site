@@ -2,17 +2,17 @@
  * /crm — West Wind driver-leads dashboard. Password-gated (token lives in the
  * Apps Script, never in this bundle). Unlinked from the public site on purpose.
  *
- * Three tabs: Leads (finished applications), Unfinished (partial captures),
- * Phone calls (call-button clicks). One Ads-Manager-style date range filters
- * everything, with per-source counts at the top.
+ * Tabs: Leads (finished) · Unfinished (partials) · Calls (phone clicks).
+ * One Ads-Manager-style date range filters everything; per-source counts on top.
  */
 import { useMemo, useState } from 'react'
-import type { RangeKey } from '@/crm/api'
+import type { CrmLead, RangeKey } from '@/crm/api'
 import { RANGE_LABELS, createLead, getToken, inRange, ping, rangeWindow, setToken, useLeads } from '@/crm/api'
 import { Board } from '@/crm/Board'
 import { AddLead, LeadDetail } from '@/crm/Detail'
+import { LeadList } from '@/crm/List'
 import { LeadTable } from '@/crm/Table'
-import { AmberBtn, Chip, GhostBtn, SOURCE_STYLE, fmtDate, inputCls, selectCls } from '@/crm/ui'
+import { AmberBtn, GhostBtn, Skeleton, SourceTag, fmtDate, inputCls, selectCls } from '@/crm/ui'
 
 function Login({ onOk }: { onOk: () => void }) {
   const [pw, setPw] = useState('')
@@ -61,6 +61,22 @@ type Tab = 'leads' | 'unfinished' | 'calls'
 
 const RANGE_ORDER: RangeKey[] = ['today', 'yesterday', 'last7', 'last30', 'thisWeek', 'thisMonth', 'max', 'custom']
 
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-3 overflow-hidden">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="w-[280px] shrink-0 space-y-2">
+            <Skeleton className="h-10" />
+            <Skeleton className="h-24" />
+            <Skeleton className="h-24" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function CrmPage() {
   const [authed, setAuthed] = useState(() => Boolean(getToken()))
   const { leads, calls, loading, error, refresh, patch } = useLeads(authed)
@@ -77,14 +93,13 @@ export default function CrmPage() {
 
   const win = useMemo(() => rangeWindow(range, customFrom, customTo), [range, customFrom, customTo])
 
-  /* ---- date-windowed base sets (before search/source filters) ---- */
   const leadsInRange = useMemo(() => leads.filter((l) => inRange(l.date, win)), [leads, win])
   const callsInRange = useMemo(() => calls.filter((c) => inRange(c.ts, win)), [calls, win])
 
   const finished = useMemo(() => leadsInRange.filter((l) => l.capture !== 'Partial'), [leadsInRange])
   const unfinished = useMemo(() => leadsInRange.filter((l) => l.capture === 'Partial'), [leadsInRange])
 
-  /* ---- per-source summary for the selected range ---- */
+  /* per-source summary for the selected range */
   const summary = useMemo(() => {
     const by: Record<string, { leads: number; partial: number; calls: number }> = {}
     const get = (s: string) => (by[s] ||= { leads: 0, partial: 0, calls: 0 })
@@ -94,8 +109,7 @@ export default function CrmPage() {
     return Object.entries(by).sort((a, b) => b[1].leads + b[1].partial + b[1].calls - (a[1].leads + a[1].partial + a[1].calls))
   }, [finished, unfinished, callsInRange])
 
-  /* ---- search + source filters applied per tab ---- */
-  const applyFilters = (ls: typeof leads) => {
+  const applyFilters = (ls: CrmLead[]) => {
     const needle = q.trim().toLowerCase()
     return ls.filter((l) => {
       if (source && l.source !== source) return false
@@ -121,100 +135,124 @@ export default function CrmPage() {
 
   if (!authed) return <Login onOk={() => setAuthed(true)} />
 
+  const appliedCount = finished.filter((l) => l.tenstreet).length
+
   return (
-    <div className="min-h-svh bg-[#081A33] text-white">
-      {/* ============ top bar ============ */}
+    <div className="min-h-dvh bg-[#081A33] text-white">
+      {/* ============ header ============ */}
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#081A33]/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3 px-4 py-3">
-          <div className="mr-1">
+        {/* row 1: brand · range · actions */}
+        <div className="mx-auto flex max-w-[1600px] items-center gap-2 px-3 pt-3 sm:px-4">
+          <div className="mr-1 hidden sm:block">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400">West Wind</p>
             <h1 className="-mt-0.5 text-lg font-bold leading-tight">Driver Leads</h1>
           </div>
+          <p className="mr-1 text-sm font-bold text-amber-400 sm:hidden">WW</p>
 
-          {/* date range — Ads Manager style */}
-          <select value={range} onChange={(e) => setRange(e.target.value as RangeKey)} className={`${selectCls} !w-[150px] !py-1.5`}>
+          <select value={range} onChange={(e) => setRange(e.target.value as RangeKey)} className={`${selectCls} !w-[142px]`}>
             {RANGE_ORDER.map((k) => (
               <option key={k} value={k}>
                 {RANGE_LABELS[k]}
               </option>
             ))}
           </select>
-          {range === 'custom' && (
-            <div className="flex items-center gap-1.5">
-              <input type="date" value={customFrom} onChange={(e) => setCustomFrom(e.target.value)} className={`${inputCls} !w-[140px] !py-1.5`} />
-              <span className="text-white/40">→</span>
-              <input type="date" value={customTo} onChange={(e) => setCustomTo(e.target.value)} className={`${inputCls} !w-[140px] !py-1.5`} />
-            </div>
-          )}
 
           <div className="ml-auto flex items-center gap-2">
-            <AmberBtn onClick={() => setAdding(true)}>+ Lead</AmberBtn>
-            <GhostBtn onClick={() => void refresh()}>{loading ? '…' : '⟳'}</GhostBtn>
+            {loading && leads.length > 0 && <span className="hidden text-[11px] text-white/35 sm:inline">updating…</span>}
+            <AmberBtn onClick={() => setAdding(true)} className="!px-3">
+              + Lead
+            </AmberBtn>
+            <GhostBtn onClick={() => void refresh()} title="Refresh" className="!px-3">
+              ⟳
+            </GhostBtn>
             <GhostBtn
               onClick={() => {
                 setToken('')
                 setAuthed(false)
               }}
+              title="Sign out"
+              className="!px-3"
             >
-              Out
+              ⏻
             </GhostBtn>
           </div>
         </div>
 
-        {/* ============ per-source summary for the range ============ */}
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-2 px-4 pb-2">
-          <div className="flex items-center gap-3 rounded-lg border border-amber-400/25 bg-amber-400/5 px-3 py-1.5 text-[12px]">
-            <span>
-              <b className="text-amber-300">{finished.length}</b> <span className="text-white/60">leads</span>
-            </span>
-            <span>
-              <b className="text-orange-300">{unfinished.length}</b> <span className="text-white/60">unfinished</span>
-            </span>
-            <span>
-              <b className="text-sky-300">{callsInRange.length}</b> <span className="text-white/60">calls</span>
-            </span>
-            <span>
-              <b className="text-emerald-300">{finished.filter((l) => l.tenstreet).length}</b> <span className="text-white/60">tenstreet ✓</span>
-            </span>
+        {/* custom range */}
+        {range === 'custom' && (
+          <div className="mx-auto flex max-w-[1600px] items-center gap-1.5 px-3 pt-2 sm:px-4">
+            <input type="date" value={customFrom} onChange={(e) => setCustomFrom(e.target.value)} className={`${inputCls} !w-[150px]`} />
+            <span className="text-white/40">→</span>
+            <input type="date" value={customTo} onChange={(e) => setCustomTo(e.target.value)} className={`${inputCls} !w-[150px]`} />
           </div>
-          {summary.map(([src, n]) => (
-            <div key={src} className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[12px]">
-              <Chip value={src} map={SOURCE_STYLE} />
-              <span className="text-white/70 tabular-nums">
-                {n.leads} leads{n.partial ? ` · ${n.partial} unfinished` : ''}{n.calls ? ` · ${n.calls} calls` : ''}
+        )}
+
+        {/* row 2: range summary — scrolls horizontally on small screens */}
+        <div className="mx-auto max-w-[1600px] overflow-x-auto px-3 pt-2 sm:px-4" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex w-max items-center gap-2 pb-0.5">
+            <div className="flex items-center gap-3 whitespace-nowrap rounded-lg border border-amber-400/25 bg-amber-400/5 px-3 py-1.5 text-[12px]">
+              <span>
+                <b className="text-amber-300">{finished.length}</b> <span className="text-white/60">leads</span>
+              </span>
+              <span>
+                <b className="text-orange-300">{unfinished.length}</b> <span className="text-white/60">unfinished</span>
+              </span>
+              <span>
+                <b className="text-sky-300">{callsInRange.length}</b> <span className="text-white/60">calls</span>
+              </span>
+              <span>
+                <b className="text-emerald-300">{appliedCount}</b> <span className="text-white/60">applied ✓</span>
               </span>
             </div>
-          ))}
-          {error && <span className="text-[13px] text-red-300">⚠ {error}</span>}
+            {summary.map(([src, n]) => (
+              <div
+                key={src}
+                className="flex items-center gap-2 whitespace-nowrap rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[12px]"
+              >
+                <SourceTag source={src} />
+                <span className="tabular-nums text-white/70">
+                  {n.leads} leads
+                  {n.partial ? ` · ${n.partial} unfinished` : ''}
+                  {n.calls ? ` · ${n.calls} calls` : ''}
+                </span>
+              </div>
+            ))}
+            {error && <span className="whitespace-nowrap text-[12px] text-red-300">⚠ {error}</span>}
+          </div>
         </div>
 
-        {/* ============ tabs + filters ============ */}
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-2 px-4 pb-3">
-          <div className="flex overflow-hidden rounded-lg border border-white/15">
+        {/* row 3: tabs + filters */}
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-2 px-3 py-2.5 sm:px-4">
+          <div className="flex h-10 flex-1 overflow-hidden rounded-lg border border-white/15 sm:flex-none">
             {(
               [
-                ['leads', `Leads ${finishedFiltered.length}`],
-                ['unfinished', `Unfinished ${unfinishedFiltered.length}`],
-                ['calls', `Phone calls ${callsFiltered.length}`],
-              ] as [Tab, string][]
-            ).map(([t, label]) => (
+                ['leads', 'Leads', finishedFiltered.length],
+                ['unfinished', 'Unfinished', unfinishedFiltered.length],
+                ['calls', 'Calls', callsFiltered.length],
+              ] as [Tab, string, number][]
+            ).map(([t, label, n]) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setTab(t)}
-                className={`px-3.5 py-1.5 text-sm font-semibold transition ${
+                className={`flex-1 whitespace-nowrap px-3 text-sm font-semibold transition-colors sm:flex-none sm:px-4 ${
                   tab === t ? 'bg-amber-400 text-[#0A2240]' : 'bg-white/5 text-white/60 hover:bg-white/10'
                 }`}
               >
-                {label}
+                {label} <span className={tab === t ? 'opacity-70' : 'text-white/35'}>{n}</span>
               </button>
             ))}
           </div>
 
           {tab !== 'calls' && (
-            <input placeholder="Search name, phone, email…" value={q} onChange={(e) => setQ(e.target.value)} className={`${inputCls} !w-[240px] !py-1.5`} />
+            <input
+              placeholder="Search…"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              className={`${inputCls} !w-full sm:!w-[220px]`}
+            />
           )}
-          <select value={source} onChange={(e) => setSource(e.target.value)} className={`${selectCls} !w-[130px] !py-1.5`}>
+          <select value={source} onChange={(e) => setSource(e.target.value)} className={`${selectCls} !w-[128px]`}>
             <option value="">All sources</option>
             {sources.map((s) => (
               <option key={s}>{s}</option>
@@ -222,13 +260,13 @@ export default function CrmPage() {
           </select>
 
           {tab === 'leads' && (
-            <div className="ml-auto flex overflow-hidden rounded-lg border border-white/15">
+            <div className="hidden h-10 overflow-hidden rounded-lg border border-white/15 sm:ml-auto sm:flex">
               {(['board', 'table'] as const).map((v) => (
                 <button
                   key={v}
                   type="button"
                   onClick={() => setView(v)}
-                  className={`px-3 py-1.5 text-sm font-medium transition ${
+                  className={`px-3 text-sm font-medium transition-colors ${
                     view === v ? 'bg-white/20 text-white' : 'bg-white/5 text-white/50 hover:bg-white/10'
                   }`}
                 >
@@ -241,56 +279,44 @@ export default function CrmPage() {
       </header>
 
       {/* ============ body ============ */}
-      <main className="mx-auto max-w-[1600px] px-4 py-4">
+      <main className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
         {loading && leads.length === 0 ? (
-          <div className="flex h-[50vh] items-center justify-center text-white/40">Loading leads…</div>
+          <LoadingSkeleton />
         ) : tab === 'leads' ? (
           view === 'board' ? (
             <Board
               leads={finishedFiltered}
               onMove={(id, stage) => patch(id, { stage })}
               onOpen={setOpenId}
-              onTenstreet={(id, v) => patch(id, { tenstreet: v })}
+              onApplied={(id, v) => patch(id, { tenstreet: v })}
             />
           ) : (
             <LeadTable leads={finishedFiltered} onPatch={patch} onOpen={setOpenId} />
           )
         ) : tab === 'unfinished' ? (
           <>
-            <p className="mb-3 text-[13px] text-white/50">
-              Drivers who left name + phone but never finished the application. A fast call converts these — they were interested minutes ago.
+            <p className="mb-3 text-[13px] leading-relaxed text-white/50">
+              Left name + phone but never finished. They were interested minutes ago — a fast call converts these.
             </p>
-            <LeadTable leads={unfinishedFiltered} onPatch={patch} onOpen={setOpenId} />
+            <LeadList
+              leads={unfinishedFiltered}
+              onOpen={setOpenId}
+              onApplied={(id, v) => patch(id, { tenstreet: v })}
+              emptyText="No unfinished applications in this period."
+            />
           </>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-white/10">
-            <table className="w-full min-w-[520px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-white/10 bg-white/[0.04] text-[11px] uppercase tracking-wider text-white/40">
-                  <th className="px-3 py-2.5 font-semibold">When</th>
-                  <th className="px-3 py-2.5 font-semibold">Source</th>
-                  <th className="px-3 py-2.5 font-semibold">Page</th>
-                </tr>
-              </thead>
-              <tbody>
-                {callsFiltered.map((c, i) => (
-                  <tr key={i} className="border-b border-white/5 hover:bg-white/[0.04]">
-                    <td className="whitespace-nowrap px-3 py-2 text-white/75">{fmtDate(c.ts)}</td>
-                    <td className="px-3 py-2">
-                      <Chip value={c.channel} map={SOURCE_STYLE} />
-                    </td>
-                    <td className="px-3 py-2 text-white/50">{c.page || '—'}</td>
-                  </tr>
-                ))}
-                {callsFiltered.length === 0 && (
-                  <tr>
-                    <td colSpan={3} className="px-3 py-10 text-center text-white/35">
-                      No phone-call clicks in this period.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="overflow-hidden rounded-2xl border border-white/10">
+            {callsFiltered.map((c, i) => (
+              <div key={i} className={`flex items-center gap-3 px-3.5 py-3 sm:px-4 ${i > 0 ? 'border-t border-white/5' : ''}`}>
+                <span className="w-[120px] shrink-0 text-[13px] tabular-nums text-white/75 sm:w-[140px]">{fmtDate(c.ts)}</span>
+                <SourceTag source={c.channel} />
+                <span className="ml-auto truncate text-[12px] text-white/35">{c.page || ''}</span>
+              </div>
+            ))}
+            {callsFiltered.length === 0 && (
+              <div className="px-4 py-14 text-center text-sm text-white/35">No phone-call clicks in this period.</div>
+            )}
           </div>
         )}
       </main>
