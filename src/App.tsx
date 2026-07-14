@@ -37,23 +37,41 @@ export default function App() {
     initTracking()
   }, [])
 
-  // Ping Telegram when a driver taps any "Call" link on the site (debounced so a
-  // double-tap doesn't double-notify). Not the same as a Google-ad call.
+  // Count a phone call ONLY when the dialer actually opens: a tel: tap on a touch
+  // device followed by the page going hidden (= the OS took over). Desktop clicks,
+  // canceled dial sheets, and accidental taps never count. Max one per 10 minutes
+  // per visitor so re-taps don't stack.
   useEffect(() => {
-    let last = 0
+    let armedAt = 0
     const onClick = (e: MouseEvent) => {
       // Recruiters dialing drivers from /crm are not website call-intent.
       if (window.location.pathname.startsWith('/crm')) return
       const el = e.target as HTMLElement | null
       if (!el?.closest?.('a[href^="tel:"]')) return
-      const now = Date.now()
-      if (now - last < 4000) return
-      last = now
-      track('call_click', { channel: getChannel() })
+      track('call_click', { channel: getChannel() }) // analytics: every tap
+      // Only phones/tablets can actually place a call from a tel: link.
+      if (!window.matchMedia('(pointer: coarse)').matches) return
+      armedAt = Date.now()
+    }
+    const onHide = () => {
+      if (!document.hidden || Date.now() - armedAt > 2500) return
+      armedAt = 0
+      try {
+        const lastSent = Number(sessionStorage.getItem('ww_call_sent') || 0)
+        if (Date.now() - lastSent < 600_000) return
+        sessionStorage.setItem('ww_call_sent', String(Date.now()))
+      } catch {
+        /* private mode: still send */
+      }
+      track('call_dial', { channel: getChannel() })
       void deliver(buildCallEvent())
     }
     document.addEventListener('click', onClick, true)
-    return () => document.removeEventListener('click', onClick, true)
+    document.addEventListener('visibilitychange', onHide)
+    return () => {
+      document.removeEventListener('click', onClick, true)
+      document.removeEventListener('visibilitychange', onHide)
+    }
   }, [])
 
   // Re-observe sections after each route change so /apply emits section_view too.

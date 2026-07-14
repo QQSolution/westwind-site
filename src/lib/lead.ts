@@ -124,6 +124,9 @@ export async function deliver(lead: Record<string, unknown>): Promise<boolean> {
       await fetch(webhookUrl, {
         method: 'POST',
         mode: 'no-cors',
+        // keepalive: call events fire while the page is being backgrounded
+        // (dialer opening) — without it the browser drops the request.
+        keepalive: true,
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(lead),
       })
