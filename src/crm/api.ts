@@ -66,10 +66,21 @@ function apiUrl(): string {
   return config.lead.webhookUrl
 }
 
+export interface Session {
+  me: string
+  recruiters: string[]
+}
+
+let session: Session = { me: '', recruiters: [] }
+export function getSession(): Session {
+  return session
+}
+
 export async function ping(token: string): Promise<boolean> {
   try {
     const res = await fetch(`${apiUrl()}?action=ping&token=${encodeURIComponent(token)}`)
     const j = await res.json()
+    if (j?.ok) session = { me: j.me || '', recruiters: j.recruiters || [] }
     return j?.ok === true
   } catch {
     return false
@@ -180,6 +191,7 @@ export function inRange(iso: string, win: [Date | null, Date | null]): boolean {
 export function useLeads(authed: boolean) {
   const [leads, setLeads] = useState<CrmLead[]>([])
   const [calls, setCalls] = useState<CallEvent[]>([])
+  const [session, setSession] = useState<Session>(() => getSession())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const timer = useRef<number>()
@@ -200,10 +212,12 @@ export function useLeads(authed: boolean) {
 
   useEffect(() => {
     if (!authed) return
+    // Establish who is signed in + the recruiter roster (fills after a reload too).
+    if (!session.me) void ping(getToken()).then(() => setSession(getSession()))
     void refresh()
     timer.current = window.setInterval(() => void refresh(true), 90_000)
     return () => window.clearInterval(timer.current)
-  }, [authed, refresh])
+  }, [authed, refresh, session.me])
 
   /** Apply locally right away, persist in the background, roll back on failure. */
   const patch = useCallback(
@@ -252,7 +266,7 @@ export function useLeads(authed: boolean) {
     [leads],
   )
 
-  return { leads, calls, loading, error, refresh, patch, remove, setLeads }
+  return { leads, calls, session, loading, error, refresh, patch, remove, setLeads }
 }
 
 export function daysSince(iso: string): number {

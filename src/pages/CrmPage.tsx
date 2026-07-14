@@ -79,7 +79,7 @@ function LoadingSkeleton() {
 
 export default function CrmPage() {
   const [authed, setAuthed] = useState(() => Boolean(getToken()))
-  const { leads, calls, loading, error, refresh, patch, remove } = useLeads(authed)
+  const { leads, calls, session, loading, error, refresh, patch, remove } = useLeads(authed)
 
   const [tab, setTab] = useState<Tab>('leads')
   const [view, setView] = useState<'board' | 'table'>('board')
@@ -88,6 +88,7 @@ export default function CrmPage() {
   const [customTo, setCustomTo] = useState('')
   const [q, setQ] = useState('')
   const [source, setSource] = useState('')
+  const [assignee, setAssignee] = useState('') // '', 'unassigned', 'mine', or a recruiter name
   const [openId, setOpenId] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
 
@@ -109,10 +110,14 @@ export default function CrmPage() {
     return Object.entries(by).sort((a, b) => b[1].leads + b[1].partial + b[1].calls - (a[1].leads + a[1].partial + a[1].calls))
   }, [finished, unfinished, callsInRange])
 
+  const isAssigned = (l: CrmLead) => l.caller && l.caller !== '—'
   const applyFilters = (ls: CrmLead[]) => {
     const needle = q.trim().toLowerCase()
     return ls.filter((l) => {
       if (source && l.source !== source) return false
+      if (assignee === 'unassigned' && isAssigned(l)) return false
+      else if (assignee === 'mine' && l.caller !== session.me) return false
+      else if (assignee && assignee !== 'unassigned' && assignee !== 'mine' && l.caller !== assignee) return false
       if (needle) {
         const hay = `${l.name} ${l.phone} ${l.email} ${l.state}`.toLowerCase()
         if (!hay.includes(needle)) return false
@@ -120,10 +125,10 @@ export default function CrmPage() {
       return true
     })
   }
-  const finishedFiltered = useMemo(() => applyFilters(finished), [finished, q, source])
+  const finishedFiltered = useMemo(() => applyFilters(finished), [finished, q, source, assignee, session.me])
   const unfinishedFiltered = useMemo(
     () => applyFilters(unfinished).sort((a, b) => +new Date(b.date) - +new Date(a.date)),
-    [unfinished, q, source],
+    [unfinished, q, source, assignee, session.me],
   )
   const callsFiltered = useMemo(
     () => callsInRange.filter((c) => !source || c.channel === source).sort((a, b) => +new Date(b.ts) - +new Date(a.ts)),
@@ -159,6 +164,12 @@ export default function CrmPage() {
 
           <div className="ml-auto flex items-center gap-2">
             {loading && leads.length > 0 && <span className="hidden text-[11px] text-white/35 sm:inline">updating…</span>}
+            {session.me && (
+              <span className="hidden items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[12px] text-white/60 sm:inline-flex">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                {session.me}
+              </span>
+            )}
             <AmberBtn onClick={() => setAdding(true)} className="!px-3">
               + Lead
             </AmberBtn>
@@ -170,7 +181,7 @@ export default function CrmPage() {
                 setToken('')
                 setAuthed(false)
               }}
-              title="Sign out"
+              title={session.me ? `Sign out ${session.me}` : 'Sign out'}
               className="!px-3"
             >
               ⏻
@@ -258,6 +269,18 @@ export default function CrmPage() {
               <option key={s}>{s}</option>
             ))}
           </select>
+          {tab !== 'calls' && session.recruiters.length > 0 && (
+            <select value={assignee} onChange={(e) => setAssignee(e.target.value)} className={`${selectCls} !w-[140px]`}>
+              <option value="">All recruiters</option>
+              <option value="unassigned">Unassigned</option>
+              {session.recruiters.includes(session.me) && <option value="mine">My leads</option>}
+              {session.recruiters.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          )}
 
           {tab === 'leads' && (
             <div className="hidden h-10 overflow-hidden rounded-lg border border-white/15 sm:ml-auto sm:flex">
@@ -291,7 +314,7 @@ export default function CrmPage() {
               onApplied={(id, v) => patch(id, { tenstreet: v })}
             />
           ) : (
-            <LeadTable leads={finishedFiltered} onPatch={patch} onOpen={setOpenId} />
+            <LeadTable leads={finishedFiltered} recruiters={session.recruiters} onPatch={patch} onOpen={setOpenId} />
           )
         ) : tab === 'unfinished' ? (
           <>
@@ -321,7 +344,9 @@ export default function CrmPage() {
         )}
       </main>
 
-      {open && <LeadDetail lead={open} onPatch={patch} onDelete={remove} onClose={() => setOpenId(null)} />}
+      {open && (
+        <LeadDetail lead={open} recruiters={session.recruiters} onPatch={patch} onDelete={remove} onClose={() => setOpenId(null)} />
+      )}
       {adding && (
         <AddLead
           onClose={() => setAdding(false)}

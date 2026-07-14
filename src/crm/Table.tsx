@@ -5,10 +5,12 @@ import { AgeBadge, Chip, HotBadge, QUAL_STYLE, SOURCE_STYLE, fmtPhone, selectCls
 
 export function LeadTable({
   leads,
+  recruiters,
   onPatch,
   onOpen,
 }: {
   leads: CrmLead[]
+  recruiters: string[]
   onPatch: (id: string, fields: Partial<CrmLead>) => void
   onOpen: (id: string) => void
 }) {
@@ -25,7 +27,7 @@ export function LeadTable({
             <th className="px-3 py-3 font-semibold">Eligible</th>
             <th className="px-3 py-3 font-semibold">Status</th>
             <th className="px-3 py-3 font-semibold">Stage</th>
-            <th className="px-3 py-3 font-semibold">Caller</th>
+            <th className="px-3 py-3 font-semibold">Recruiter</th>
             <th className="px-3 py-3 text-center font-semibold">Applied</th>
           </tr>
         </thead>
@@ -81,15 +83,18 @@ export function LeadTable({
                 </select>
               </td>
               <td className="px-3 py-2.5">
-                <input
-                  defaultValue={l.caller === '—' ? '' : l.caller}
-                  placeholder="—"
-                  onBlur={(e) => {
-                    const v = e.target.value.trim() || '—'
-                    if (v !== l.caller) onPatch(l.id, { caller: v })
-                  }}
-                  className={`${selectCls} !h-8 !w-[92px] !px-2 !text-[12px]`}
-                />
+                <select
+                  value={recruiters.includes(l.caller) ? l.caller : ''}
+                  onChange={(e) => onPatch(l.id, { caller: e.target.value || '—' })}
+                  className={`${selectCls} !h-8 !w-[110px] !px-2 !text-[12px] ${l.caller && l.caller !== '—' ? '' : 'text-white/40'}`}
+                >
+                  <option value="">Unassigned</option>
+                  {recruiters.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
               </td>
               <td className="px-3 py-2.5 text-center">
                 <input

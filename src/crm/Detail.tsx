@@ -11,11 +11,13 @@ const QUAL_OPTS = ['in_progress', 'qualified', 'hard_no']
 
 export function LeadDetail({
   lead,
+  recruiters,
   onPatch,
   onDelete,
   onClose,
 }: {
   lead: CrmLead
+  recruiters: string[]
   onPatch: (id: string, fields: Partial<CrmLead> & { noteAppend?: string }) => void
   onDelete: (id: string) => void
   onClose: () => void
@@ -134,16 +136,19 @@ export function LeadDetail({
             ))}
           </select>
         </Field>
-        <Field label="Caller">
-          <input
-            className={inputCls}
-            defaultValue={lead.caller === '—' ? '' : lead.caller}
-            placeholder="recruiter name"
-            onBlur={(e) => {
-              const v = e.target.value.trim() || '—'
-              if (v !== lead.caller) p({ caller: v })
-            }}
-          />
+        <Field label="Recruiter">
+          <select
+            className={selectCls}
+            value={recruiters.includes(lead.caller) ? lead.caller : ''}
+            onChange={(e) => p({ caller: e.target.value || '—' })}
+          >
+            <option value="">Unassigned</option>
+            {recruiters.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field label="Due date">
           <input
