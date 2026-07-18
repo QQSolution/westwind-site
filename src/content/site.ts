@@ -61,9 +61,8 @@ export const company = {
 }
 
 export const contact = {
-  phone: '800-400-9956',
-  ext: '2040',
-  tel: '+18004009956,,2040',
+  phone: '(708) 820-2738',
+  tel: '+17088202738',
   privacyUrl: 'https://www.westwindusa.com/privacy-policy',
   smsUrl: 'https://www.westwindusa.com/sms-terms-conditions',
   saferUrl: 'https://safer.fmcsa.dot.gov/CompanySnapshot.aspx',
@@ -294,7 +293,7 @@ export const finalCta = {
   ] as Array<Array<{ t: string; hl?: boolean }>>,
   sub: 'The freight is here. The miles are here. We just need you.',
   cta: 'See if you qualify',
-  secondaryCta: 'Call 800-400-9956 ext 2040',
+  secondaryCta: 'Call (708) 820-2738',
   image: windYard,
 }
 

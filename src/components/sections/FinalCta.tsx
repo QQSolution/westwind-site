@@ -64,7 +64,7 @@ export function FinalCta() {
             className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-foreground"
           >
             <Phone className="h-4 w-4" />
-            {contact.phone} ext {contact.ext}
+            {contact.phone}
           </a>
           <p className="text-sm opacity-80">{company.hours}</p>
         </div>

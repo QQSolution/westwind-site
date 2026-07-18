@@ -16,7 +16,7 @@ export function Footer() {
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">{footer.blurb}</p>
             <a href={`tel:${contact.tel}`} className="mt-5 inline-flex items-center gap-2 text-base font-semibold text-foreground transition-colors hover:text-accent">
-              <Phone className="size-4" /> {contact.phone} <span className="text-muted-foreground">· ext {contact.ext}</span>
+              <Phone className="size-4" /> {contact.phone}
             </a>
             <p className="mt-1 text-sm text-muted-foreground">{company.hours}</p>
           </div>
