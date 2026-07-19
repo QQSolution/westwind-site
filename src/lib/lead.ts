@@ -101,6 +101,18 @@ export function buildCallEvent(): Record<string, unknown> {
   }
 }
 
+/** Retracts the call event we just sent: the visitor bounced straight back from
+ *  the dial sheet, so the tap was accidental and shouldn't count. */
+export function buildCallCancel(): Record<string, unknown> {
+  return {
+    stage: 'call_cancel',
+    channel: getChannel(),
+    source: 'westwind-site',
+    page: typeof location !== 'undefined' ? location.pathname : '',
+    timestamp_utc: new Date().toISOString(),
+  }
+}
+
 /** Returns true if delivered (or captured in demo mode). Uses a no-cors text/plain
  *  POST so the Google Apps Script endpoint always receives it. */
 export async function deliver(lead: Record<string, unknown>): Promise<boolean> {

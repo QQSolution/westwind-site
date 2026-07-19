@@ -7,7 +7,7 @@
  */
 import { useMemo, useState } from 'react'
 import type { CrmLead, RangeKey } from '@/crm/api'
-import { RANGE_LABELS, createLead, getToken, inRange, ping, rangeWindow, setToken, useLeads } from '@/crm/api'
+import { RANGE_LABELS, createLead, getToken, inRange, normPhone, ping, rangeWindow, setToken, useLeads } from '@/crm/api'
 import { Board } from '@/crm/Board'
 import { AddLead, LeadDetail } from '@/crm/Detail'
 import { LeadList } from '@/crm/List'
@@ -87,6 +87,7 @@ export default function CrmPage() {
   const [customFrom, setCustomFrom] = useState('')
   const [customTo, setCustomTo] = useState('')
   const [q, setQ] = useState('')
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest')
   const [source, setSource] = useState('')
   const [assignee, setAssignee] = useState('') // '', 'unassigned', 'mine', or a recruiter name
   const [openId, setOpenId] = useState<string | null>(null)
@@ -98,7 +99,18 @@ export default function CrmPage() {
   const callsInRange = useMemo(() => calls.filter((c) => inRange(c.ts, win)), [calls, win])
 
   const finished = useMemo(() => leadsInRange.filter((l) => l.capture !== 'Partial'), [leadsInRange])
-  const unfinished = useMemo(() => leadsInRange.filter((l) => l.capture === 'Partial'), [leadsInRange])
+  // A partial whose phone later finished the full application is the SAME driver —
+  // they live in Leads only, never duplicated into Unfinished. (Checked against
+  // ALL finished leads, not just the selected range, so range changes can't
+  // resurrect them.)
+  const finishedPhones = useMemo(
+    () => new Set(leads.filter((l) => l.capture !== 'Partial').map((l) => normPhone(l.phone)).filter(Boolean)),
+    [leads],
+  )
+  const unfinished = useMemo(
+    () => leadsInRange.filter((l) => l.capture === 'Partial' && !finishedPhones.has(normPhone(l.phone))),
+    [leadsInRange, finishedPhones],
+  )
 
   /* per-source summary for the selected range */
   const summary = useMemo(() => {
@@ -125,10 +137,12 @@ export default function CrmPage() {
       return true
     })
   }
-  const finishedFiltered = useMemo(() => applyFilters(finished), [finished, q, source, assignee, session.me])
+  const byDate = (a: CrmLead, b: CrmLead) =>
+    sort === 'newest' ? +new Date(b.date) - +new Date(a.date) : +new Date(a.date) - +new Date(b.date)
+  const finishedFiltered = useMemo(() => applyFilters(finished).sort(byDate), [finished, q, source, assignee, session.me, sort])
   const unfinishedFiltered = useMemo(
-    () => applyFilters(unfinished).sort((a, b) => +new Date(b.date) - +new Date(a.date)),
-    [unfinished, q, source, assignee, session.me],
+    () => applyFilters(unfinished).sort(byDate),
+    [unfinished, q, source, assignee, session.me, sort],
   )
   const callsFiltered = useMemo(
     () => callsInRange.filter((c) => !source || c.channel === source).sort((a, b) => +new Date(b.ts) - +new Date(a.ts)),
@@ -269,6 +283,12 @@ export default function CrmPage() {
               <option key={s}>{s}</option>
             ))}
           </select>
+          {tab !== 'calls' && (
+            <select value={sort} onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')} className={`${selectCls} !w-[128px]`}>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          )}
           {tab !== 'calls' && session.recruiters.length > 0 && (
             <select value={assignee} onChange={(e) => setAssignee(e.target.value)} className={`${selectCls} !w-[140px]`}>
               <option value="">All recruiters</option>

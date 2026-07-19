@@ -41,6 +41,7 @@ export function ApplyFlow() {
   const [result, setResult] = useState<{ outcome: Outcome; title: string; body: string } | null>(null)
 
   const leadId = useRef(uuid())
+  const restoredPhone = useRef('')
   const partialSent = useRef(false)
   const startedAt = useRef(Date.now())
 
@@ -49,6 +50,12 @@ export function ApplyFlow() {
     try {
       const p = new URLSearchParams(location.search)
       const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}')
+      // A returning driver keeps their lead_id, so their partial row upgrades
+      // in place instead of duplicating when they finish.
+      if (saved.leadId) {
+        leadId.current = saved.leadId
+        restoredPhone.current = String(saved.phone || '').replace(/\D/g, '')
+      }
       const a: Answers = { ...(saved.answers || {}) }
       const exp = p.get('exp') || p.get('experience')
       if (exp) a.experience = exp
@@ -66,7 +73,7 @@ export function ApplyFlow() {
   // Persist progress so a returning driver picks up where they left off.
   useEffect(() => {
     try {
-      localStorage.setItem(PROGRESS_KEY, JSON.stringify({ answers, name, phone, email }))
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify({ answers, name, phone, email, leadId: leadId.current }))
     } catch {
       /* ignore */
     }
@@ -104,6 +111,10 @@ export function ApplyFlow() {
   function firePartial(a: Answers) {
     if (partialSent.current) return
     partialSent.current = true
+    // A different phone than the saved session means a different person on this
+    // device (roommate, spouse) — give them their own lead, don't overwrite.
+    const digits = phone.replace(/\D/g, '')
+    if (restoredPhone.current && digits && digits !== restoredPhone.current) leadId.current = uuid()
     track('lead_partial', { lead_id: leadId.current })
     void deliver(buildLead({ leadId: leadId.current, stage: 'partial', name, phone, email, answers: a }))
   }

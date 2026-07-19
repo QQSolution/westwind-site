@@ -269,6 +269,12 @@ export function useLeads(authed: boolean) {
   return { leads, calls, session, loading, error, refresh, patch, remove, setLeads }
 }
 
+/** Same driver = same phone, regardless of formatting or a leading 1. */
+export function normPhone(p: string): string {
+  const d = (p || '').replace(/\D/g, '')
+  return d.length === 11 && d.startsWith('1') ? d.slice(1) : d
+}
+
 export function daysSince(iso: string): number {
   const d = new Date(iso).getTime()
   if (!d) return 0
