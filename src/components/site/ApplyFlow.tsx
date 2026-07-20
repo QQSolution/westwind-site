@@ -18,7 +18,7 @@ import {
   type Answers,
   type Outcome,
 } from '@/lib/lead'
-import { track } from '@/lib/track'
+import { fireLeadConversion, track } from '@/lib/track'
 import { cn } from '@/lib/utils'
 
 const byId = Object.fromEntries(quiz.steps.map((s) => [s.id, s])) as Record<string, (typeof quiz.steps)[number]>
@@ -147,6 +147,10 @@ export function ApplyFlow() {
     setSending(true)
     await deliver(buildLead({ leadId: leadId.current, stage: 'complete', name, phone, email, answers: all, outcome, reasonCode }))
     setSending(false)
+    // Count the conversion NOW — most drivers never click through to the
+    // thank-you page, so firing there undercounted real leads on Google/Meta.
+    // Disqualified applications are not leads and never count.
+    if (outcome !== 'hard_no') fireLeadConversion(leadId.current)
     try {
       localStorage.removeItem(PROGRESS_KEY)
     } catch {

@@ -2,6 +2,8 @@
  * Pushes to window.dataLayer (GTM/GA4-ready) and forwards conversion-ish events
  * to gtag / Meta Pixel if/when they're present. No-ops safely until those load. */
 
+import { config } from '@/content/site'
+
 type Props = Record<string, unknown>
 
 declare global {
@@ -75,6 +77,36 @@ let io: IntersectionObserver | null = null
 export function observeSections(): void {
   if (typeof window === 'undefined' || !io) return
   requestAnimationFrame(() => document.querySelectorAll('section[id]').forEach((s) => io!.observe(s)))
+}
+
+/** The ad-platform conversion, fired at the ACTUAL moment a driver completes
+ *  the application (not on the optional thank-you page — most drivers never
+ *  click through to it, which made Google/Meta undercount real leads).
+ *
+ *  No PII leaves the page: platforms get only a lead_id-based dedup key.
+ *  - transaction_id / eventID = lead_id → each driver counts exactly once,
+ *    even if they resubmit or later load the thank-you page.
+ *  - With no conversion label configured yet, we fall back to a virtual
+ *    page_view of /apply/thank-you so the existing URL-match conversion in
+ *    Google Ads counts every completion starting today. */
+export function fireLeadConversion(leadId: string): void {
+  if (typeof window === 'undefined') return
+  try {
+    if (typeof window.gtag === 'function') {
+      const sendTo = config.conversions?.googleAdsSendTo
+      if (sendTo) {
+        window.gtag('event', 'conversion', { send_to: sendTo, transaction_id: leadId })
+      } else {
+        window.gtag('event', 'page_view', {
+          page_path: '/apply/thank-you',
+          page_location: `${window.location.origin}/apply/thank-you`,
+        })
+      }
+    }
+    if (typeof window.fbq === 'function') window.fbq('track', 'Lead', {}, { eventID: leadId })
+  } catch {
+    /* analytics never break the funnel */
+  }
 }
 
 /** Call once from App. Wires: page_load, delegated [data-track] clicks,

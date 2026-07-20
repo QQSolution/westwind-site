@@ -33,10 +33,12 @@ export const config = {
     notifyEmail: 'recruiting@westwindusa.com',
   },
   conversions: {
-    /** Optional Google Ads conversion-event label, e.g. 'AW-18294197867/AbCdEf'.
-     *  Leave '' if you use a Google Ads PAGE-LOAD conversion pointed at the
-     *  /apply/thank-you URL (the base gtag fires it automatically). Set it to
-     *  also fire an explicit gtag('event','conversion') on the thank-you page. */
+    /** Google Ads conversion-event label, e.g. 'AW-18294197867/AbCdEf'.
+     *  While '' the completion moment fires a virtual /apply/thank-you
+     *  page_view so the existing URL-match conversion action still counts
+     *  every finished application. Set the label (Google Ads → Conversions →
+     *  event-snippet action) to switch to an explicit gtag conversion with
+     *  transaction_id dedupe — then demote the URL-match action to Secondary. */
     googleAdsSendTo: '',
   },
 }

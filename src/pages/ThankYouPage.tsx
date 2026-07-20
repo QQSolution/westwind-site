@@ -1,29 +1,23 @@
 import { useEffect } from 'react'
 import { ArrowRight, Check, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { config, contact, company } from '@/content/site'
+import { contact, company } from '@/content/site'
 import { buildIntelliappUrl, getChannel, getUtms } from '@/lib/attribution'
 import { track } from '@/lib/track'
 import logo from '@/assets/photos/logo.png'
 
 /**
- * /apply/thank-you, the conversion page. Its own distinct URL so a Google Ads
- * PAGE-LOAD conversion (or the explicit event below) fires exactly once when a
- * pre-qualified driver reaches it. Then it hands off to the Tenstreet/IntelliApp
- * application (different domain) with the ?r= source + UTM tags preserved.
+ * /apply/thank-you — the post-application handoff page. The ad-platform
+ * conversion does NOT fire here anymore: it fires the moment the application
+ * completes (ApplyFlow → fireLeadConversion), because most drivers never click
+ * through to this page and Google/Meta were undercounting real leads. Firing
+ * here too would double-count the ones who do. This page just hands off to the
+ * Tenstreet/IntelliApp application with the ?r= source + UTM tags preserved.
  */
 export function ThankYouPage() {
   useEffect(() => {
     // First-party event (dataLayer / GTM). PII is not included.
     track('application_complete', { channel: getChannel(), ...getUtms() })
-    // Google Ads: page-load conversion on this URL fires from the base tag with no
-    // code. If a conversion label is configured, also fire the explicit event.
-    const sendTo = config.conversions?.googleAdsSendTo
-    if (sendTo && typeof window.gtag === 'function') {
-      window.gtag('event', 'conversion', { send_to: sendTo })
-    }
-    // Meta pixel (fires only once the pixel is installed).
-    if (typeof window.fbq === 'function') window.fbq('track', 'Lead')
   }, [])
 
   const intelliapp = buildIntelliappUrl()
