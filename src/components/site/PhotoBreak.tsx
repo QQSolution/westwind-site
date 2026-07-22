@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { SmartImage } from '@/components/site/SmartImage'
 import { cn } from '@/lib/utils'
@@ -16,12 +16,26 @@ type Props = {
 export function PhotoBreak({ src, alt, kicker, line, align = 'left' }: Props) {
   const ref = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
+  // Parallax repaints a large scaled photo on every scroll frame — cheap on a
+  // desktop GPU, visibly janky on the phones most drivers browse from. Run it
+  // only on pointer-fine screens.
+  const [parallax, setParallax] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px) and (pointer: fine)')
+    const apply = () => setParallax(mq.matches)
+    apply()
+    mq.addEventListener('change', apply)
+    return () => mq.removeEventListener('change', apply)
+  }, [])
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
 
   return (
     <section ref={ref} className="relative isolate h-[44svh] min-h-[300px] w-full overflow-hidden bg-[hsl(var(--navy))] sm:h-[52svh]">
-      <motion.div className="absolute inset-0 scale-[1.12]" style={reduce ? undefined : { y }}>
+      <motion.div
+        className={cn('absolute inset-0', parallax && !reduce ? 'scale-[1.12]' : 'scale-100')}
+        style={parallax && !reduce ? { y } : undefined}
+      >
         <SmartImage src={src} alt={alt} className="h-full w-full object-cover" />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))]/92 via-[hsl(var(--navy))]/45 to-[hsl(var(--navy))]/25" />

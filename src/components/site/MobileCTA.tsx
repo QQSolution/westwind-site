@@ -9,9 +9,27 @@ export function MobileCTA() {
   const [applyInView, setApplyInView] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.85)
+    // Hysteresis: appear past SHOW_AT, but don't hide again until back above
+    // HIDE_AT. A single threshold made the bar flap in and out whenever the
+    // driver nudged up and down near it. The reference height is captured once,
+    // because mobile browsers change innerHeight as the URL bar collapses —
+    // which used to move the threshold mid-scroll, under the user's finger.
+    const base = window.innerHeight
+    const SHOW_AT = base * 0.85
+    const HIDE_AT = base * 0.55
+    let ticking = false
+    const evaluate = () => {
+      ticking = false
+      const y = window.scrollY
+      setShow((prev) => (prev ? y > HIDE_AT : y > SHOW_AT))
+    }
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(evaluate)
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
+    evaluate()
 
     const apply = document.getElementById('apply')
     let io: IntersectionObserver | undefined
