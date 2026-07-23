@@ -1,8 +1,8 @@
 /** Kanban pipeline board — native HTML5 drag & drop + tap-friendly, scroll-snap columns. */
 import { useState } from 'react'
 import type { CrmLead } from './api'
-import { STAGES } from './api'
-import { AgeBadge, AppliedPill, HotBadge, STAGE_STYLE, SourceTag, fmtPhone } from './ui'
+import { STAGES, isOutOfArea } from './api'
+import { AgeBadge, AppliedPill, HotBadge, OutOfAreaBadge, STAGE_STYLE, SourceTag, fmtPhone } from './ui'
 
 export function Board({
   leads,
@@ -86,6 +86,12 @@ export function Board({
                       {fmtPhone(l.phone)}
                     </a>
                   </div>
+                  {(l.age || isOutOfArea(l)) && (
+                    <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                      {isOutOfArea(l) && <OutOfAreaBadge state={l.state} />}
+                      {l.age && <span className="rounded bg-white/8 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-white/55">age {l.age}</span>}
+                    </div>
+                  )}
                   <div className="mt-2 flex items-center gap-2">
                     <SourceTag source={l.source} />
                     {l.caller && l.caller !== '—' && (

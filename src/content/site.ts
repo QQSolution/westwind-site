@@ -246,7 +246,7 @@ export const process = {
   headline: 'Getting started is easy.',
   sub: 'No SSN. No résumé. No runaround. Here’s the whole thing.',
   steps: [
-    { n: '01', title: 'Answer 6 quick questions', body: 'Takes about a minute. No SSN, no résumé.' },
+    { n: '01', title: 'Answer 7 quick questions', body: 'Takes about a minute. No SSN, no résumé.' },
     { n: '02', title: 'A real recruiter calls you', body: 'A real person who knows the lanes. Not a robot.' },
     { n: '03', title: 'Quick orientation', body: '3-4 hours. The mechanic shows you the reefer.' },
     { n: '04', title: 'Grab your first load', body: 'Pick it up at our IL yard and roll. You’re earning.' },
@@ -332,16 +332,34 @@ export const apply = {
   reviews: [] as Array<{ name: string; where: string; quote: string }>,
 }
 
+/* ---- States we actively hire from (terminals IL/AZ/CA/UT + our lane states).
+ *  A driver outside these still completes the application, but is flagged
+ *  "out of area" on the dashboard and in the Telegram alert so recruiters know
+ *  they're a lower-fit lead — we don't hard-stop them. One source of truth,
+ *  shared by the funnel scoring and the CRM dashboard. ---- */
+export const HIRING_STATES = [
+  'AZ', 'CA', 'CO', 'FL', 'GA', 'ID', 'IL', 'IN', 'MI', 'MT',
+  'NJ', 'NM', 'NY', 'OR', 'PA', 'TX', 'UT', 'VT', 'WA', 'WI',
+] as const
+const HIRING_SET = new Set<string>(HIRING_STATES)
+/** True if `st` is one of our hiring states. Empty/unknown → treated as in-area
+ *  (don't flag a lead we simply have no state for). */
+export function isHiringState(st: string): boolean {
+  const s = (st || '').trim().toUpperCase()
+  return s === '' || HIRING_SET.has(s)
+}
+
 /* ---- The honest 60-second qualification quiz (logic lives in QualForm) ---- */
 export type Choice = { v: string; label: string }
 export type Step =
   | { id: string; q: string; type: 'choice'; options: Choice[] }
   | { id: string; q: string; type: 'select'; placeholder: string; options: string[] }
+  | { id: string; q: string; type: 'number'; placeholder: string }
   | { id: string; q: string; type: 'contact' }
 
 export const quiz = {
   headline: '60-second driver qualification',
-  intro: '6 questions. No SSN. A real person calls you. Your info is never sold.',
+  intro: '7 questions. No SSN. A real person calls you. Your info is never sold.',
   hiringNote: 'Now hiring CDL-A reefer drivers, IL · AZ · CA · UT and our Midwest-to-West-Coast lanes.',
   /** Tenstreet / IntelliApp handoff. The site appends ?r=<channel> (source
    *  attribution inside IntelliApp) + the driver's utm_* so every application
@@ -386,6 +404,7 @@ export const quiz = {
       { v: '1-2', label: '1-2 years' },
       { v: 'under1', label: 'Under 1 year' },
     ] },
+    { id: 'age', q: 'How old are you?', type: 'number', placeholder: 'Your age' },
     { id: 'reefer', q: 'Have you run reefer?', type: 'choice', options: [
       { v: 'reefer', label: 'Yes, reefer' },
       { v: 'dry', label: 'Dry van or flatbed' },

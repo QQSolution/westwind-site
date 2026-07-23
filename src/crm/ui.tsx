@@ -72,6 +72,18 @@ export function HotBadge({ date, stage }: { date: string; stage: string }) {
   return <span className="shrink-0 rounded bg-amber-400/20 px-1.5 py-0.5 text-[11px] font-bold text-amber-300">new</span>
 }
 
+/** Lives outside our hiring states — still workable, just a lower-fit lead. */
+export function OutOfAreaBadge({ state }: { state?: string }) {
+  return (
+    <span
+      title="Lives outside our hiring states — lower-fit lead"
+      className="shrink-0 whitespace-nowrap rounded bg-orange-400/20 px-1.5 py-0.5 text-[11px] font-bold text-orange-300"
+    >
+      ⚠ out of area{state ? ` · ${state}` : ''}
+    </span>
+  )
+}
+
 /** "Applied" = filled the official application with us. Green = done, don't touch. */
 export function AppliedPill({ done, onToggle }: { done: boolean; onToggle: () => void }) {
   return (

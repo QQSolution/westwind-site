@@ -1,8 +1,8 @@
 /** Lead detail modal (edit + timestamped notes) and Add Lead modal. */
 import { useState } from 'react'
 import type { CrmLead } from './api'
-import { STAGES, STATUSES } from './api'
-import { AmberBtn, Chip, Field, GhostBtn, Overlay, QUAL_STYLE, SOURCE_STYLE, fmtDate, fmtPhone, inputCls, selectCls } from './ui'
+import { STAGES, STATUSES, isOutOfArea } from './api'
+import { AmberBtn, Chip, Field, GhostBtn, Overlay, OutOfAreaBadge, QUAL_STYLE, SOURCE_STYLE, fmtDate, fmtPhone, inputCls, selectCls } from './ui'
 
 const EXP_OPTS = ['', 'under1', '1-2', '2plus']
 const TRAILER_OPTS = ['', 'reefer', 'dry', 'mixed']
@@ -35,6 +35,7 @@ export function LeadDetail({
             <div className="mt-1 flex flex-wrap items-center gap-1.5">
               <Chip value={lead.source} map={SOURCE_STYLE} />
               <Chip value={lead.qualified} map={QUAL_STYLE} />
+              {isOutOfArea(lead) && <OutOfAreaBadge state={lead.state} />}
               {lead.capture === 'Partial' && (
                 <span className="rounded-full border border-orange-400/30 bg-orange-400/15 px-2 py-0.5 text-[11px] font-medium text-orange-300">
                   unfinished
@@ -83,6 +84,9 @@ export function LeadDetail({
         </Field>
         <Field label="State">
           <input className={inputCls} defaultValue={lead.state} onBlur={(e) => e.target.value !== lead.state && p({ state: e.target.value })} />
+        </Field>
+        <Field label="Age">
+          <input className={inputCls} inputMode="numeric" defaultValue={lead.age} onBlur={(e) => e.target.value !== lead.age && p({ age: e.target.value.replace(/\D/g, '').slice(0, 2) })} />
         </Field>
 
         <Field label="Experience">
@@ -255,6 +259,9 @@ export function AddLead({
         </Field>
         <Field label="State">
           <input className={inputCls} onChange={set('state')} />
+        </Field>
+        <Field label="Age">
+          <input className={inputCls} inputMode="numeric" onChange={set('age')} />
         </Field>
         <Field label="Source">
           <select className={selectCls} value={f.source} onChange={set('source')}>

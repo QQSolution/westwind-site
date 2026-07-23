@@ -1,4 +1,4 @@
-import { config } from '@/content/site'
+import { config, isHiringState } from '@/content/site'
 import { getChannel, getUtms } from '@/lib/attribution'
 
 export type Answers = Record<string, string>
@@ -68,13 +68,18 @@ export function buildLead(fields: {
   reasonCode?: string
 }): Record<string, unknown> {
   const a = fields.answers || {}
+  const state = a.state || ''
   return {
     lead_id: fields.leadId,
     stage: fields.stage,
     name: fields.name.trim(),
     phone: fields.phone.replace(/\D/g, ''),
     email: (fields.email || '').trim(),
-    state: a.state || '',
+    state,
+    age: a.age || '',
+    // 'out' = lives outside our hiring states (still a lead, just lower fit);
+    // '' when we don't have a state yet (partials). Drives the Telegram flag.
+    area: state ? (isHiringState(state) ? 'in' : 'out') : '',
     run_type: a.runType || '',
     experience_years: a.experience || '',
     reefer: a.reefer || '',

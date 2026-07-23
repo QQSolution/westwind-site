@@ -23,7 +23,8 @@ import { cn } from '@/lib/utils'
 
 const byId = Object.fromEntries(quiz.steps.map((s) => [s.id, s])) as Record<string, (typeof quiz.steps)[number]>
 // Contact first (so a drop-off is still captured), then the qualifying questions.
-const FORM_STEPS = ['contact', 'experience', 'reefer', 'runType', 'record', 'state'].map((id) => byId[id])
+const FORM_STEPS = ['contact', 'experience', 'age', 'reefer', 'runType', 'record', 'state'].map((id) => byId[id])
+const isValidAge = (v?: string) => !!v && /^\d{1,2}$/.test(v) && Number(v) >= 18 && Number(v) <= 90
 const PROGRESS_KEY = 'ww_apply_progress'
 
 export function ApplyFlow() {
@@ -264,7 +265,14 @@ export function ApplyFlow() {
   }
 
   /* ---------------- FORM ---------------- */
-  const canContinue = step.type === 'choice' ? !!answers[step.id] : step.type === 'select' ? !!answers.state : true
+  const canContinue =
+    step.type === 'choice'
+      ? !!answers[step.id]
+      : step.type === 'select'
+        ? !!answers.state
+        : step.type === 'number'
+          ? isValidAge(answers[step.id])
+          : true
 
   return (
     <Shell progress={progress}>
@@ -332,6 +340,27 @@ export function ApplyFlow() {
               ))}
             </select>
             {errors.state && <p className="mt-2 text-sm text-accent">Please choose your state.</p>}
+          </div>
+        )}
+
+        {step.type === 'number' && (
+          <div className="mt-6">
+            <Input
+              inputMode="numeric"
+              autoComplete="off"
+              enterKeyHint="next"
+              maxLength={2}
+              className="min-h-[62px] max-w-[180px] text-lg"
+              placeholder={step.placeholder}
+              aria-label={step.q}
+              value={answers[step.id] || ''}
+              onChange={(e) => setAnswer(step.id, e.target.value.replace(/\D/g, '').slice(0, 2))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && canContinue) advance()
+              }}
+              aria-invalid={!!errors[step.id]}
+            />
+            {errors[step.id] && <p className="mt-2 text-sm text-accent">Please enter a valid age.</p>}
           </div>
         )}
 

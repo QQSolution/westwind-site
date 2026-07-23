@@ -1,6 +1,6 @@
 /** Desktop table view — trimmed to what recruiters actually work with. */
 import type { CrmLead } from './api'
-import { STAGES, STATUSES } from './api'
+import { STAGES, STATUSES, isOutOfArea } from './api'
 import { AgeBadge, Chip, HotBadge, QUAL_STYLE, SOURCE_STYLE, fmtPhone, selectCls } from './ui'
 
 export function LeadTable({
@@ -24,6 +24,7 @@ export function LeadTable({
             <th className="px-3 py-3 font-semibold">Phone</th>
             <th className="px-3 py-3 font-semibold">Source</th>
             <th className="px-3 py-3 font-semibold">St</th>
+            <th className="px-3 py-3 text-center font-semibold" title="Driver's age">Yrs</th>
             <th className="px-3 py-3 font-semibold">Eligible</th>
             <th className="px-3 py-3 font-semibold">Status</th>
             <th className="px-3 py-3 font-semibold">Stage</th>
@@ -56,7 +57,19 @@ export function LeadTable({
               <td className="px-3 py-2.5">
                 <Chip value={l.source} map={SOURCE_STYLE} />
               </td>
-              <td className="px-3 py-2.5 text-white/70">{l.state || '—'}</td>
+              <td className="px-3 py-2.5">
+                {isOutOfArea(l) ? (
+                  <span
+                    title="Lives outside our hiring states — lower-fit lead"
+                    className="rounded bg-orange-400/20 px-1.5 py-0.5 text-[12px] font-bold text-orange-300"
+                  >
+                    {l.state} ⚠
+                  </span>
+                ) : (
+                  <span className="text-white/70">{l.state || '—'}</span>
+                )}
+              </td>
+              <td className="px-3 py-2.5 text-center tabular-nums text-white/70">{l.age || '—'}</td>
               <td className="px-3 py-2.5">
                 <Chip value={l.qualified} map={QUAL_STYLE} />
               </td>
@@ -108,7 +121,7 @@ export function LeadTable({
           ))}
           {leads.length === 0 && (
             <tr>
-              <td colSpan={10} className="px-3 py-12 text-center text-white/35">
+              <td colSpan={11} className="px-3 py-12 text-center text-white/35">
                 No leads match.
               </td>
             </tr>

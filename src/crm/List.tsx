@@ -1,6 +1,7 @@
 /** Compact lead list — used for Unfinished and as the mobile-friendly list everywhere. */
 import type { CrmLead } from './api'
-import { AgeBadge, AppliedPill, SourceTag, fmtPhone } from './ui'
+import { isOutOfArea } from './api'
+import { AgeBadge, AppliedPill, OutOfAreaBadge, SourceTag, fmtPhone } from './ui'
 
 export function LeadList({
   leads,
@@ -27,14 +28,16 @@ export function LeadList({
           } ${l.tenstreet ? 'bg-emerald-500/10 hover:bg-emerald-500/15' : 'hover:bg-white/[0.05]'}`}
         >
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <p className="truncate text-[14px] font-semibold text-white">{l.name || '—'}</p>
               <AgeBadge date={l.date} />
+              {isOutOfArea(l) && <OutOfAreaBadge state={l.state} />}
             </div>
             <div className="mt-0.5 flex items-center gap-2.5">
               <span className="text-[12.5px] tabular-nums text-white/55">{fmtPhone(l.phone)}</span>
               <SourceTag source={l.source} />
-              {l.state && <span className="hidden text-[11px] text-white/35 sm:inline">{l.state}</span>}
+              {l.age && <span className="text-[11px] text-white/35">age {l.age}</span>}
+              {l.state && !isOutOfArea(l) && <span className="hidden text-[11px] text-white/35 sm:inline">{l.state}</span>}
             </div>
           </div>
           <AppliedPill done={l.tenstreet} onToggle={() => onApplied(l.id, !l.tenstreet)} />

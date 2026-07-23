@@ -4,7 +4,7 @@
  * (a CORS "simple request", so no preflight — Apps Script can't answer OPTIONS).
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { config } from '@/content/site'
+import { config, isHiringState } from '@/content/site'
 
 export interface CrmLead {
   id: string
@@ -28,6 +28,13 @@ export interface CrmLead {
   notes: string
   followed: boolean
   tenstreet: boolean
+  age: string
+}
+
+/** A lead who lives outside our hiring states — still workable, just lower fit.
+ *  Derived from the state so it stays correct for every historical lead too. */
+export function isOutOfArea(l: { state: string }): boolean {
+  return !!l.state && !isHiringState(l.state)
 }
 
 export const STAGES = [
